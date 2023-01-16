@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RegisterFragment">
+    tools:context=".fragments.ProfileFragment">
 
     <ImageView
-        android:id="@+id/register_fragment_img"
+        android:id="@+id/profile_fragment_img"
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_marginStart="100dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/register_fragment_username_input_layout"
+        android:id="@+id/profile_fragment_username_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -28,17 +28,18 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_fragment_img">
+        app:layout_constraintTop_toBottomOf="@+id/profile_fragment_img"
+        app:placeholderText="Username">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/register_fragment_username_input_et"
+            android:id="@+id/profile_fragment_username_input_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username" />
+            android:hint="hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/register_fragment_email_input_layout"
+        android:id="@+id/profile_fragment_newpassword_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -47,64 +48,66 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_fragment_username_input_layout">
+        app:layout_constraintTop_toBottomOf="@+id/profile_fragment_username_input_layout"
+        app:placeholderText="new password">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/register_fragment_email_input_et"
+            android:id="@+id/profile_fragment_newpassword_input_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email" />
+            android:hint="hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/register_fragment_password_input_layout"
+        android:id="@+id/profile_fragment_actor_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+        android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_fragment_email_input_layout">
+        app:layout_constraintTop_toBottomOf="@+id/profile_fragment_newpassword_input_layout"
+        app:placeholderText="favorite actor">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/register_fragment_password_input_et"
+            android:id="@+id/profile_fragment_actor_input_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password" />
+            android:hint="hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/register_fragment_tv"
-        android:layout_width="0dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_fragment_category_input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="409dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="4dp"
-        android:gravity="center"
-        android:text="Start browes moviews"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/register_fragment_register_btn"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.569"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_fragment_password_input_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_fragment_actor_input_layout"
+        app:placeholderText="favorite moview category">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/profile_fragment_category_input_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="hint" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/register_fragment_register_btn"
+        android:id="@+id/profile_fragment_save_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="70dp"
         android:layout_marginEnd="60dp"
         android:backgroundTint="#3164F4"
-        android:text="Register"
-        android:textSize="24sp"
+        android:text="SAVE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_fragment_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_fragment_category_input_layout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
