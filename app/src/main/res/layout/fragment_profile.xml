@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -124,17 +124,30 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
+                android:id="@+id/profile_fragment_comments_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="60dp"
+                android:backgroundTint="#2596be"
+                android:text="Click for comments"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_category_input_layout" />
+
+            <Button
                 android:id="@+id/profile_fragment_save_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="48dp"
                 android:layout_marginEnd="60dp"
                 android:backgroundTint="#3164F4"
                 android:text="SAVE"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_category_input_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_comments_btn" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>

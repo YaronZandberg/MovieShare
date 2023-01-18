@@ -21,10 +21,19 @@
         android:id="@+id/registerFragment"
         android:name="com.example.movieshare.fragments.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_userCommentListFragment"
+            app:destination="@id/userCommentListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.movieshare.fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/userCommentListFragment"
+        android:name="com.example.movieshare.fragments.UserCommentListFragment"
+        android:label="fragment_user_comment_list"
+        tools:layout="@layout/fragment_user_comment_list" />
 </navigation>
