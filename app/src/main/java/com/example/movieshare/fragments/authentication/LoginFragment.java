@@ -1,4 +1,4 @@
-package com.example.movieshare.fragments;
+package com.example.movieshare.fragments.authentication;
 
 import android.os.Bundle;
 

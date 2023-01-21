@@ -1,9 +1,8 @@
-package com.example.movieshare.fragments;
+package com.example.movieshare.fragments.profile;
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -14,7 +13,9 @@ import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
 import com.example.movieshare.repository.MovieComment;
 import com.example.movieshare.repository.Repository;
 
-public class UserCommentEditionFragment extends Fragment {
+import java.util.Objects;
+
+public class UserCommentEditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentEditionBinding viewBindings;
     private Integer movieCommentPosition;
     private MovieComment movieComment;
@@ -24,14 +25,35 @@ public class UserCommentEditionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.movieCommentPosition =
                 UserCommentEditionFragmentArgs.fromBundle(getArguments()).getMovieCommentPosition();
+        this.movieComment = Repository.instance().getAllMovieComments().get(this.movieCommentPosition);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentUserCommentEditionBinding.inflate(inflater, container, false);
-        this.movieComment = Repository.instance().getAllMovieComments().get(this.movieCommentPosition);
         displayUserMovieCommentDetails();
+        activateButtonsListeners();
+        return this.viewBindings.getRoot();
+    }
+
+    @Override
+    protected void displayUserMovieCommentDetails() {
+        this.viewBindings.userCommentEditionFragmentMovieNameInputEt.setText(this.movieComment.getMovieName());
+        this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setText(this.movieComment.getMovieRating());
+        this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.setText(this.movieComment.getDescription());
+        setUserCommentPropertiesState();
+    }
+
+    @Override
+    protected void setUserCommentPropertiesState() {
+        this.viewBindings.userCommentEditionFragmentMovieNameInputEt.setFocusable(false);
+        this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setFocusable(true);
+        this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.setFocusable(true);
+    }
+
+    @Override
+    protected void activateButtonsListeners() {
         this.viewBindings.userCommentEditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view -> {
@@ -42,20 +64,6 @@ public class UserCommentEditionFragment extends Fragment {
             updateUserComment();
             Navigation.findNavController(view).popBackStack();
         });
-        return this.viewBindings.getRoot();
-    }
-
-    private void displayUserMovieCommentDetails(){
-        this.viewBindings.userCommentEditionFragmentMovieNameInputEt.setText(this.movieComment.getMovieName());
-        this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setText(this.movieComment.getMovieRating());
-        this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.setText(this.movieComment.getDescription());
-        setUserCommentPropertiesState();
-    }
-
-    private void setUserCommentPropertiesState(){
-        this.viewBindings.userCommentEditionFragmentMovieNameInputEt.setFocusable(false);
-        this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setFocusable(true);
-        this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.setFocusable(true);
     }
 
     private void deleteUserComment() {
@@ -63,11 +71,21 @@ public class UserCommentEditionFragment extends Fragment {
     }
 
     private void updateUserComment(){
-        MovieComment movieComment = Repository.instance().getAllMovieComments().get(this.movieCommentPosition);
-        String updatedMovieRating = this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.getText().toString();
-        String updatedMovieComment = this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.getText().toString();
-        movieComment.setMovieRating(updatedMovieRating);
-        movieComment.setDescription(updatedMovieComment);
-        Repository.instance().setMovieComment(this.movieCommentPosition, movieComment);
+        String updatedMovieRating =
+                replaceNullValueIfNeeded(this.viewBindings
+                        .userCommentEditionFragmentMovieRatingInputEt.getText().toString());
+        String updatedMovieComment =
+                replaceNullValueIfNeeded(this.viewBindings
+                        .userCommentEditionFragmentMovieCommentInputEt.getText().toString());
+        this.movieComment.setMovieRating(updatedMovieRating);
+        this.movieComment.setDescription(updatedMovieComment);
+        Repository.instance().setMovieComment(this.movieCommentPosition, this.movieComment);
+    }
+
+    private String replaceNullValueIfNeeded(String content){
+        if (Objects.isNull(content)){
+            return "";
+        }
+        return content;
     }
 }

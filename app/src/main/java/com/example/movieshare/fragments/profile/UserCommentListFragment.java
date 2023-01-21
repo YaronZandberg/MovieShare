@@ -1,8 +1,9 @@
-package com.example.movieshare.fragments;
+package com.example.movieshare.fragments.profile;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +44,12 @@ public class UserCommentListFragment extends Fragment {
                     UserCommentListFragmentDirections
                     .actionUserCommentListFragmentToUserCommentEditionFragment(position);
             Navigation.findNavController(viewBindings.usercommentListFragmentList).navigate(action);
+        });
+
+        this.viewBindings.usercommentListFragmentAddBtn.setOnClickListener(view -> {
+            NavDirections action = UserCommentListFragmentDirections
+                    .actionUserCommentListFragmentToUserCommentAdditionFragment();
+            Navigation.findNavController(view).navigate(action);
         });
 
         return this.viewBindings.getRoot();
