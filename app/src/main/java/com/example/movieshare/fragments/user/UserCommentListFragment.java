@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.movieshare.adapters.CommentAdapter;
 import com.example.movieshare.databinding.FragmentUserCommentListBinding;
-import com.example.movieshare.repository.MovieComment;
+import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class UserCommentListFragment extends Fragment {
         this.viewBindings = FragmentUserCommentListBinding.inflate(inflater, container, false);
 
         // TODO: Initialize movieCommentList using Repository.instance.getAllMovieCommentsByUserId()
-        this.userCommentList = Repository.instance().getAllMovieComments();
+        this.userCommentList = Repository.getMovieCommentHandler().getAllMovieComments();
 
         RecyclerView userCommentsRecyclerList = this.viewBindings.userCommentListFragmentList;
         userCommentsRecyclerList.setHasFixedSize(true);

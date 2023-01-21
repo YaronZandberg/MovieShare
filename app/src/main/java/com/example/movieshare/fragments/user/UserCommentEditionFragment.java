@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
 import com.example.movieshare.fragments.dialogs.DeleteUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFragment;
-import com.example.movieshare.repository.MovieComment;
+import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 
 import java.util.Objects;
@@ -27,7 +27,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         super.onCreate(savedInstanceState);
         this.movieCommentPosition =
                 UserCommentEditionFragmentArgs.fromBundle(getArguments()).getMovieCommentPosition();
-        this.movieComment = Repository.instance().getAllMovieComments().get(this.movieCommentPosition);
+        this.movieComment = Repository.getMovieCommentHandler().getAllMovieComments().get(this.movieCommentPosition);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     }
 
     private void deleteUserComment() {
-        Repository.instance().removeMovieComment(this.movieCommentPosition);
+        Repository.getMovieCommentHandler().removeMovieComment(this.movieCommentPosition);
     }
 
     private void updateUserComment(){
@@ -85,7 +85,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                         .userCommentEditionFragmentMovieCommentInputEt.getText().toString());
         this.movieComment.setMovieRating(updatedMovieRating);
         this.movieComment.setDescription(updatedMovieComment);
-        Repository.instance().setMovieComment(this.movieCommentPosition, this.movieComment);
+        Repository.getMovieCommentHandler().setMovieComment(this.movieCommentPosition, this.movieComment);
     }
 
     private String replaceNullValueIfNeeded(String content){

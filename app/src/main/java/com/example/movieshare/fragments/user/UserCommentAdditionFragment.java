@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
 import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
-import com.example.movieshare.repository.MovieComment;
+import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 
 import java.util.Objects;
@@ -53,7 +53,7 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
 
     private void addUserMovieComment(){
         MovieComment movieComment = buildNewMovieComment();
-        Repository.instance().addMovieComment(movieComment);
+        Repository.getMovieCommentHandler().addMovieComment(movieComment);
     }
 
     private MovieComment buildNewMovieComment(){

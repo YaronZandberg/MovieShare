@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieshare.R;
 import com.example.movieshare.monitoring.OnItemClickListener;
-import com.example.movieshare.repository.MovieComment;
+import com.example.movieshare.repository.models.MovieComment;
 
 import java.util.List;
 
@@ -24,9 +24,9 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
                              List<MovieComment> movieCommentList) {
         super(itemView);
         this.movieCommentList = movieCommentList;
-        this.movieNameTv = itemView.findViewById(R.id.comment_list_row_movie_name_tv);
-        this.movieRatingTv = itemView.findViewById(R.id.comment_list_row_movie_rating_tv);
-        this.movieCommentTv = itemView.findViewById(R.id.comment_list_row_movie_comment_tv);
+        this.movieNameTv = itemView.findViewById(R.id.item_list_row_name_tv);
+        this.movieRatingTv = itemView.findViewById(R.id.item_list_row_rating_tv);
+        this.movieCommentTv = itemView.findViewById(R.id.item_list_row_comment_tv);
         itemView.setOnClickListener(view -> {
             Integer position = getAdapterPosition();
             Log.d("TAG", "row clicked " + position);
