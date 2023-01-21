@@ -3,6 +3,7 @@ package com.example.movieshare.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.example.movieshare.adapters.UserCommentAdapter;
 import com.example.movieshare.databinding.FragmentUserCommentListBinding;
-import com.example.movieshare.monitoring.OnItemClickListener;
 import com.example.movieshare.repository.MovieComment;
 import com.example.movieshare.repository.Repository;
 
@@ -34,16 +34,15 @@ public class UserCommentListFragment extends Fragment {
         RecyclerView userCommentsRecyclerList = this.viewBindings.usercommentListFragmentList;
         userCommentsRecyclerList.setHasFixedSize(true);
         userCommentsRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
-        UserCommentAdapter userCommentAdapter =
-                new UserCommentAdapter(getLayoutInflater(), this.movieCommentList);
+        UserCommentAdapter userCommentAdapter = new UserCommentAdapter(getLayoutInflater(), this.movieCommentList);
         userCommentsRecyclerList.setAdapter(userCommentAdapter);
 
-        // TODO: Add adapter.setOnItemClickListener which create an action to edit comment fragment
-        userCommentAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(Integer position) {
-
-            }
+        userCommentAdapter.setOnItemClickListener(position -> {
+            UserCommentListFragmentDirections
+                    .ActionUserCommentListFragmentToUserCommentEditionFragment action =
+                    UserCommentListFragmentDirections
+                    .actionUserCommentListFragmentToUserCommentEditionFragment(position);
+            Navigation.findNavController(viewBindings.usercommentListFragmentList).navigate(action);
         });
 
         return this.viewBindings.getRoot();

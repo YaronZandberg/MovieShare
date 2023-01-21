@@ -3,6 +3,8 @@ package com.example.movieshare.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,10 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentProfileBinding.inflate(inflater, container, false);
+        this.viewBindings.profileFragmentCommentsBtn.setOnClickListener(view -> {
+            NavDirections action = ProfileFragmentDirections.actionProfileFragmentToUserCommentListFragment();
+            Navigation.findNavController(view).navigate(action);
+        });
         return this.viewBindings.getRoot();
     }
 }

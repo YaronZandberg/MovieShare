@@ -1,15 +1,15 @@
 package com.example.movieshare.repository;
 
 public class MovieComment {
-    private String serialId;
-    private String userId;
-    private String movieId;
+    private Integer serialId;
+    private Integer userId;
+    private Integer movieId;
     private String description;
     // TODO: Delete these two properties later because we will get them from Movie Entity using movieId FK
     private String movieName;
     private String movieRating;
 
-    public MovieComment(String id, String userId, String movieId, String description,
+    public MovieComment(Integer id, Integer userId, Integer movieId, String description,
                         String movieName, String movieRating) {
         this.serialId = id;
         this.userId = userId;
@@ -19,27 +19,27 @@ public class MovieComment {
         this.movieRating = movieRating;
     }
 
-    public String getSerialId() {
+    public Integer getSerialId() {
         return this.serialId;
     }
 
-    public void setSerialId(String serialId) {
+    public void setSerialId(Integer serialId) {
         this.serialId = serialId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return this.userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public String getMovieId() {
+    public Integer getMovieId() {
         return this.movieId;
     }
 
-    public void setMovieId(String movieId) {
+    public void setMovieId(Integer movieId) {
         this.movieId = movieId;
     }
 

@@ -20,9 +20,9 @@ public class Repository {
     }
 
     private MovieComment initializeMovieComment(Integer index) {
-        String id = String.valueOf(index);
-        String userId = "user " + index;
-        String movieId = "movie " + index;
+        Integer id = index;
+        Integer userId = index;
+        Integer movieId = index;
         String description = "description " + index;
         String movieName = "name " + index;
         String movieRating = "rating " + index;
