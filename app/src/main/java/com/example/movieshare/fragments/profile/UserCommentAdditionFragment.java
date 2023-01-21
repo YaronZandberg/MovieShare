@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
+import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
 import com.example.movieshare.repository.MovieComment;
 import com.example.movieshare.repository.Repository;
 
@@ -44,6 +45,8 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
             addUserMovieComment();
+            new AddUserMovieCommentDialogFragment()
+                    .show(getActivity().getSupportFragmentManager(), "TAG");
             Navigation.findNavController(view).popBackStack();
         });
     }

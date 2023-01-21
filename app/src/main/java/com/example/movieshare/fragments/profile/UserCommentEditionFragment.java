@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
+import com.example.movieshare.fragments.dialogs.DeleteUserMovieCommentDialogFragment;
+import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFragment;
 import com.example.movieshare.repository.MovieComment;
 import com.example.movieshare.repository.Repository;
 
@@ -58,10 +60,14 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view -> {
             deleteUserComment();
+            new DeleteUserMovieCommentDialogFragment()
+                    .show(getActivity().getSupportFragmentManager(), "TAG");
             Navigation.findNavController(view).popBackStack();
         });
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             updateUserComment();
+            new UpdateUserMovieCommentDialogFragment()
+                    .show(getActivity().getSupportFragmentManager(), "TAG");
             Navigation.findNavController(view).popBackStack();
         });
     }
