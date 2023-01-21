@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.movieshare.adapters.UserCommentAdapter;
+import com.example.movieshare.adapters.CommentAdapter;
 import com.example.movieshare.databinding.FragmentUserCommentListBinding;
 import com.example.movieshare.repository.MovieComment;
 import com.example.movieshare.repository.Repository;
@@ -35,7 +35,7 @@ public class UserCommentListFragment extends Fragment {
         RecyclerView userCommentsRecyclerList = this.viewBindings.userCommentListFragmentList;
         userCommentsRecyclerList.setHasFixedSize(true);
         userCommentsRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
-        UserCommentAdapter userCommentAdapter = new UserCommentAdapter(getLayoutInflater(), this.userCommentList);
+        CommentAdapter userCommentAdapter = new CommentAdapter(getLayoutInflater(), this.userCommentList);
         userCommentsRecyclerList.setAdapter(userCommentAdapter);
 
         userCommentAdapter.setOnItemClickListener(position -> {
