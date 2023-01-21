@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.movieshare.fragments.LoginFragment"
+        android:name="com.example.movieshare.fragments.authentication.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.movieshare.fragments.RegisterFragment"
+        android:name="com.example.movieshare.fragments.authentication.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.movieshare.fragments.ProfileFragment"
+        android:name="com.example.movieshare.fragments.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -33,20 +33,28 @@
     </fragment>
     <fragment
         android:id="@+id/userCommentListFragment"
-        android:name="com.example.movieshare.fragments.UserCommentListFragment"
+        android:name="com.example.movieshare.fragments.profile.UserCommentListFragment"
         android:label="fragment_user_comment_list"
         tools:layout="@layout/fragment_user_comment_list" >
+        <action
+            android:id="@+id/action_userCommentListFragment_to_userCommentAdditionFragment"
+            app:destination="@id/userCommentAdditionFragment" />
         <action
             android:id="@+id/action_userCommentListFragment_to_userCommentEditionFragment"
             app:destination="@id/userCommentEditionFragment" />
     </fragment>
     <fragment
         android:id="@+id/userCommentEditionFragment"
-        android:name="com.example.movieshare.fragments.UserCommentEditionFragment"
+        android:name="com.example.movieshare.fragments.profile.UserCommentEditionFragment"
         android:label="fragment_user_comment_edition"
         tools:layout="@layout/fragment_user_comment_edition" >
         <argument
             android:name="movieCommentPosition"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/userCommentAdditionFragment"
+        android:name="com.example.movieshare.fragments.profile.UserCommentAdditionFragment"
+        android:label="fragment_user_comment_addition"
+        tools:layout="@layout/fragment_user_comment_addition" />
 </navigation>
