@@ -24,16 +24,16 @@
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.movieshare.fragments.profile.ProfileFragment"
+        android:name="com.example.movieshare.fragments.user.UserProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_user_profile" >
         <action
             android:id="@+id/action_profileFragment_to_userCommentListFragment"
             app:destination="@id/userCommentListFragment" />
     </fragment>
     <fragment
         android:id="@+id/userCommentListFragment"
-        android:name="com.example.movieshare.fragments.profile.UserCommentListFragment"
+        android:name="com.example.movieshare.fragments.user.UserCommentListFragment"
         android:label="fragment_user_comment_list"
         tools:layout="@layout/fragment_user_comment_list" >
         <action
@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/userCommentEditionFragment"
-        android:name="com.example.movieshare.fragments.profile.UserCommentEditionFragment"
+        android:name="com.example.movieshare.fragments.user.UserCommentEditionFragment"
         android:label="fragment_user_comment_edition"
         tools:layout="@layout/fragment_user_comment_edition" >
         <argument
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/userCommentAdditionFragment"
-        android:name="com.example.movieshare.fragments.profile.UserCommentAdditionFragment"
+        android:name="com.example.movieshare.fragments.user.UserCommentAdditionFragment"
         android:label="fragment_user_comment_addition"
         tools:layout="@layout/fragment_user_comment_addition" />
 </navigation>

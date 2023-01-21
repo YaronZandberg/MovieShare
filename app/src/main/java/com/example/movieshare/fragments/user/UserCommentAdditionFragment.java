@@ -1,4 +1,4 @@
-package com.example.movieshare.fragments.profile;
+package com.example.movieshare.fragments.user;
 
 import android.os.Bundle;
 

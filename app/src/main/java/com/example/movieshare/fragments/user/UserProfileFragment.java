@@ -1,4 +1,4 @@
-package com.example.movieshare.fragments.profile;
+package com.example.movieshare.fragments.user;
 
 import android.os.Bundle;
 
@@ -10,17 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.movieshare.databinding.FragmentProfileBinding;
+import com.example.movieshare.databinding.FragmentUserProfileBinding;
 
-public class ProfileFragment extends Fragment {
-    private FragmentProfileBinding viewBindings;
+public class UserProfileFragment extends Fragment {
+    private FragmentUserProfileBinding viewBindings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.viewBindings = FragmentProfileBinding.inflate(inflater, container, false);
-        this.viewBindings.profileFragmentCommentsBtn.setOnClickListener(view -> {
-            NavDirections action = ProfileFragmentDirections.actionProfileFragmentToUserCommentListFragment();
+        this.viewBindings = FragmentUserProfileBinding.inflate(inflater, container, false);
+        this.viewBindings.userProfileFragmentCommentsBtn.setOnClickListener(view -> {
+            NavDirections action = UserProfileFragmentDirections.actionProfileFragmentToUserCommentListFragment();
             Navigation.findNavController(view).navigate(action);
         });
         return this.viewBindings.getRoot();

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.profile.UserCommentListFragment" >
+    tools:context=".fragments.user.UserCommentListFragment" >
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/usercomment_list_fragment_list"
+        android:id="@+id/user_comment_list_fragment_list"
         android:layout_width="409dp"
         android:layout_height="729dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/usercomment_list_fragment_add_btn"
+        android:id="@+id/user_comment_list_fragment_add_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"

@@ -1,4 +1,4 @@
-package com.example.movieshare.fragments.profile;
+package com.example.movieshare.fragments.user;
 
 import android.os.Bundle;
 
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class UserCommentListFragment extends Fragment {
     private FragmentUserCommentListBinding viewBindings;
-    private List<MovieComment> movieCommentList;
+    private List<MovieComment> userCommentList;
     private String userId;
 
     @Override
@@ -30,12 +30,12 @@ public class UserCommentListFragment extends Fragment {
         this.viewBindings = FragmentUserCommentListBinding.inflate(inflater, container, false);
 
         // TODO: Initialize movieCommentList using Repository.instance.getAllMovieCommentsByUserId()
-        this.movieCommentList = Repository.instance().getAllMovieComments();
+        this.userCommentList = Repository.instance().getAllMovieComments();
 
-        RecyclerView userCommentsRecyclerList = this.viewBindings.usercommentListFragmentList;
+        RecyclerView userCommentsRecyclerList = this.viewBindings.userCommentListFragmentList;
         userCommentsRecyclerList.setHasFixedSize(true);
         userCommentsRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
-        UserCommentAdapter userCommentAdapter = new UserCommentAdapter(getLayoutInflater(), this.movieCommentList);
+        UserCommentAdapter userCommentAdapter = new UserCommentAdapter(getLayoutInflater(), this.userCommentList);
         userCommentsRecyclerList.setAdapter(userCommentAdapter);
 
         userCommentAdapter.setOnItemClickListener(position -> {
@@ -43,10 +43,10 @@ public class UserCommentListFragment extends Fragment {
                     .ActionUserCommentListFragmentToUserCommentEditionFragment action =
                     UserCommentListFragmentDirections
                     .actionUserCommentListFragmentToUserCommentEditionFragment(position);
-            Navigation.findNavController(viewBindings.usercommentListFragmentList).navigate(action);
+            Navigation.findNavController(viewBindings.userCommentListFragmentList).navigate(action);
         });
 
-        this.viewBindings.usercommentListFragmentAddBtn.setOnClickListener(view -> {
+        this.viewBindings.userCommentListFragmentAddBtn.setOnClickListener(view -> {
             NavDirections action = UserCommentListFragmentDirections
                     .actionUserCommentListFragmentToUserCommentAdditionFragment();
             Navigation.findNavController(view).navigate(action);
