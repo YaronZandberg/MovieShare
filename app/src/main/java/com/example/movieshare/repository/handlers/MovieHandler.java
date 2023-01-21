@@ -4,6 +4,7 @@ import com.example.movieshare.repository.models.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MovieHandler {
     private final Integer MOVIES_AMOUNT = 15;
@@ -22,10 +23,11 @@ public class MovieHandler {
 
     private Movie initializeMovie(Integer index) {
         Integer movieId = index;
+        Integer movieCategoryId = index;
         String movieName = "name " + index;
         String movieRating = "rating " + index;
         String description = "description " + index;
-        return new Movie(movieId, movieName, movieRating, description);
+        return new Movie(movieId, movieCategoryId, movieName, movieRating, description);
     }
 
     public List<Movie> getAllMovies() {
@@ -34,6 +36,13 @@ public class MovieHandler {
 
     public Movie getMovieById(Integer id) {
         return movieList.get(id);
+    }
+
+    public List<Movie> getAllMoviesByCategoryId(Integer categoryId){
+        return this.movieList
+                .stream()
+                .filter(movie -> movie.getMovieCategoryId().equals(categoryId))
+                .collect(Collectors.toList());
     }
 
     public void addMovie(Movie movie) {

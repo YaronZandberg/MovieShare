@@ -2,6 +2,7 @@ package com.example.movieshare.fragments.user;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -22,15 +23,19 @@ import java.util.List;
 public class UserCommentListFragment extends Fragment {
     private FragmentUserCommentListBinding viewBindings;
     private List<MovieComment> userCommentList;
-    private String userId;
+    private Integer userId;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.userId = UserCommentListFragmentArgs.fromBundle(getArguments()).getUserId();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentUserCommentListBinding.inflate(inflater, container, false);
-
-        // TODO: Initialize movieCommentList using Repository.instance.getAllMovieCommentsByUserId()
-        this.userCommentList = Repository.getMovieCommentHandler().getAllMovieComments();
+        this.userCommentList = Repository.getMovieCommentHandler().getAllMovieCommentsByUserId(this.userId);
 
         RecyclerView userCommentsRecyclerList = this.viewBindings.userCommentListFragmentList;
         userCommentsRecyclerList.setHasFixedSize(true);

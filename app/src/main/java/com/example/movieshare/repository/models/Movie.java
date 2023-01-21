@@ -2,12 +2,15 @@ package com.example.movieshare.repository.models;
 
 public class Movie {
     private Integer movieId;
+    private Integer movieCategoryId;
     private String movieName;
     private String movieRating;
     private String description;
 
-    public Movie(Integer movieId, String movieName, String movieRating, String description) {
+    public Movie(Integer movieId, Integer movieCategoryId,
+                 String movieName, String movieRating, String description) {
         this.movieId = movieId;
+        this.movieCategoryId = movieCategoryId;
         this.movieName = movieName;
         this.movieRating = movieRating;
         this.description = description;
@@ -19,6 +22,14 @@ public class Movie {
 
     public void setMovieId(Integer movieId) {
         this.movieId = movieId;
+    }
+
+    public Integer getMovieCategoryId() {
+        return this.movieCategoryId;
+    }
+
+    public void setMovieCategoryId(Integer movieCategoryId) {
+        this.movieCategoryId = movieCategoryId;
     }
 
     public String getMovieName() {
