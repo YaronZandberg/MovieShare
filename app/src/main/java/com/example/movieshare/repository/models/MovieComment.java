@@ -1,4 +1,4 @@
-package com.example.movieshare.repository;
+package com.example.movieshare.repository.models;
 
 public class MovieComment {
     private Integer serialId;

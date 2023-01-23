@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.profile.ProfileFragment">
+    tools:context=".fragments.movie.MovieProfileFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,12 +20,12 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/profile_fragment_frame"
+                android:id="@+id/movie_profile_fragment_frame"
                 android:layout_width="match_parent"
                 android:layout_height="250dp">
 
                 <ImageView
-                    android:id="@+id/profile_fragment_img"
+                    android:id="@+id/movie_profile_fragment_img"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_marginStart="100dp"
@@ -38,7 +38,7 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <ImageButton
-                    android:id="@+id/profile_fragment_img_btn"
+                    android:id="@+id/movie_profile_fragment_img_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:layout_gravity="bottom|center"
@@ -48,7 +48,7 @@
             </FrameLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/profile_fragment_username_input_layout"
+                android:id="@+id/movie_profile_fragment_movie_name_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,17 +57,17 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_frame">
+                app:layout_constraintTop_toBottomOf="@+id/movie_profile_fragment_frame">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profile_fragment_username_input_et"
+                    android:id="@+id/movie_profile_fragment_movie_name_input_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Username" />
+                    android:hint="Name" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/profile_fragment_newpassword_input_layout"
+                android:id="@+id/movie_profile_fragment_movie_category_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,17 +76,17 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_username_input_layout">
+                app:layout_constraintTop_toBottomOf="@+id/movie_profile_fragment_movie_name_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profile_fragment_newpassword_input_et"
+                    android:id="@+id/movie_profile_fragment_movie_category_input_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="New Password" />
+                    android:hint="Category" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/profile_fragment_actor_input_layout"
+                android:id="@+id/movie_profile_fragment_movie_description_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -95,17 +95,17 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_newpassword_input_layout">
+                app:layout_constraintTop_toBottomOf="@+id/movie_profile_fragment_movie_category_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profile_fragment_actor_input_et"
+                    android:id="@+id/movie_profile_fragment_movie_description_input_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Favorite Actor" />
+                    android:hint="Description" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/profile_fragment_category_input_layout"
+                android:id="@+id/movie_profile_fragment_movie_rating_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,17 +114,36 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_actor_input_layout">
+                app:layout_constraintTop_toBottomOf="@+id/movie_profile_fragment_movie_description_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profile_fragment_category_input_et"
+                    android:id="@+id/movie_profile_fragment_movie_rating_input_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Favorite Movie Category" />
+                    android:hint="Rating" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/movie_profile_fragment_movie_subscribers_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/movie_profile_fragment_movie_rating_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/movie_profile_fragment_movie_subscribers_input_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Subscribers" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/profile_fragment_comments_btn"
+                android:id="@+id/movie_profile_fragment_comments_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
@@ -134,20 +153,7 @@
                 android:text="Click for comments"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_category_input_layout" />
-
-            <Button
-                android:id="@+id/profile_fragment_save_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="48dp"
-                android:layout_marginEnd="60dp"
-                android:backgroundTint="#3164F4"
-                android:text="SAVE"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_fragment_comments_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/movie_profile_fragment_movie_rating_input_layout" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>

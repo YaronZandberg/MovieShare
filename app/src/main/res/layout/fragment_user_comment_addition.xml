@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.profile.UserCommentAdditionFragment">
+    tools:context=".fragments.user.UserCommentAdditionFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/user_comment_addition_fragment_movie_name_input_layout"

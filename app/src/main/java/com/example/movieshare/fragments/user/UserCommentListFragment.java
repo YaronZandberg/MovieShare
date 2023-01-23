@@ -1,7 +1,8 @@
-package com.example.movieshare.fragments.profile;
+package com.example.movieshare.fragments.user;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -12,30 +13,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.movieshare.adapters.UserCommentAdapter;
+import com.example.movieshare.adapters.CommentAdapter;
 import com.example.movieshare.databinding.FragmentUserCommentListBinding;
-import com.example.movieshare.repository.MovieComment;
+import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 
 import java.util.List;
 
 public class UserCommentListFragment extends Fragment {
     private FragmentUserCommentListBinding viewBindings;
-    private List<MovieComment> movieCommentList;
-    private String userId;
+    private List<MovieComment> userCommentList;
+    private Integer userId;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.userId = UserCommentListFragmentArgs.fromBundle(getArguments()).getUserId();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentUserCommentListBinding.inflate(inflater, container, false);
+        this.userCommentList = Repository.getMovieCommentHandler().getAllMovieCommentsByUserId(this.userId);
 
-        // TODO: Initialize movieCommentList using Repository.instance.getAllMovieCommentsByUserId()
-        this.movieCommentList = Repository.instance().getAllMovieComments();
-
-        RecyclerView userCommentsRecyclerList = this.viewBindings.usercommentListFragmentList;
+        RecyclerView userCommentsRecyclerList = this.viewBindings.userCommentListFragmentList;
         userCommentsRecyclerList.setHasFixedSize(true);
         userCommentsRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
-        UserCommentAdapter userCommentAdapter = new UserCommentAdapter(getLayoutInflater(), this.movieCommentList);
+        CommentAdapter userCommentAdapter = new CommentAdapter(getLayoutInflater(), this.userCommentList);
         userCommentsRecyclerList.setAdapter(userCommentAdapter);
 
         userCommentAdapter.setOnItemClickListener(position -> {
@@ -43,10 +48,10 @@ public class UserCommentListFragment extends Fragment {
                     .ActionUserCommentListFragmentToUserCommentEditionFragment action =
                     UserCommentListFragmentDirections
                     .actionUserCommentListFragmentToUserCommentEditionFragment(position);
-            Navigation.findNavController(viewBindings.usercommentListFragmentList).navigate(action);
+            Navigation.findNavController(viewBindings.userCommentListFragmentList).navigate(action);
         });
 
-        this.viewBindings.usercommentListFragmentAddBtn.setOnClickListener(view -> {
+        this.viewBindings.userCommentListFragmentAddBtn.setOnClickListener(view -> {
             NavDirections action = UserCommentListFragmentDirections
                     .actionUserCommentListFragmentToUserCommentAdditionFragment();
             Navigation.findNavController(view).navigate(action);

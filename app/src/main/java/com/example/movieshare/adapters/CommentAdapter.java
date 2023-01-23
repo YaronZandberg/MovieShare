@@ -9,17 +9,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieshare.R;
 import com.example.movieshare.monitoring.OnItemClickListener;
-import com.example.movieshare.repository.MovieComment;
-import com.example.movieshare.viewholders.UserCommentViewHolder;
+import com.example.movieshare.repository.models.MovieComment;
+import com.example.movieshare.viewholders.CommentViewHolder;
 
 import java.util.List;
 
-public class UserCommentAdapter extends RecyclerView.Adapter<UserCommentViewHolder> {
+public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
     private final LayoutInflater layoutInflater;
     private final List<MovieComment> movieCommentList;
     private OnItemClickListener listener;
 
-    public UserCommentAdapter(LayoutInflater layoutInflater, List<MovieComment> movieCommentList) {
+    public CommentAdapter(LayoutInflater layoutInflater, List<MovieComment> movieCommentList) {
         this.layoutInflater = layoutInflater;
         this.movieCommentList = movieCommentList;
     }
@@ -30,15 +30,15 @@ public class UserCommentAdapter extends RecyclerView.Adapter<UserCommentViewHold
 
     @NonNull
     @Override
-    public UserCommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = this.layoutInflater.inflate(R.layout.user_comment_list_row, parent, false);
-        return new UserCommentViewHolder(view, this.listener, this.movieCommentList);
+    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = this.layoutInflater.inflate(R.layout.item_list_row, parent, false);
+        return new CommentViewHolder(view, this.listener, this.movieCommentList);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserCommentViewHolder userCommentViewHolder, int position) {
+    public void onBindViewHolder(@NonNull CommentViewHolder commentViewHolder, int position) {
         MovieComment movieComment = this.movieCommentList.get(position);
-        userCommentViewHolder.bindMovieComment(movieComment);
+        commentViewHolder.bindMovieComment(movieComment);
     }
 
     @Override
