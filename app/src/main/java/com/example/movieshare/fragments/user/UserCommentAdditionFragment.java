@@ -44,19 +44,17 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentAdditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
-            addUserMovieComment();
-            new AddUserMovieCommentDialogFragment()
-                    .show(getActivity().getSupportFragmentManager(), "TAG");
-            Navigation.findNavController(view).popBackStack();
+            MovieComment movieComment = buildNewMovieComment();
+            Repository.getMovieCommentHandler()
+                    .addMovieComment(movieComment, () -> {
+                        new AddUserMovieCommentDialogFragment()
+                                .show(getActivity().getSupportFragmentManager(), "TAG");
+                        Navigation.findNavController(view).popBackStack();
+                    });
         });
     }
 
-    private void addUserMovieComment(){
-        MovieComment movieComment = buildNewMovieComment();
-        Repository.getMovieCommentHandler().addMovieComment(movieComment);
-    }
-
-    private MovieComment buildNewMovieComment(){
+    private MovieComment buildNewMovieComment() {
         Integer id = 1;
         Integer userId = 1;
         Integer movieId = 1;
@@ -72,8 +70,8 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         return new MovieComment(id, userId, movieId, description, movieName, movieRating);
     }
 
-    private String replaceNullValueIfNeeded(String content){
-        if (Objects.isNull(content)){
+    private String replaceNullValueIfNeeded(String content) {
+        if (Objects.isNull(content)) {
             return "";
         }
         return content;

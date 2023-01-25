@@ -15,11 +15,13 @@ import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFrag
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 
+import java.util.List;
 import java.util.Objects;
 
 public class UserCommentEditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentEditionBinding viewBindings;
     private Integer movieCommentPosition;
+    private List<MovieComment> tempMovieComments;
     private MovieComment movieComment;
 
     @Override
@@ -27,7 +29,10 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         super.onCreate(savedInstanceState);
         this.movieCommentPosition =
                 UserCommentEditionFragmentArgs.fromBundle(getArguments()).getMovieCommentPosition();
-        this.movieComment = Repository.getMovieCommentHandler().getAllMovieComments().get(this.movieCommentPosition);
+        Repository.getMovieCommentHandler().getAllMovieComments(movieCommentList ->
+                tempMovieComments = movieCommentList
+        );
+        this.movieComment = this.tempMovieComments.get(this.movieCommentPosition);
     }
 
     @Override
@@ -58,12 +63,13 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     protected void activateButtonsListeners() {
         this.viewBindings.userCommentEditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
-        this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view -> {
-            deleteUserComment();
-            new DeleteUserMovieCommentDialogFragment()
-                    .show(getActivity().getSupportFragmentManager(), "TAG");
-            Navigation.findNavController(view).popBackStack();
-        });
+        this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
+                Repository.getMovieCommentHandler()
+                        .removeMovieComment(this.movieCommentPosition, () -> {
+                            new DeleteUserMovieCommentDialogFragment()
+                                    .show(getActivity().getSupportFragmentManager(), "TAG");
+                            Navigation.findNavController(view).popBackStack();
+                        }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             updateUserComment();
             new UpdateUserMovieCommentDialogFragment()
@@ -72,11 +78,9 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         });
     }
 
-    private void deleteUserComment() {
-        Repository.getMovieCommentHandler().removeMovieComment(this.movieCommentPosition);
-    }
-
-    private void updateUserComment(){
+    // TODO: Use the updateUserComment method of DB version and put all this code in the
+    //  setOnClickListener method of save button
+    private void updateUserComment() {
         String updatedMovieRating =
                 replaceNullValueIfNeeded(this.viewBindings
                         .userCommentEditionFragmentMovieRatingInputEt.getText().toString());
@@ -88,8 +92,8 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         Repository.getMovieCommentHandler().setMovieComment(this.movieCommentPosition, this.movieComment);
     }
 
-    private String replaceNullValueIfNeeded(String content){
-        if (Objects.isNull(content)){
+    private String replaceNullValueIfNeeded(String content) {
+        if (Objects.isNull(content)) {
             return "";
         }
         return content;

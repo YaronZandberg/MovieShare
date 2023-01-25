@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieshare.R;
-import com.example.movieshare.monitoring.OnItemClickListener;
+import com.example.movieshare.listeners.OnItemClickListener;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.viewholders.CommentViewHolder;
 
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
     private final LayoutInflater layoutInflater;
-    private final List<MovieComment> movieCommentList;
+    private List<MovieComment> movieCommentList;
     private OnItemClickListener listener;
 
     public CommentAdapter(LayoutInflater layoutInflater, List<MovieComment> movieCommentList) {
@@ -26,6 +26,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.listener = onItemClickListener;
+    }
+
+    public void setMovieCommentList(List<MovieComment> movieCommentList) {
+        this.movieCommentList = movieCommentList;
+        notifyDataSetChanged();
     }
 
     @NonNull
