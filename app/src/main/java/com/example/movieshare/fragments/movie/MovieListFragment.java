@@ -23,6 +23,7 @@ public class MovieListFragment extends Fragment {
     private FragmentMovieListBinding viewBindings;
     private List<Movie> movieList;
     private Integer movieCategoryPosition;
+    private List<MovieCategory> tempMovieCategories;
     private MovieCategory movieCategory;
     private MovieAdapter movieAdapter;
 
@@ -31,8 +32,11 @@ public class MovieListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.movieCategoryPosition =
                 MovieListFragmentArgs.fromBundle(getArguments()).getMovieCategoryPosition();
-        this.movieCategory = Repository.getMovieCategoryHandler()
-                .getAllMovieCategories().get(this.movieCategoryPosition);
+        Repository.getMovieCategoryHandler()
+                .getAllMovieCategories(movieCategoryList ->
+                        tempMovieCategories = movieCategoryList
+                );
+        this.movieCategory = tempMovieCategories.get(this.movieCategoryPosition);
         Repository.getMovieHandler()
                 .getAllMoviesByCategoryId(this.movieCategory.getCategoryId(), movieList -> {
                     this.movieList = movieList;

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MovieCategoryAdapter extends RecyclerView.Adapter<MovieCategoryViewHolder> {
     private final LayoutInflater layoutInflater;
-    private final List<MovieCategory> movieCategoryList;
+    private List<MovieCategory> movieCategoryList;
     private OnItemClickListener listener;
 
     public MovieCategoryAdapter(LayoutInflater layoutInflater, List<MovieCategory> movieCommentList) {
@@ -26,6 +26,11 @@ public class MovieCategoryAdapter extends RecyclerView.Adapter<MovieCategoryView
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.listener = onItemClickListener;
+    }
+
+    public void setMovieCategoryList(List<MovieCategory> movieCategoryList) {
+        this.movieCategoryList = movieCategoryList;
+        notifyDataSetChanged();
     }
 
     @NonNull

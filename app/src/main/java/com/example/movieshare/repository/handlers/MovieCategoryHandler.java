@@ -1,50 +1,69 @@
 package com.example.movieshare.repository.handlers;
 
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.os.HandlerCompat;
+
+import com.example.movieshare.listeners.ExecuteMovieItemListener;
+import com.example.movieshare.listeners.GetMovieItemListListener;
+import com.example.movieshare.listeners.GetMovieItemListener;
+import com.example.movieshare.repository.localdb.AppLocalDB;
+import com.example.movieshare.repository.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.MovieCategory;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class MovieCategoryHandler {
-    private final Integer MOVIE_CATEGORIES_AMOUNT = 15;
-    private final List<MovieCategory> movieCategoryList = new ArrayList();
     private static final MovieCategoryHandler movieCategoryHandlerInstance = new MovieCategoryHandler();
+    private final Executor executor;
+    private final Handler mainThreadHandler;
+    private final AppLocalDbRepository localDB;
 
     private MovieCategoryHandler() {
-        for (int i = 0; i < this.MOVIE_CATEGORIES_AMOUNT; i++) {
-            this.addMovieCategory(initializeMovieCategory(i));
-        }
+        this.executor = Executors.newSingleThreadExecutor();
+        this.mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+        this.localDB = AppLocalDB.getAppDB();
     }
 
     public static MovieCategoryHandler instance() {
         return movieCategoryHandlerInstance;
     }
 
-    private MovieCategory initializeMovieCategory(Integer index) {
-        Integer categoryId = index;
-        String categoryName = "name " + index;
-        String categoryRating = "rating " + index;
-        String description = "description " + index;
-        return new MovieCategory(categoryId, categoryName, categoryRating, description);
+    public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {
+        this.executor.execute(() -> {
+            List<MovieCategory> movieCategories = localDB.movieCategoryDao().getAllMovieCategories();
+            mainThreadHandler.post(() -> listener.onComplete(movieCategories));
+        });
     }
 
-    public List<MovieCategory> getAllMovieCategories() {
-        return movieCategoryList;
+    public void getMovieCategoryById(Integer id, GetMovieItemListener<MovieCategory> listener) {
+        this.executor.execute(() -> {
+            MovieCategory movieCategory = localDB.movieCategoryDao().getMovieCategoryById(id);
+            mainThreadHandler.post(() -> listener.onComplete(movieCategory));
+        });
     }
 
-    public MovieCategory getMovieCategoryById(Integer id) {
-        return movieCategoryList.get(id);
+    public void addMovieCategory(MovieCategory movieCategory, ExecuteMovieItemListener listener) {
+        this.executor.execute(() -> {
+            localDB.movieCategoryDao().insertAll(movieCategory);
+            mainThreadHandler.post(listener::onComplete);
+        });
     }
 
-    public void addMovieCategory(MovieCategory movieCategory) {
-        movieCategoryList.add(movieCategory);
-    }
-
+    // TODO: Need to create a equivalent method in movieCategoryDao that supports updates
     public void setMovieCategory(Integer index, MovieCategory movieCategory) {
-        movieCategoryList.set(index, movieCategory);
+        //movieCategoryList.set(index, movieCategory);
     }
 
-    public void removeMovieCategory(Integer index) {
-        movieCategoryList.remove(movieCategoryList.get(index));
+    public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
+        this.executor.execute(() -> {
+            MovieCategory deletedMovieCategory =
+                    localDB.movieCategoryDao().getAllMovieCategories().get(index);
+            localDB.movieCategoryDao().delete(deletedMovieCategory);
+            mainThreadHandler.post(listener::onComplete);
+        });
     }
 }
