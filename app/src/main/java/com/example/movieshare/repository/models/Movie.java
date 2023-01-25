@@ -1,13 +1,21 @@
 package com.example.movieshare.repository.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Movie {
+    @PrimaryKey
+    @NonNull
     private Integer movieId;
+    @NonNull
     private Integer movieCategoryId;
     private String movieName;
     private String movieRating;
     private String description;
 
-    public Movie(Integer movieId, Integer movieCategoryId,
+    public Movie(@NonNull Integer movieId, @NonNull Integer movieCategoryId,
                  String movieName, String movieRating, String description) {
         this.movieId = movieId;
         this.movieCategoryId = movieCategoryId;
@@ -16,19 +24,21 @@ public class Movie {
         this.description = description;
     }
 
+    @NonNull
     public Integer getMovieId() {
         return this.movieId;
     }
 
-    public void setMovieId(Integer movieId) {
+    public void setMovieId(@NonNull Integer movieId) {
         this.movieId = movieId;
     }
 
+    @NonNull
     public Integer getMovieCategoryId() {
         return this.movieCategoryId;
     }
 
-    public void setMovieCategoryId(Integer movieCategoryId) {
+    public void setMovieCategoryId(@NonNull Integer movieCategoryId) {
         this.movieCategoryId = movieCategoryId;
     }
 

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieshare.R;
-import com.example.movieshare.monitoring.OnItemClickListener;
+import com.example.movieshare.listeners.OnItemClickListener;
 import com.example.movieshare.repository.models.MovieCategory;
 import com.example.movieshare.viewholders.MovieCategoryViewHolder;
 
