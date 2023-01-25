@@ -78,7 +78,7 @@ public class MovieCommentHandler {
         });
     }
 
-    // TODO: Need to create a ambivalent method in movieCommentDao that supports updates
+    // TODO: Need to create a equivalent method in movieCommentDao that supports updates
     public void setMovieComment(Integer index, MovieComment movieComment) {
         //movieCommentList.set(index, movieComment);
     }

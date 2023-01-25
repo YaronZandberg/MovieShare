@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,37 +24,37 @@ public class MovieListFragment extends Fragment {
     private List<Movie> movieList;
     private Integer movieCategoryPosition;
     private MovieCategory movieCategory;
+    private MovieAdapter movieAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.movieCategoryPosition =
                 MovieListFragmentArgs.fromBundle(getArguments()).getMovieCategoryPosition();
-        this.movieCategory =
-                Repository.getMovieCategoryHandler().getAllMovieCategories().get(this.movieCategoryPosition);
+        this.movieCategory = Repository.getMovieCategoryHandler()
+                .getAllMovieCategories().get(this.movieCategoryPosition);
+        Repository.getMovieHandler()
+                .getAllMoviesByCategoryId(this.movieCategory.getCategoryId(), movieList -> {
+                    this.movieList = movieList;
+                    this.movieAdapter.setMovieList(this.movieList);
+                });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentMovieListBinding.inflate(inflater, container, false);
-        this.movieList = Repository.getMovieHandler()
-                .getAllMoviesByCategoryId(this.movieCategory.getCategoryId());
-
-        RecyclerView movieRecyclerList = this.viewBindings.movieListFragmentMoviesList;
-        movieRecyclerList.setHasFixedSize(true);
-        movieRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
-        MovieAdapter movieAdapter = new MovieAdapter(getLayoutInflater(), this.movieList);
-        movieRecyclerList.setAdapter(movieAdapter);
-
-        movieAdapter.setOnItemClickListener(position -> {
+        this.viewBindings.movieListFragmentMoviesList.setHasFixedSize(true);
+        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new LinearLayoutManager(getContext()));
+        this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.movieList);
+        this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
+        this.movieAdapter.setOnItemClickListener(position -> {
             MovieListFragmentDirections
                     .ActionMovieListFragmentToMovieProfileFragment action =
                     MovieListFragmentDirections
                             .actionMovieListFragmentToMovieProfileFragment(position);
             Navigation.findNavController(viewBindings.movieListFragmentMoviesList).navigate(action);
         });
-
         return this.viewBindings.getRoot();
     }
 }

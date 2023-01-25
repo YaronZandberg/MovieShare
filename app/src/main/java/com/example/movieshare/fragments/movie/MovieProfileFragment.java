@@ -24,7 +24,9 @@ public class MovieProfileFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.moviePosition = MovieProfileFragmentArgs.fromBundle(getArguments()).getMoviePosition();
-        this.movie = Repository.getMovieHandler().getAllMovies().get(this.moviePosition);
+        Repository.getMovieHandler().getAllMovies(movieList ->
+                this.movie = movieList.get(this.moviePosition)
+        );
     }
 
     @Override

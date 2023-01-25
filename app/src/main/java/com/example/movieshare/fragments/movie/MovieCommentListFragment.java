@@ -30,7 +30,9 @@ public class MovieCommentListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.moviePosition = MovieCommentListFragmentArgs
                 .fromBundle(getArguments()).getMoviePosition();
-        this.movie = Repository.getMovieHandler().getAllMovies().get(this.moviePosition);
+        Repository.getMovieHandler().getAllMovies(movieList ->
+                this.movie = movieList.get(this.moviePosition)
+        );
         Repository.getMovieCommentHandler()
                 .getAllMovieCommentsByMovieId(this.movie.getMovieId(), movieCommentList -> {
                     this.movieCommentList = movieCommentList;
