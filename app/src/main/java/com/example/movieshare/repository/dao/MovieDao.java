@@ -16,9 +16,6 @@ public interface MovieDao {
     @Query("SELECT * FROM Movie WHERE movieId = :id")
     Movie getMovieById(Integer id);
 
-    // --- Add another query with FK: getAllMoviesByCategoryId ---
-    //public void addMovie(Movie movie);
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Movie... movies);
 
