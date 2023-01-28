@@ -6,19 +6,22 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(foreignKeys = {@ForeignKey(entity = Movie.class,
-        parentColumns = "movieId",
-        childColumns = "movieId",
-        onDelete = ForeignKey.CASCADE)
+@Entity(foreignKeys = {
+        @ForeignKey(entity = Movie.class,
+                parentColumns = "movieId",
+                childColumns = "movieId",
+                onDelete = ForeignKey.CASCADE)
 })
 public class MovieComment {
     @PrimaryKey(autoGenerate = true)
     private Integer serialId;
 
-    private @NonNull Integer userId;
+    @NonNull
+    private Integer userId;
 
     @ColumnInfo(index = true)
-    private @NonNull Integer movieId;
+    @NonNull
+    private Integer movieId;
     private String description;
 
     // TODO: Delete these two properties later because we will get them from Movie Entity using movieId FK

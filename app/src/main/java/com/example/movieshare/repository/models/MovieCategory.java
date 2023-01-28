@@ -2,9 +2,10 @@ package com.example.movieshare.repository.models;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(indices = {@Index(value = {"categoryName"}, unique = true)})
 public class MovieCategory {
     @PrimaryKey(autoGenerate = true)
     private Integer categoryId;

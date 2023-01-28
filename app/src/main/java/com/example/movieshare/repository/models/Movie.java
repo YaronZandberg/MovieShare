@@ -4,18 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(foreignKeys = {@ForeignKey(entity = MovieCategory.class,
-        parentColumns = "categoryId",
-        childColumns = "movieCategoryId",
-        onDelete = ForeignKey.CASCADE)
-})
+@Entity(foreignKeys = {
+        @ForeignKey(entity = MovieCategory.class,
+                parentColumns = "categoryId",
+                childColumns = "movieCategoryId",
+                onDelete = ForeignKey.CASCADE)},
+        indices = {@Index(value = {"movieName"}, unique = true)}
+)
 public class Movie {
     @PrimaryKey(autoGenerate = true)
     private Integer movieId;
     @ColumnInfo(index = true)
-    private @NonNull Integer movieCategoryId;
+    @NonNull
+    private Integer movieCategoryId;
     private String movieName;
     private String movieRating;
     private String description;
