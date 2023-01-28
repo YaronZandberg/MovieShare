@@ -40,6 +40,20 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getContext(), "Home button has been clicked", Toast.LENGTH_LONG)
                     .show();
         });
+        this.viewBindings.testCategoryBtn.setOnClickListener(view -> {
+            NavDirections action = LoginFragmentDirections
+                    .actionLoginFragmentToTestAddMovieCategoryFragment();
+            Navigation.findNavController(view).navigate(action);
+            Toast.makeText(getContext(), "Category Test has been started", Toast.LENGTH_LONG)
+                    .show();
+        });
+        this.viewBindings.testMovieBtn.setOnClickListener(view -> {
+            NavDirections action = LoginFragmentDirections
+                    .actionLoginFragmentToTestAddMovieFragment();
+            Navigation.findNavController(view).navigate(action);
+            Toast.makeText(getContext(), "Movie Test has been started", Toast.LENGTH_LONG)
+                    .show();
+        });
         return this.viewBindings.getRoot();
     }
 }

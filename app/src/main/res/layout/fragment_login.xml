@@ -29,14 +29,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="60dp"
         android:backgroundTint="#3164F4"
         android:text="Login"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_fragment_headline" />
+        app:layout_constraintTop_toBottomOf="@+id/test_category_btn" />
 
     <Button
         android:id="@+id/login_fragment_register_btn"
@@ -80,4 +80,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_fragment_user_btn" />
+
+    <Button
+        android:id="@+id/test_category_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="2dp"
+        android:text="Category"
+        app:layout_constraintEnd_toStartOf="@+id/test_movie_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_fragment_headline" />
+
+    <Button
+        android:id="@+id/test_movie_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="8dp"
+        android:text="Movie"
+        app:layout_constraintBottom_toBottomOf="@+id/test_category_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/test_category_btn"
+        app:layout_constraintTop_toTopOf="@+id/test_category_btn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

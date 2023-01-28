@@ -17,11 +17,12 @@ import com.example.movieshare.databinding.FragmentUserCommentListBinding;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserCommentListFragment extends Fragment {
     private FragmentUserCommentListBinding viewBindings;
-    private List<MovieComment> userCommentList;
+    private List<MovieComment> userCommentList = new ArrayList<>();
     private Integer userId;
     private CommentAdapter userCommentAdapter;
 

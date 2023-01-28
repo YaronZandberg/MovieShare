@@ -15,7 +15,6 @@ import com.example.movieshare.repository.models.Movie;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class MovieHandler {
     private static final MovieHandler movieHandlerInstance = new MovieHandler();
@@ -43,12 +42,6 @@ public class MovieHandler {
     public void getAllMoviesByCategoryId(Integer categoryId,
                                          GetMovieItemListListener<Movie> listener){
         this.executor.execute(() -> {
-            /*List<Movie> allMovies = localDB.movieDao().getAllMovies();
-            List<Movie> filteredMovies = allMovies
-                    .stream()
-                    .filter(movie -> movie.getMovieCategoryId().equals(categoryId))
-                    .collect(Collectors.toList());
-            mainThreadHandler.post(() -> listener.onComplete(filteredMovies));*/
             List<Movie> movies = localDB.movieDao().getAllMoviesByCategoryId(categoryId);
             mainThreadHandler.post(() -> listener.onComplete(movies));
         });

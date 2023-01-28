@@ -16,11 +16,12 @@ import com.example.movieshare.databinding.FragmentMovieHomeBinding;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.models.MovieCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieHomeFragment extends Fragment {
     private FragmentMovieHomeBinding viewBindings;
-    private List<MovieCategory> movieCategories;
+    private List<MovieCategory> movieCategories = new ArrayList<>();
     private MovieCategoryAdapter movieCategoryAdapter;
 
     @Override

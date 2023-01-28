@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_loginFragment_to_movieHomeFragment"
             app:destination="@id/movieHomeFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_testAddMovieCategoryFragment"
+            app:destination="@id/testAddMovieCategoryFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_testAddMovieFragment"
+            app:destination="@id/testAddMovieFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -105,4 +111,14 @@
             android:name="moviePosition"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/testAddMovieCategoryFragment"
+        android:name="com.example.movieshare.fragments.test.TestAddMovieCategoryFragment"
+        android:label="fragment_test_add_movie_category"
+        tools:layout="@layout/fragment_test_add_movie_category" />
+    <fragment
+        android:id="@+id/testAddMovieFragment"
+        android:name="com.example.movieshare.fragments.test.TestAddMovieFragment"
+        android:label="fragment_test_add_movie"
+        tools:layout="@layout/fragment_test_add_movie" />
 </navigation>

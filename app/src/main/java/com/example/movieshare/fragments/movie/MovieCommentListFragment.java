@@ -16,11 +16,12 @@ import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieCommentListFragment extends Fragment {
     private FragmentMovieCommentListBinding viewBindings;
-    private List<MovieComment> movieCommentList;
+    private List<MovieComment> movieCommentList = new ArrayList<>();
     private Integer moviePosition;
     private Movie movie;
     private CommentAdapter movieCommentAdapter;
