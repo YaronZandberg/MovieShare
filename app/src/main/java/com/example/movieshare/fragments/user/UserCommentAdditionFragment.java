@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
 import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
+import com.example.movieshare.fragments.dialogs.NonExistingMovieDialogFragment;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
@@ -57,9 +58,8 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
                             Navigation.findNavController(view).popBackStack();
                         });
             } catch (Exception e) {
-                // TODO: Create an exception for nonMovieExisting and create another
-                //  dialog alert to inform the user that the operation failed
-                e.printStackTrace();
+                new NonExistingMovieDialogFragment()
+                        .show(getActivity().getSupportFragmentManager(), "TAG");
             }
         });
     }
