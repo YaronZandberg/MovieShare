@@ -33,11 +33,7 @@ public class MovieCommentListFragment extends Fragment {
         Repository.getMovieHandler().getAllMovies(movieList ->
                 this.movie = movieList.get(this.moviePosition)
         );
-        Repository.getMovieCommentHandler()
-                .getAllMovieCommentsByMovieId(this.movie.getMovieId(), movieCommentList -> {
-                    this.movieCommentList = movieCommentList;
-                    this.movieCommentAdapter.setMovieCommentList(this.movieCommentList);
-                });
+        reloadList();
     }
 
     @Override
@@ -50,5 +46,19 @@ public class MovieCommentListFragment extends Fragment {
         this.movieCommentAdapter = new CommentAdapter(getLayoutInflater(), this.movieCommentList);
         this.viewBindings.movieCommentListFragmentList.setAdapter(this.movieCommentAdapter);
         return this.viewBindings.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadList();
+    }
+
+    private void reloadList() {
+        Repository.getMovieCommentHandler()
+                .getAllMovieCommentsByMovieId(this.movie.getMovieId(), movieCommentList -> {
+                    this.movieCommentList = movieCommentList;
+                    this.movieCommentAdapter.setMovieCommentList(this.movieCommentList);
+                });
     }
 }

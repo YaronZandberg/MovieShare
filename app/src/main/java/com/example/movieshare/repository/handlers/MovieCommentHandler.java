@@ -62,12 +62,15 @@ public class MovieCommentHandler {
     public void getAllMovieCommentsByMovieId(Integer movieId,
                                              GetMovieItemListListener<MovieComment> listener){
         this.executor.execute(() -> {
-            List<MovieComment> allMovieComments = localDB.movieCommentDao().getAllMovieComments();
+            /*List<MovieComment> allMovieComments = localDB.movieCommentDao().getAllMovieComments();
             List<MovieComment> filteredMovieComments = allMovieComments
                     .stream()
                     .filter(movieComment -> movieComment.getMovieId().equals(movieId))
                     .collect(Collectors.toList());
-            mainThreadHandler.post(() -> listener.onComplete(filteredMovieComments));
+            mainThreadHandler.post(() -> listener.onComplete(filteredMovieComments));*/
+            List<MovieComment> movieComments =
+                    localDB.movieCommentDao().getAllMovieCommentsByMovieId(movieId);
+            mainThreadHandler.post(() -> listener.onComplete(movieComments));
         });
     }
 

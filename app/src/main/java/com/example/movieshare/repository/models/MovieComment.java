@@ -1,19 +1,26 @@
 package com.example.movieshare.repository.models;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(foreignKeys = {@ForeignKey(entity = Movie.class,
+        parentColumns = "movieId",
+        childColumns = "movieId",
+        onDelete = ForeignKey.CASCADE)
+})
 public class MovieComment {
     @PrimaryKey
-    @NonNull
-    private Integer serialId;
-    @NonNull
-    private Integer userId;
-    @NonNull
-    private Integer movieId;
+    private @NonNull Integer serialId;
+
+    private @NonNull Integer userId;
+
+    @ColumnInfo(index = true)
+    private @NonNull Integer movieId;
     private String description;
+
     // TODO: Delete these two properties later because we will get them from Movie Entity using movieId FK
     private String movieName;
     private String movieRating;

@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class MovieCategory {
     @PrimaryKey
-    @NonNull
-    private Integer categoryId;
+    private @NonNull Integer categoryId;
     private String categoryName;
     private String categoryRating;
     private String description;

@@ -1,16 +1,21 @@
 package com.example.movieshare.repository.models;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(foreignKeys = {@ForeignKey(entity = MovieCategory.class,
+        parentColumns = "categoryId",
+        childColumns = "movieCategoryId",
+        onDelete = ForeignKey.CASCADE)
+})
 public class Movie {
     @PrimaryKey
-    @NonNull
-    private Integer movieId;
-    @NonNull
-    private Integer movieCategoryId;
+    private @NonNull Integer movieId;
+    @ColumnInfo(index = true)
+    private @NonNull Integer movieCategoryId;
     private String movieName;
     private String movieRating;
     private String description;

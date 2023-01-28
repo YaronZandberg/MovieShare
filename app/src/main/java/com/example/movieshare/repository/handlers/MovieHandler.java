@@ -40,6 +40,20 @@ public class MovieHandler {
         });
     }
 
+    public void getAllMoviesByCategoryId(Integer categoryId,
+                                         GetMovieItemListListener<Movie> listener){
+        this.executor.execute(() -> {
+            /*List<Movie> allMovies = localDB.movieDao().getAllMovies();
+            List<Movie> filteredMovies = allMovies
+                    .stream()
+                    .filter(movie -> movie.getMovieCategoryId().equals(categoryId))
+                    .collect(Collectors.toList());
+            mainThreadHandler.post(() -> listener.onComplete(filteredMovies));*/
+            List<Movie> movies = localDB.movieDao().getAllMoviesByCategoryId(categoryId);
+            mainThreadHandler.post(() -> listener.onComplete(movies));
+        });
+    }
+
     public void getMovieById(Integer id, GetMovieItemListener<Movie> listener) {
         this.executor.execute(() -> {
             Movie movie = localDB.movieDao().getMovieById(id);
@@ -47,15 +61,10 @@ public class MovieHandler {
         });
     }
 
-    public void getAllMoviesByCategoryId(Integer categoryId,
-                                         GetMovieItemListListener<Movie> listener){
+    public void getMovieByName(String name, GetMovieItemListener<Movie> listener) {
         this.executor.execute(() -> {
-            List<Movie> allMovies = localDB.movieDao().getAllMovies();
-            List<Movie> filteredMovies = allMovies
-                    .stream()
-                    .filter(movie -> movie.getMovieCategoryId().equals(categoryId))
-                    .collect(Collectors.toList());
-            mainThreadHandler.post(() -> listener.onComplete(filteredMovies));
+            Movie movie = localDB.movieDao().getMovieByName(name);
+            mainThreadHandler.post(() -> listener.onComplete(movie));
         });
     }
 

@@ -29,11 +29,7 @@ public class UserCommentListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.userId = UserCommentListFragmentArgs.fromBundle(getArguments()).getUserId();
-        Repository.getMovieCommentHandler()
-                .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
-                    this.userCommentList = movieCommentList;
-                    this.userCommentAdapter.setMovieCommentList(this.userCommentList);
-                });
+        reloadList();
     }
 
     @Override
@@ -61,5 +57,19 @@ public class UserCommentListFragment extends Fragment {
         });
 
         return this.viewBindings.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadList();
+    }
+
+    private void reloadList() {
+        Repository.getMovieCommentHandler()
+                .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
+                    this.userCommentList = movieCommentList;
+                    this.userCommentAdapter.setMovieCommentList(this.userCommentList);
+                });
     }
 }

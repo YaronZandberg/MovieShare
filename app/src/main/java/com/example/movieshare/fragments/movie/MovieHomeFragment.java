@@ -26,10 +26,7 @@ public class MovieHomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Repository.getMovieCategoryHandler()
-                .getAllMovieCategories(movieCategoryList ->
-                        movieCategories = movieCategoryList
-                );
+        reloadList();
     }
 
     @Override
@@ -48,5 +45,19 @@ public class MovieHomeFragment extends Fragment {
             Navigation.findNavController(viewBindings.movieHomeFragmentMovieCategoriesList).navigate(action);
         });
         return this.viewBindings.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadList();
+    }
+
+    private void reloadList() {
+        Repository.getMovieCategoryHandler()
+                .getAllMovieCategories(movieCategoryList -> {
+                    this.movieCategories = movieCategoryList;
+                    this.movieCategoryAdapter.setMovieCategoryList(this.movieCategories);
+                });
     }
 }

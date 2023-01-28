@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
 import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
+import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 
@@ -17,11 +18,13 @@ import java.util.Objects;
 
 public class UserCommentAdditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentAdditionBinding viewBindings;
+    private Movie movie;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.viewBindings = FragmentUserCommentAdditionBinding.inflate(inflater, container, false);
+        this.viewBindings =
+                FragmentUserCommentAdditionBinding.inflate(inflater, container, false);
         displayUserMovieCommentDetails();
         activateButtonsListeners();
         return this.viewBindings.getRoot();
@@ -44,14 +47,31 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentAdditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
-            MovieComment movieComment = buildNewMovieComment();
-            Repository.getMovieCommentHandler()
-                    .addMovieComment(movieComment, () -> {
-                        new AddUserMovieCommentDialogFragment()
-                                .show(getActivity().getSupportFragmentManager(), "TAG");
-                        Navigation.findNavController(view).popBackStack();
-                    });
+            try {
+                validateExistingMovie();
+                MovieComment movieComment = buildNewMovieComment();
+                Repository.getMovieCommentHandler()
+                        .addMovieComment(movieComment, () -> {
+                            new AddUserMovieCommentDialogFragment()
+                                    .show(getActivity().getSupportFragmentManager(), "TAG");
+                            Navigation.findNavController(view).popBackStack();
+                        });
+            } catch (Exception e) {
+                // TODO: Create an exception for nonMovieExisting and create another
+                //  dialog alert to inform the user that the operation failed
+                e.printStackTrace();
+            }
         });
+    }
+
+    private void validateExistingMovie() throws Exception {
+        String movieName =
+                replaceNullValueIfNeeded(this.viewBindings
+                        .userCommentAdditionFragmentMovieNameInputEt.getText().toString());
+        Repository.getMovieHandler().getMovieByName(movieName, movieItem -> movie = movieItem);
+        if (Objects.isNull(this.movie)) {
+            throw new Exception("There is no movie whose name is: " + movieName);
+        }
     }
 
     private MovieComment buildNewMovieComment() {

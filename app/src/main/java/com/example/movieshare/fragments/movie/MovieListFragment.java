@@ -37,11 +37,7 @@ public class MovieListFragment extends Fragment {
                         tempMovieCategories = movieCategoryList
                 );
         this.movieCategory = tempMovieCategories.get(this.movieCategoryPosition);
-        Repository.getMovieHandler()
-                .getAllMoviesByCategoryId(this.movieCategory.getCategoryId(), movieList -> {
-                    this.movieList = movieList;
-                    this.movieAdapter.setMovieList(this.movieList);
-                });
+        reloadList();
     }
 
     @Override
@@ -60,5 +56,19 @@ public class MovieListFragment extends Fragment {
             Navigation.findNavController(viewBindings.movieListFragmentMoviesList).navigate(action);
         });
         return this.viewBindings.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadList();
+    }
+
+    private void reloadList() {
+        Repository.getMovieHandler()
+                .getAllMoviesByCategoryId(this.movieCategory.getCategoryId(), movieList -> {
+                    this.movieList = movieList;
+                    this.movieAdapter.setMovieList(this.movieList);
+                });
     }
 }
