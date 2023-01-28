@@ -6,15 +6,13 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class MovieCategory {
-    @PrimaryKey
-    private @NonNull Integer categoryId;
+    @PrimaryKey(autoGenerate = true)
+    private Integer categoryId;
     private String categoryName;
     private String categoryRating;
     private String description;
 
-    public MovieCategory(@NonNull Integer categoryId, String categoryName,
-                         String categoryRating, String description) {
-        this.categoryId = categoryId;
+    public MovieCategory(String categoryName, String categoryRating, String description) {
         this.categoryName = categoryName;
         this.categoryRating = categoryRating;
         this.description = description;

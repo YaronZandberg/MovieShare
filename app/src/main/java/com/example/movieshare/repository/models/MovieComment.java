@@ -12,8 +12,8 @@ import androidx.room.PrimaryKey;
         onDelete = ForeignKey.CASCADE)
 })
 public class MovieComment {
-    @PrimaryKey
-    private @NonNull Integer serialId;
+    @PrimaryKey(autoGenerate = true)
+    private Integer serialId;
 
     private @NonNull Integer userId;
 
@@ -25,9 +25,8 @@ public class MovieComment {
     private String movieName;
     private String movieRating;
 
-    public MovieComment(@NonNull Integer id, @NonNull Integer userId, @NonNull Integer movieId,
+    public MovieComment(@NonNull Integer userId, @NonNull Integer movieId,
                         String description, String movieName, String movieRating) {
-        this.serialId = id;
         this.userId = userId;
         this.movieId = movieId;
         this.description = description;

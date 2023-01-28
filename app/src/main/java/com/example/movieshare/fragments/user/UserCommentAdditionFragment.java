@@ -75,7 +75,6 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
     }
 
     private MovieComment buildNewMovieComment() {
-        Integer id = 1;
         Integer userId = 1;
         Integer movieId = 1;
         String description =
@@ -87,7 +86,7 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         String movieRating =
                 replaceNullValueIfNeeded(this.viewBindings
                         .userCommentAdditionFragmentMovieRatingInputEt.getText().toString());
-        return new MovieComment(id, userId, movieId, description, movieName, movieRating);
+        return new MovieComment(userId, movieId, description, movieName, movieRating);
     }
 
     private String replaceNullValueIfNeeded(String content) {

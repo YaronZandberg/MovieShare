@@ -12,17 +12,15 @@ import androidx.room.PrimaryKey;
         onDelete = ForeignKey.CASCADE)
 })
 public class Movie {
-    @PrimaryKey
-    private @NonNull Integer movieId;
+    @PrimaryKey(autoGenerate = true)
+    private Integer movieId;
     @ColumnInfo(index = true)
     private @NonNull Integer movieCategoryId;
     private String movieName;
     private String movieRating;
     private String description;
 
-    public Movie(@NonNull Integer movieId, @NonNull Integer movieCategoryId,
-                 String movieName, String movieRating, String description) {
-        this.movieId = movieId;
+    public Movie(@NonNull Integer movieCategoryId, String movieName, String movieRating, String description) {
         this.movieCategoryId = movieCategoryId;
         this.movieName = movieName;
         this.movieRating = movieRating;

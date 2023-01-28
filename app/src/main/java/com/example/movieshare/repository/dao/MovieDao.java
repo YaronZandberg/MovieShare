@@ -1,5 +1,6 @@
 package com.example.movieshare.repository.dao;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -9,6 +10,7 @@ import com.example.movieshare.repository.models.Movie;
 
 import java.util.List;
 
+@Dao
 public interface MovieDao {
     @Query("SELECT * FROM Movie")
     List<Movie> getAllMovies();
