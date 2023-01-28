@@ -58,7 +58,7 @@ public class MovieHomeFragment extends Fragment {
         Repository.getMovieCategoryHandler()
                 .getAllMovieCategories(movieCategoryList -> {
                     this.movieCategories = movieCategoryList;
-                    this.movieCategoryAdapter.setMovieCategoryList(this.movieCategories);
+                    this.movieCategoryAdapter.setMovieItemList(this.movieCategories);
                 });
     }
 }

@@ -70,7 +70,7 @@ public class UserCommentListFragment extends Fragment {
         Repository.getMovieCommentHandler()
                 .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
                     this.userCommentList = movieCommentList;
-                    this.userCommentAdapter.setMovieCommentList(this.userCommentList);
+                    this.userCommentAdapter.setMovieItemList(this.userCommentList);
                 });
     }
 }

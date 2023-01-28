@@ -17,13 +17,14 @@ import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieListFragment extends Fragment {
     private FragmentMovieListBinding viewBindings;
-    private List<Movie> movieList;
+    private List<Movie> movieList = new ArrayList<>();
     private Integer movieCategoryPosition;
-    private List<MovieCategory> tempMovieCategories;
+    private List<MovieCategory> allMovieCategories = new ArrayList<>();
     private MovieCategory movieCategory;
     private MovieAdapter movieAdapter;
 
@@ -32,11 +33,7 @@ public class MovieListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.movieCategoryPosition =
                 MovieListFragmentArgs.fromBundle(getArguments()).getMovieCategoryPosition();
-        Repository.getMovieCategoryHandler()
-                .getAllMovieCategories(movieCategoryList ->
-                        tempMovieCategories = movieCategoryList
-                );
-        this.movieCategory = tempMovieCategories.get(this.movieCategoryPosition);
+        initializeMovieCategory();
         reloadList();
     }
 
@@ -64,11 +61,19 @@ public class MovieListFragment extends Fragment {
         reloadList();
     }
 
+    private void initializeMovieCategory() {
+        Repository.getMovieCategoryHandler()
+                .getAllMovieCategories(movieCategoryList -> {
+                    this.allMovieCategories = movieCategoryList;
+                    this.movieCategory = allMovieCategories.get(this.movieCategoryPosition);
+                });
+    }
+
     private void reloadList() {
         Repository.getMovieHandler()
                 .getAllMoviesByCategoryId(this.movieCategory.getCategoryId(), movieList -> {
                     this.movieList = movieList;
-                    this.movieAdapter.setMovieList(this.movieList);
+                    this.movieAdapter.setMovieItemList(this.movieList);
                 });
     }
 }

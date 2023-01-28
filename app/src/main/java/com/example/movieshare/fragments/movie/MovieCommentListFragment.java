@@ -59,7 +59,7 @@ public class MovieCommentListFragment extends Fragment {
         Repository.getMovieCommentHandler()
                 .getAllMovieCommentsByMovieId(this.movie.getMovieId(), movieCommentList -> {
                     this.movieCommentList = movieCommentList;
-                    this.movieCommentAdapter.setMovieCommentList(this.movieCommentList);
+                    this.movieCommentAdapter.setMovieItemList(this.movieCommentList);
                 });
     }
 }
