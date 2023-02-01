@@ -2,6 +2,7 @@ package com.example.movieshare.fragments.movie;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -27,17 +28,36 @@ public class MovieHomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        reloadList();
+        reloadMovieCategoryList();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentMovieHomeBinding.inflate(inflater, container, false);
         this.viewBindings.movieHomeFragmentMovieCategoriesList.setHasFixedSize(true);
         this.viewBindings.movieHomeFragmentMovieCategoriesList.setLayoutManager(new LinearLayoutManager(getContext()));
         this.movieCategoryAdapter = new MovieCategoryAdapter(getLayoutInflater(), this.movieCategories);
         this.viewBindings.movieHomeFragmentMovieCategoriesList.setAdapter(this.movieCategoryAdapter);
+        activateItemListListener();
+        return this.viewBindings.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadMovieCategoryList();
+    }
+
+    private void reloadMovieCategoryList() {
+        Repository.getMovieCategoryHandler()
+                .getAllMovieCategories(movieCategoryList -> {
+                    this.movieCategories = movieCategoryList;
+                    this.movieCategoryAdapter.setMovieItemList(this.movieCategories);
+                });
+    }
+
+    private void activateItemListListener() {
         this.movieCategoryAdapter.setOnItemClickListener(position -> {
             MovieHomeFragmentDirections
                     .ActionMovieHomeFragmentToMovieListFragment action =
@@ -45,20 +65,5 @@ public class MovieHomeFragment extends Fragment {
                             .actionMovieHomeFragmentToMovieListFragment(position);
             Navigation.findNavController(viewBindings.movieHomeFragmentMovieCategoriesList).navigate(action);
         });
-        return this.viewBindings.getRoot();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        reloadList();
-    }
-
-    private void reloadList() {
-        Repository.getMovieCategoryHandler()
-                .getAllMovieCategories(movieCategoryList -> {
-                    this.movieCategories = movieCategoryList;
-                    this.movieCategoryAdapter.setMovieItemList(this.movieCategories);
-                });
     }
 }

@@ -2,6 +2,7 @@ package com.example.movieshare.fragments.user;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
     private Movie movie;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings =
                 FragmentUserCommentAdditionBinding.inflate(inflater, container, false);
@@ -64,11 +65,14 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         });
     }
 
+    // TODO: Put the throw section code after the getMovieByName method because it is async.
+    //  In addition, create a specific listener for this method that will have throws in her signature.
     private void validateExistingMovie() throws Exception {
         String movieName =
                 replaceNullValueIfNeeded(this.viewBindings
                         .userCommentAdditionFragmentMovieNameInputEt.getText().toString());
-        Repository.getMovieHandler().getMovieByName(movieName, movieItem -> movie = movieItem);
+        Repository.getMovieHandler()
+                .getMovieByName(movieName, movieItem -> this.movie = movieItem);
         if (Objects.isNull(this.movie)) {
             throw new Exception("There is no movie whose name is: " + movieName);
         }

@@ -63,6 +63,9 @@
         <argument
             android:name="movieCommentPosition"
             app:argType="integer" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/userCommentAdditionFragment"
@@ -101,6 +104,9 @@
         <action
             android:id="@+id/action_movieProfileFragment_to_movieCommentListFragment"
             app:destination="@id/movieCommentListFragment" />
+        <argument
+            android:name="movieCategoryId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/movieCommentListFragment"
@@ -108,7 +114,7 @@
         android:label="fragment_movie_comment_list"
         tools:layout="@layout/fragment_movie_comment_list" >
         <argument
-            android:name="moviePosition"
+            android:name="movieId"
             app:argType="integer" />
     </fragment>
     <fragment
