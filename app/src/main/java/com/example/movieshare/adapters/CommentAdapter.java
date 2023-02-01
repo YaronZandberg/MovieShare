@@ -5,44 +5,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieshare.R;
-import com.example.movieshare.monitoring.OnItemClickListener;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.viewholders.CommentViewHolder;
+import com.example.movieshare.viewholders.MovieItemViewHolder;
 
 import java.util.List;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
-    private final LayoutInflater layoutInflater;
-    private final List<MovieComment> movieCommentList;
-    private OnItemClickListener listener;
-
-    public CommentAdapter(LayoutInflater layoutInflater, List<MovieComment> movieCommentList) {
-        this.layoutInflater = layoutInflater;
-        this.movieCommentList = movieCommentList;
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.listener = onItemClickListener;
+public class CommentAdapter extends MovieItemAdapter<MovieComment> {
+    public CommentAdapter(LayoutInflater layoutInflater, List<MovieComment> movieItemList){
+        super(layoutInflater, movieItemList);
     }
 
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = this.layoutInflater.inflate(R.layout.item_list_row, parent, false);
-        return new CommentViewHolder(view, this.listener, this.movieCommentList);
+        return new CommentViewHolder(view, this.listener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder commentViewHolder, int position) {
-        MovieComment movieComment = this.movieCommentList.get(position);
-        commentViewHolder.bindMovieComment(movieComment);
-    }
-
-    @Override
-    public int getItemCount() {
-        return this.movieCommentList.size();
+    public void onBindViewHolder(@NonNull MovieItemViewHolder commentViewHolder, int position) {
+        MovieComment movieComment = this.movieItemList.get(position);
+        commentViewHolder.bindMovieItem(movieComment);
     }
 }

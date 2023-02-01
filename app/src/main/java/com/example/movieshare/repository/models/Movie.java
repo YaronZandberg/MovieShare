@@ -1,34 +1,51 @@
 package com.example.movieshare.repository.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
+@Entity(foreignKeys = {
+        @ForeignKey(entity = MovieCategory.class,
+                parentColumns = "categoryId",
+                childColumns = "movieCategoryId",
+                onDelete = ForeignKey.CASCADE)},
+        indices = {@Index(value = {"movieName"}, unique = true)}
+)
 public class Movie {
+    @PrimaryKey(autoGenerate = true)
     private Integer movieId;
+    @ColumnInfo(index = true)
+    @NonNull
     private Integer movieCategoryId;
     private String movieName;
     private String movieRating;
     private String description;
 
-    public Movie(Integer movieId, Integer movieCategoryId,
-                 String movieName, String movieRating, String description) {
-        this.movieId = movieId;
+    public Movie(@NonNull Integer movieCategoryId, String movieName, String movieRating, String description) {
         this.movieCategoryId = movieCategoryId;
         this.movieName = movieName;
         this.movieRating = movieRating;
         this.description = description;
     }
 
+    @NonNull
     public Integer getMovieId() {
         return this.movieId;
     }
 
-    public void setMovieId(Integer movieId) {
+    public void setMovieId(@NonNull Integer movieId) {
         this.movieId = movieId;
     }
 
+    @NonNull
     public Integer getMovieCategoryId() {
         return this.movieCategoryId;
     }
 
-    public void setMovieCategoryId(Integer movieCategoryId) {
+    public void setMovieCategoryId(@NonNull Integer movieCategoryId) {
         this.movieCategoryId = movieCategoryId;
     }
 

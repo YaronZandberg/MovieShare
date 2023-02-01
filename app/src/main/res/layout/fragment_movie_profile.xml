@@ -123,25 +123,6 @@
                     android:hint="Rating" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/movie_profile_fragment_movie_subscribers_input_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_profile_fragment_movie_rating_input_layout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/movie_profile_fragment_movie_subscribers_input_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Subscribers" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <Button
                 android:id="@+id/movie_profile_fragment_comments_btn"
                 android:layout_width="match_parent"

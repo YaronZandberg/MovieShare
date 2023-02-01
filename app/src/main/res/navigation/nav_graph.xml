@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_loginFragment_to_movieHomeFragment"
             app:destination="@id/movieHomeFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_testAddMovieCategoryFragment"
+            app:destination="@id/testAddMovieCategoryFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_testAddMovieFragment"
+            app:destination="@id/testAddMovieFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -56,6 +62,9 @@
         tools:layout="@layout/fragment_user_comment_edition" >
         <argument
             android:name="movieCommentPosition"
+            app:argType="integer" />
+        <argument
+            android:name="userId"
             app:argType="integer" />
     </fragment>
     <fragment
@@ -95,6 +104,9 @@
         <action
             android:id="@+id/action_movieProfileFragment_to_movieCommentListFragment"
             app:destination="@id/movieCommentListFragment" />
+        <argument
+            android:name="movieCategoryId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/movieCommentListFragment"
@@ -102,7 +114,17 @@
         android:label="fragment_movie_comment_list"
         tools:layout="@layout/fragment_movie_comment_list" >
         <argument
-            android:name="moviePosition"
+            android:name="movieId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/testAddMovieCategoryFragment"
+        android:name="com.example.movieshare.fragments.test.TestAddMovieCategoryFragment"
+        android:label="fragment_test_add_movie_category"
+        tools:layout="@layout/fragment_test_add_movie_category" />
+    <fragment
+        android:id="@+id/testAddMovieFragment"
+        android:name="com.example.movieshare.fragments.test.TestAddMovieFragment"
+        android:label="fragment_test_add_movie"
+        tools:layout="@layout/fragment_test_add_movie" />
 </navigation>
