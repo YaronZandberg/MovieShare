@@ -68,9 +68,8 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
     // TODO: Put the throw section code after the getMovieByName method because it is async.
     //  In addition, create a specific listener for this method that will have throws in her signature.
     private void validateExistingMovie() throws Exception {
-        String movieName =
-                replaceNullValueIfNeeded(this.viewBindings
-                        .userCommentAdditionFragmentMovieNameInputEt.getText().toString());
+        String movieName = this.viewBindings
+                .userCommentAdditionFragmentMovieNameInputEt.getText().toString();
         Repository.getMovieHandler()
                 .getMovieByName(movieName, movieItem -> this.movie = movieItem);
         if (Objects.isNull(this.movie)) {
@@ -81,22 +80,12 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
     private MovieComment buildNewMovieComment() {
         Integer userId = 1;
         Integer movieId = 1;
-        String description =
-                replaceNullValueIfNeeded(this.viewBindings
-                        .userCommentAdditionFragmentMovieCommentInputEt.getText().toString());
-        String movieName =
-                replaceNullValueIfNeeded(this.viewBindings
-                        .userCommentAdditionFragmentMovieNameInputEt.getText().toString());
-        String movieRating =
-                replaceNullValueIfNeeded(this.viewBindings
-                        .userCommentAdditionFragmentMovieRatingInputEt.getText().toString());
+        String description = this.viewBindings
+                .userCommentAdditionFragmentMovieCommentInputEt.getText().toString();
+        String movieName = this.viewBindings
+                .userCommentAdditionFragmentMovieNameInputEt.getText().toString();
+        String movieRating = this.viewBindings
+                .userCommentAdditionFragmentMovieRatingInputEt.getText().toString();
         return new MovieComment(userId, movieId, description, movieName, movieRating);
-    }
-
-    private String replaceNullValueIfNeeded(String content) {
-        if (Objects.isNull(content)) {
-            return "";
-        }
-        return content;
     }
 }

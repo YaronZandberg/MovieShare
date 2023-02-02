@@ -91,21 +91,12 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     // TODO: Use the updateUserComment method of DB version and put all this code in the
     //  setOnClickListener method of save button
     private void updateUserComment() {
-        String updatedMovieRating =
-                replaceNullValueIfNeeded(this.viewBindings
-                        .userCommentEditionFragmentMovieRatingInputEt.getText().toString());
-        String updatedMovieComment =
-                replaceNullValueIfNeeded(this.viewBindings
-                        .userCommentEditionFragmentMovieCommentInputEt.getText().toString());
+        String updatedMovieRating = this.viewBindings
+                .userCommentEditionFragmentMovieRatingInputEt.getText().toString();
+        String updatedMovieComment = this.viewBindings
+                .userCommentEditionFragmentMovieCommentInputEt.getText().toString();
         this.movieComment.setMovieRating(updatedMovieRating);
         this.movieComment.setDescription(updatedMovieComment);
         Repository.getMovieCommentHandler().setMovieComment(this.movieCommentPosition, this.movieComment);
-    }
-
-    private String replaceNullValueIfNeeded(String content) {
-        if (Objects.isNull(content)) {
-            return "";
-        }
-        return content;
     }
 }
