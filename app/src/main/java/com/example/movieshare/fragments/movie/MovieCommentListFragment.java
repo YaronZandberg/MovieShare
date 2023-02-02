@@ -15,6 +15,7 @@ import com.example.movieshare.adapters.CommentAdapter;
 import com.example.movieshare.databinding.FragmentMovieCommentListBinding;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.utils.MovieUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,6 @@ public class MovieCommentListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.movieId = MovieCommentListFragmentArgs.fromBundle(getArguments()).getMovieId();
-        reloadMovieCommentList();
     }
 
     @Override
@@ -50,10 +50,13 @@ public class MovieCommentListFragment extends Fragment {
     }
 
     private void reloadMovieCommentList() {
+        this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.VISIBLE);
         Repository.getMovieCommentHandler()
                 .getAllMovieCommentsByMovieId(this.movieId, movieCommentList -> {
                     this.movieCommentList = movieCommentList;
                     this.movieCommentAdapter.setMovieItemList(this.movieCommentList);
+                    MovieUtils.simulateSleeping();
+                    this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.GONE);
                 });
     }
 }

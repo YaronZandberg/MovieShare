@@ -17,6 +17,7 @@ import com.example.movieshare.databinding.FragmentMovieListBinding;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieCategory;
+import com.example.movieshare.utils.MovieUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,6 @@ public class MovieListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.movieCategoryPosition = MovieListFragmentArgs.fromBundle(getArguments()).getMovieCategoryPosition();
-        initializeMovieCategory();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MovieListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        reloadMovieList();
+        initializeMovieCategory();
     }
 
     private void initializeMovieCategory() {
@@ -66,10 +66,13 @@ public class MovieListFragment extends Fragment {
 
     private void reloadMovieList() {
         if (Objects.nonNull(this.movieCategory)) {
+            this.viewBindings.movieListFragmentProgressBar.setVisibility(View.VISIBLE);
             Repository.getMovieHandler()
                     .getAllMoviesByCategoryId(this.movieCategory.getCategoryId(), movieList -> {
                         this.movieList = movieList;
                         this.movieAdapter.setMovieItemList(this.movieList);
+                        MovieUtils.simulateSleeping();
+                        this.viewBindings.movieListFragmentProgressBar.setVisibility(View.GONE);
                     });
         }
     }
