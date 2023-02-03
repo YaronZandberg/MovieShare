@@ -84,14 +84,14 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
 
     private MovieComment buildNewMovieComment() {
         Integer userId = 1;
-        Integer movieId = 1;
-        String description = this.viewBindings
-                .userCommentAdditionFragmentMovieCommentInputEt.getText().toString();
+        Integer movieId = this.movie.getMovieId();
         String movieName = this.viewBindings
                 .userCommentAdditionFragmentMovieNameInputEt.getText().toString();
-        String movieRating = this.viewBindings
+        String movieRatingOfComment = this.viewBindings
                 .userCommentAdditionFragmentMovieRatingInputEt.getText().toString();
-        return new MovieComment(userId, movieId, description, movieName, movieRating);
+        String description = this.viewBindings
+                .userCommentAdditionFragmentMovieCommentInputEt.getText().toString();
+        return new MovieComment(userId, movieId, movieName, movieRatingOfComment, description);
     }
 
     private void configureMenuOptions() {

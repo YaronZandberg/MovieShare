@@ -77,7 +77,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     protected void displayUserMovieCommentDetails() {
         if (Objects.nonNull(this.movieComment)) {
             this.viewBindings.userCommentEditionFragmentMovieNameInputEt.setText(this.movieComment.getMovieName());
-            this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setText(this.movieComment.getMovieRating());
+            this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setText(this.movieComment.getMovieRatingOfComment());
             this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.setText(this.movieComment.getDescription());
             setUserCommentPropertiesState();
         }
@@ -118,7 +118,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                 .userCommentEditionFragmentMovieRatingInputEt.getText().toString();
         String updatedMovieDescription = this.viewBindings
                 .userCommentEditionFragmentMovieCommentInputEt.getText().toString();
-        this.movieComment.setMovieRating(updatedMovieRating);
+        this.movieComment.setMovieRatingOfComment(updatedMovieRating);
         this.movieComment.setDescription(updatedMovieDescription);
     }
 

@@ -15,7 +15,7 @@ public class CommentViewHolder extends MovieItemViewHolder<MovieComment> {
     @Override
     public void bindMovieItem(MovieComment movieComment) {
         this.movieItemNameTv.setText(movieComment.getMovieName());
-        this.movieItemRatingTv.setText(movieComment.getMovieRating());
+        this.movieItemRatingTv.setText(movieComment.getMovieRatingOfComment());
         this.movieItemDescriptionTv.setText(movieComment.getDescription());
     }
 }

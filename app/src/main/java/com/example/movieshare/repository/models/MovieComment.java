@@ -22,19 +22,17 @@ public class MovieComment {
     @ColumnInfo(index = true)
     @NonNull
     private Integer movieId;
+    private String movieName;
+    private String movieRatingOfComment;
     private String description;
 
-    // TODO: Delete these two properties later because we will get them from Movie Entity using movieId FK
-    private String movieName;
-    private String movieRating;
-
     public MovieComment(@NonNull Integer userId, @NonNull Integer movieId,
-                        String description, String movieName, String movieRating) {
+                        String movieName, String movieRatingOfComment, String description) {
         this.userId = userId;
         this.movieId = movieId;
-        this.description = description;
         this.movieName = movieName;
-        this.movieRating = movieRating;
+        this.movieRatingOfComment = movieRatingOfComment;
+        this.description = description;
     }
 
     @NonNull
@@ -64,14 +62,6 @@ public class MovieComment {
         this.movieId = movieId;
     }
 
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getMovieName() {
         return this.movieName;
     }
@@ -80,11 +70,19 @@ public class MovieComment {
         this.movieName = movieName;
     }
 
-    public String getMovieRating() {
-        return this.movieRating;
+    public String getMovieRatingOfComment() {
+        return this.movieRatingOfComment;
     }
 
-    public void setMovieRating(String movieRating) {
-        this.movieRating = movieRating;
+    public void setMovieRatingOfComment(String movieRatingOfComment) {
+        this.movieRatingOfComment = movieRatingOfComment;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
