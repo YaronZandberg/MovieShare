@@ -44,7 +44,7 @@
         android:id="@+id/userCommentListFragment"
         android:name="com.example.movieshare.fragments.user.UserCommentListFragment"
         android:label="fragment_user_comment_list"
-        tools:layout="@layout/fragment_user_comment_list" >
+        tools:layout="@layout/fragment_user_comment_list">
         <action
             android:id="@+id/action_userCommentListFragment_to_userCommentAdditionFragment"
             app:destination="@id/userCommentAdditionFragment" />
@@ -127,4 +127,5 @@
         android:name="com.example.movieshare.fragments.test.TestAddMovieFragment"
         android:label="fragment_test_add_movie"
         tools:layout="@layout/fragment_test_add_movie" />
+    <action android:id="@+id/action_global_userProfileFragment" app:destination="@id/userProfileFragment" />
 </navigation>

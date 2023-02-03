@@ -53,16 +53,22 @@ public class MovieCategoryHandler {
         });
     }
 
-    // TODO: Need to create a equivalent method in movieCategoryDao that supports updates
-    public void setMovieCategory(Integer index, MovieCategory movieCategory) {
-        //movieCategoryList.set(index, movieCategory);
-    }
-
     public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
             MovieCategory deletedMovieCategory =
                     localDB.movieCategoryDao().getAllMovieCategories().get(index);
             localDB.movieCategoryDao().delete(deletedMovieCategory);
+            mainThreadHandler.post(listener::onComplete);
+        });
+    }
+
+    public void updateMovieCategory(Integer index, MovieCategory movieCategory,
+                                    ExecuteMovieItemListener listener) {
+        this.executor.execute(() -> {
+            MovieCategory deletedMovieCategory =
+                    localDB.movieCategoryDao().getAllMovieCategories().get(index);
+            localDB.movieCategoryDao().delete(deletedMovieCategory);
+            localDB.movieCategoryDao().insertAll(movieCategory);
             mainThreadHandler.post(listener::onComplete);
         });
     }

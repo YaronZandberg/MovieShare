@@ -4,12 +4,20 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
 import com.example.movieshare.fragments.dialogs.DeleteUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFragment;
@@ -21,15 +29,17 @@ import java.util.Objects;
 
 public class UserCommentEditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentEditionBinding viewBindings;
-    private Integer movieCommentPosition;
+    private Integer userMovieCommentPosition;
     private Integer userId;
     private List<MovieComment> allUserMovieComments;
     private MovieComment movieComment;
+    private List<MovieComment> allMovieComments;
+    private Integer movieCommentPositionInTotalList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.movieCommentPosition =
+        this.userMovieCommentPosition =
                 UserCommentEditionFragmentArgs.fromBundle(getArguments()).getMovieCommentPosition();
         this.userId = UserCommentEditionFragmentArgs.fromBundle(getArguments()).getUserId();
     }
@@ -39,6 +49,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentUserCommentEditionBinding.inflate(inflater, container, false);
         reloadUserMovieComments();
+        configureMenuOptions();
         activateButtonsListeners();
         return this.viewBindings.getRoot();
     }
@@ -47,7 +58,17 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         Repository.getMovieCommentHandler()
                 .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
                     this.allUserMovieComments = movieCommentList;
-                    this.movieComment = this.allUserMovieComments.get(this.movieCommentPosition);
+                    this.movieComment = this.allUserMovieComments.get(this.userMovieCommentPosition);
+                    findMovieCommentPositionInTotalList();
+                });
+    }
+
+    private void findMovieCommentPositionInTotalList() {
+        Repository.getMovieCommentHandler()
+                .getAllMovieComments(allMovieComments -> {
+                    this.allMovieComments = allMovieComments;
+                    this.movieCommentPositionInTotalList =
+                            this.allMovieComments.indexOf(this.movieComment);
                     displayUserMovieCommentDetails();
                 });
     }
@@ -56,7 +77,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     protected void displayUserMovieCommentDetails() {
         if (Objects.nonNull(this.movieComment)) {
             this.viewBindings.userCommentEditionFragmentMovieNameInputEt.setText(this.movieComment.getMovieName());
-            this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setText(this.movieComment.getMovieRating());
+            this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setText(this.movieComment.getMovieRatingOfComment());
             this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.setText(this.movieComment.getDescription());
             setUserCommentPropertiesState();
         }
@@ -75,37 +96,54 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
                 Repository.getMovieCommentHandler()
-                        .removeMovieComment(this.movieCommentPosition, () -> {
+                        .removeMovieComment(this.movieCommentPositionInTotalList, () -> {
                             new DeleteUserMovieCommentDialogFragment()
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
                             Navigation.findNavController(view).popBackStack();
                         }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             updateUserComment();
-            new UpdateUserMovieCommentDialogFragment()
-                    .show(getActivity().getSupportFragmentManager(), "TAG");
-            Navigation.findNavController(view).popBackStack();
+            Repository.getMovieCommentHandler()
+                    .updateMovieComment(this.movieCommentPositionInTotalList,
+                            this.movieComment, () -> {
+                                new UpdateUserMovieCommentDialogFragment()
+                                        .show(getActivity().getSupportFragmentManager(), "TAG");
+                                Navigation.findNavController(view).popBackStack();
+                            });
         });
     }
 
-    // TODO: Use the updateUserComment method of DB version and put all this code in the
-    //  setOnClickListener method of save button
     private void updateUserComment() {
-        String updatedMovieRating =
-                replaceNullValueIfNeeded(this.viewBindings
-                        .userCommentEditionFragmentMovieRatingInputEt.getText().toString());
-        String updatedMovieComment =
-                replaceNullValueIfNeeded(this.viewBindings
-                        .userCommentEditionFragmentMovieCommentInputEt.getText().toString());
-        this.movieComment.setMovieRating(updatedMovieRating);
-        this.movieComment.setDescription(updatedMovieComment);
-        Repository.getMovieCommentHandler().setMovieComment(this.movieCommentPosition, this.movieComment);
+        String updatedMovieRating = this.viewBindings
+                .userCommentEditionFragmentMovieRatingInputEt.getText().toString();
+        String updatedMovieDescription = this.viewBindings
+                .userCommentEditionFragmentMovieCommentInputEt.getText().toString();
+        this.movieComment.setMovieRatingOfComment(updatedMovieRating);
+        this.movieComment.setDescription(updatedMovieDescription);
     }
 
-    private String replaceNullValueIfNeeded(String content) {
-        if (Objects.isNull(content)) {
-            return "";
-        }
-        return content;
+    private void configureMenuOptions() {
+        FragmentActivity parentActivity = getActivity();
+        parentActivity.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.removeItem(R.id.userCommentAdditionFragment);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == android.R.id.home) {
+                    Navigation.findNavController(viewBindings.getRoot()).popBackStack();
+                    return true;
+                } else {
+                    if (Objects.nonNull(viewBindings)) {
+                        NavDirections action = UserCommentEditionFragmentDirections.actionGlobalUserProfileFragment();
+                        Navigation.findNavController(viewBindings.getRoot()).navigate(action);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 }
