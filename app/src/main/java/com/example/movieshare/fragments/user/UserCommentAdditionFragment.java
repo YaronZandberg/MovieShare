@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
 import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
-import com.example.movieshare.fragments.dialogs.NonExistingMovieDialogFragment;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
@@ -58,32 +57,29 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentAdditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
-            try {
-                validateExistingMovie();
-                MovieComment movieComment = buildNewMovieComment();
-                Repository.getMovieCommentHandler()
-                        .addMovieComment(movieComment, () -> {
-                            new AddUserMovieCommentDialogFragment()
-                                    .show(getActivity().getSupportFragmentManager(), "TAG");
-                            Navigation.findNavController(view).popBackStack();
-                        });
-            } catch (Exception e) {
-                new NonExistingMovieDialogFragment()
-                        .show(getActivity().getSupportFragmentManager(), "TAG");
-            }
+            // TODO: Find a way to update the movie comment only if a movie exist
+            validateExistingMovie();
+            MovieComment movieComment = buildNewMovieComment();
+            Repository.getMovieCommentHandler()
+                    .addMovieComment(movieComment, () -> {
+                        new AddUserMovieCommentDialogFragment()
+                                .show(getActivity().getSupportFragmentManager(), "TAG");
+                        Navigation.findNavController(view).popBackStack();
+                    });
+
         });
     }
 
-    // TODO: Put the throw section code after the getMovieByName method because it is async.
-    //  In addition, create a specific listener for this method that will have throws in her signature.
-    private void validateExistingMovie() throws Exception {
+    private void validateExistingMovie() {
         String movieName = this.viewBindings
                 .userCommentAdditionFragmentMovieNameInputEt.getText().toString();
         Repository.getMovieHandler()
-                .getMovieByName(movieName, movieItem -> this.movie = movieItem);
-        if (Objects.isNull(this.movie)) {
-            throw new Exception("There is no movie whose name is: " + movieName);
-        }
+                .getMovieByName(movieName, movieItem -> {
+                    this.movie = movieItem;
+                    if (Objects.isNull(this.movie)) {
+                        throw new Exception("There is no movie whose name is: " + movieName);
+                    }
+                });
     }
 
     private MovieComment buildNewMovieComment() {
