@@ -62,12 +62,6 @@ public class MovieCommentHandler {
     public void getAllMovieCommentsByMovieId(Integer movieId,
                                              GetMovieItemListListener<MovieComment> listener){
         this.executor.execute(() -> {
-            /*List<MovieComment> allMovieComments = localDB.movieCommentDao().getAllMovieComments();
-            List<MovieComment> filteredMovieComments = allMovieComments
-                    .stream()
-                    .filter(movieComment -> movieComment.getMovieId().equals(movieId))
-                    .collect(Collectors.toList());
-            mainThreadHandler.post(() -> listener.onComplete(filteredMovieComments));*/
             List<MovieComment> movieComments =
                     localDB.movieCommentDao().getAllMovieCommentsByMovieId(movieId);
             mainThreadHandler.post(() -> listener.onComplete(movieComments));
@@ -81,16 +75,22 @@ public class MovieCommentHandler {
         });
     }
 
-    // TODO: Need to create a equivalent method in movieCommentDao that supports updates
-    public void setMovieComment(Integer index, MovieComment movieComment) {
-        //movieCommentList.set(index, movieComment);
-    }
-
     public void removeMovieComment(Integer index, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
             MovieComment deletedMovieComment =
                     localDB.movieCommentDao().getAllMovieComments().get(index);
             localDB.movieCommentDao().delete(deletedMovieComment);
+            mainThreadHandler.post(listener::onComplete);
+        });
+    }
+
+    public void updateMovieComment(Integer index, MovieComment movieComment,
+                                   ExecuteMovieItemListener listener) {
+        this.executor.execute(() -> {
+            MovieComment deletedMovieComment =
+                    localDB.movieCommentDao().getAllMovieComments().get(index);
+            localDB.movieCommentDao().delete(deletedMovieComment);
+            localDB.movieCommentDao().insertAll(movieComment);
             mainThreadHandler.post(listener::onComplete);
         });
     }

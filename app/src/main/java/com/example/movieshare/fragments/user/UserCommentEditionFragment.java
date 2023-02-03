@@ -21,15 +21,17 @@ import java.util.Objects;
 
 public class UserCommentEditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentEditionBinding viewBindings;
-    private Integer movieCommentPosition;
+    private Integer userMovieCommentPosition;
     private Integer userId;
     private List<MovieComment> allUserMovieComments;
     private MovieComment movieComment;
+    private List<MovieComment> allMovieComments;
+    private Integer movieCommentPositionInTotalList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.movieCommentPosition =
+        this.userMovieCommentPosition =
                 UserCommentEditionFragmentArgs.fromBundle(getArguments()).getMovieCommentPosition();
         this.userId = UserCommentEditionFragmentArgs.fromBundle(getArguments()).getUserId();
     }
@@ -47,7 +49,17 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         Repository.getMovieCommentHandler()
                 .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
                     this.allUserMovieComments = movieCommentList;
-                    this.movieComment = this.allUserMovieComments.get(this.movieCommentPosition);
+                    this.movieComment = this.allUserMovieComments.get(this.userMovieCommentPosition);
+                    findMovieCommentPositionInTotalList();
+                });
+    }
+
+    private void findMovieCommentPositionInTotalList() {
+        Repository.getMovieCommentHandler()
+                .getAllMovieComments(allMovieComments -> {
+                    this.allMovieComments = allMovieComments;
+                    this.movieCommentPositionInTotalList =
+                            this.allMovieComments.indexOf(this.movieComment);
                     displayUserMovieCommentDetails();
                 });
     }
@@ -75,28 +87,29 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
                 Repository.getMovieCommentHandler()
-                        .removeMovieComment(this.movieCommentPosition, () -> {
+                        .removeMovieComment(this.movieCommentPositionInTotalList, () -> {
                             new DeleteUserMovieCommentDialogFragment()
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
                             Navigation.findNavController(view).popBackStack();
                         }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             updateUserComment();
-            new UpdateUserMovieCommentDialogFragment()
-                    .show(getActivity().getSupportFragmentManager(), "TAG");
-            Navigation.findNavController(view).popBackStack();
+            Repository.getMovieCommentHandler()
+                    .updateMovieComment(this.movieCommentPositionInTotalList,
+                            this.movieComment, () -> {
+                                new UpdateUserMovieCommentDialogFragment()
+                                        .show(getActivity().getSupportFragmentManager(), "TAG");
+                                Navigation.findNavController(view).popBackStack();
+                            });
         });
     }
 
-    // TODO: Use the updateUserComment method of DB version and put all this code in the
-    //  setOnClickListener method of save button
     private void updateUserComment() {
         String updatedMovieRating = this.viewBindings
                 .userCommentEditionFragmentMovieRatingInputEt.getText().toString();
-        String updatedMovieComment = this.viewBindings
+        String updatedMovieDescription = this.viewBindings
                 .userCommentEditionFragmentMovieCommentInputEt.getText().toString();
         this.movieComment.setMovieRating(updatedMovieRating);
-        this.movieComment.setDescription(updatedMovieComment);
-        Repository.getMovieCommentHandler().setMovieComment(this.movieCommentPosition, this.movieComment);
+        this.movieComment.setDescription(updatedMovieDescription);
     }
 }

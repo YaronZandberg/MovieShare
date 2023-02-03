@@ -68,15 +68,19 @@ public class MovieHandler {
         });
     }
 
-    // TODO: Need to create a equivalent method in movieDao that supports updates
-    public void setMovie(Integer index, Movie movie) {
-        //movieList.set(index, movie);
-    }
-
     public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
             Movie deletedMovie = localDB.movieDao().getAllMovies().get(index);
             localDB.movieDao().delete(deletedMovie);
+            mainThreadHandler.post(listener::onComplete);
+        });
+    }
+
+    public void updateMovie(Integer index, Movie movie, ExecuteMovieItemListener listener) {
+        this.executor.execute(() -> {
+            Movie deletedMovie = localDB.movieDao().getAllMovies().get(index);
+            localDB.movieDao().delete(deletedMovie);
+            localDB.movieDao().insertAll(movie);
             mainThreadHandler.post(listener::onComplete);
         });
     }
