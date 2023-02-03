@@ -1,10 +1,15 @@
 package com.example.movieshare.repository.models;
 
+import static com.example.movieshare.constants.MovieCommentConstants.*;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(foreignKeys = {
         @ForeignKey(entity = Movie.class,
@@ -33,6 +38,38 @@ public class MovieComment {
         this.movieName = movieName;
         this.movieRatingOfComment = movieRatingOfComment;
         this.description = description;
+    }
+
+    public MovieComment(Integer serialId, @NonNull Integer userId, @NonNull Integer movieId,
+                        String movieName, String movieRatingOfComment, String description) {
+        this.serialId = serialId;
+        this.userId = userId;
+        this.movieId = movieId;
+        this.movieName = movieName;
+        this.movieRatingOfComment = movieRatingOfComment;
+        this.description = description;
+    }
+
+    // TODO: handle exceptions from casting or null
+    public static MovieComment fromJson(Map<String, Object> json) {
+        Integer serialId = Integer.parseInt(String.valueOf(json.get(MOVIE_COMMENT_ID)));
+        Integer userId = Integer.parseInt(String.valueOf(json.get(MOVIE_COMMENT_USER_ID)));
+        Integer movieId = Integer.parseInt(String.valueOf(json.get(MOVIE_COMMENT_MOVIE_ID)));
+        String movieName = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_NAME));
+        String movieRatingOfComment = String.valueOf(json.get(MOVIE_COMMENT_RATING));
+        String description = String.valueOf(json.get(MOVIE_COMMENT_DESCRIPTION));
+        return new MovieComment(serialId, userId, movieId, movieName, movieRatingOfComment, description);
+    }
+
+    public Map<String, Object> toJson() {
+        Map<String, Object> movieCommentJson = new HashMap<>();
+        movieCommentJson.put(MOVIE_COMMENT_ID, this.getSerialId());
+        movieCommentJson.put(MOVIE_COMMENT_USER_ID, this.getUserId());
+        movieCommentJson.put(MOVIE_COMMENT_MOVIE_ID, this.getMovieId());
+        movieCommentJson.put(MOVIE_COMMENT_MOVIE_NAME, this.getMovieName());
+        movieCommentJson.put(MOVIE_COMMENT_RATING, this.getMovieRatingOfComment());
+        movieCommentJson.put(MOVIE_COMMENT_DESCRIPTION, this.getDescription());
+        return movieCommentJson;
     }
 
     @NonNull

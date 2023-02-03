@@ -1,11 +1,16 @@
 package com.example.movieshare.repository.models;
 
+import static com.example.movieshare.constants.MovieConstants.*;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(foreignKeys = {
         @ForeignKey(entity = MovieCategory.class,
@@ -29,6 +34,35 @@ public class Movie {
         this.movieName = movieName;
         this.movieRating = movieRating;
         this.description = description;
+    }
+
+    public Movie(Integer movieId, @NonNull Integer movieCategoryId,
+                 String movieName, String movieRating, String description) {
+        this.movieId = movieId;
+        this.movieCategoryId = movieCategoryId;
+        this.movieName = movieName;
+        this.movieRating = movieRating;
+        this.description = description;
+    }
+
+    // TODO: handle exceptions from casting or null
+    public static Movie fromJson(Map<String, Object> json) {
+        Integer movieId = Integer.parseInt(String.valueOf(json.get(MOVIE_ID)));
+        Integer movieCategoryId = Integer.parseInt(String.valueOf(json.get(MOVIE_CATEGORY_ID)));
+        String movieName = String.valueOf(json.get(MOVIE_NAME));
+        String movieRating = String.valueOf(json.get(MOVIE_RATING));
+        String description = String.valueOf(json.get(MOVIE_DESCRIPTION));
+        return new Movie(movieId, movieCategoryId, movieName, movieRating, description);
+    }
+
+    public Map<String, Object> toJson() {
+        Map<String, Object> movieJson = new HashMap<>();
+        movieJson.put(MOVIE_ID, this.getMovieId());
+        movieJson.put(MOVIE_CATEGORY_ID, this.getMovieCategoryId());
+        movieJson.put(MOVIE_NAME, this.getMovieName());
+        movieJson.put(MOVIE_RATING, this.getMovieRating());
+        movieJson.put(MOVIE_DESCRIPTION, this.getDescription());
+        return movieJson;
     }
 
     @NonNull
