@@ -11,7 +11,6 @@ import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.room.localdb.AppLocalDB;
 import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.Movie;
-import com.example.movieshare.repository.firebase.FirebaseModel;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -22,13 +21,11 @@ public class MovieHandler {
     private final Executor executor;
     private final Handler mainThreadHandler;
     private final AppLocalDbRepository localDB;
-    private final FirebaseModel remoteDB;
 
     private MovieHandler() {
         this.executor = Executors.newSingleThreadExecutor();
         this.mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
         this.localDB = AppLocalDB.getAppDB();
-        this.remoteDB = new FirebaseModel();
     }
 
     public static MovieHandler instance() {
@@ -65,7 +62,6 @@ public class MovieHandler {
     }
 
     public void addMovie(Movie movie, ExecuteMovieItemListener listener) {
-        //this.remoteDB.addMovie(movie, listener);
         this.executor.execute(() -> {
             localDB.movieDao().insertAll(movie);
             mainThreadHandler.post(listener::onComplete);

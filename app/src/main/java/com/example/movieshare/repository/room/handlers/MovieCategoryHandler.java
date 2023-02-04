@@ -11,7 +11,6 @@ import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.room.localdb.AppLocalDB;
 import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.MovieCategory;
-import com.example.movieshare.repository.firebase.FirebaseModel;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -22,13 +21,11 @@ public class MovieCategoryHandler {
     private final Executor executor;
     private final Handler mainThreadHandler;
     private final AppLocalDbRepository localDB;
-    private final FirebaseModel remoteDB;
 
     private MovieCategoryHandler() {
         this.executor = Executors.newSingleThreadExecutor();
         this.mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
         this.localDB = AppLocalDB.getAppDB();
-        this.remoteDB = new FirebaseModel();
     }
 
     public static MovieCategoryHandler instance() {
@@ -36,7 +33,6 @@ public class MovieCategoryHandler {
     }
 
     public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {
-        //this.remoteDB.getAllMovieCategories(listener);
         this.executor.execute(() -> {
             List<MovieCategory> movieCategories = localDB.movieCategoryDao().getAllMovieCategories();
             mainThreadHandler.post(() -> listener.onComplete(movieCategories));
@@ -44,7 +40,6 @@ public class MovieCategoryHandler {
     }
 
     public void getMovieCategoryById(Integer id, GetMovieItemListener<MovieCategory> listener) {
-        //this.remoteDB.getMovieCategoryById(id, listener);
         this.executor.execute(() -> {
             MovieCategory movieCategory = localDB.movieCategoryDao().getMovieCategoryById(id);
             mainThreadHandler.post(() -> listener.onComplete(movieCategory));
@@ -52,7 +47,6 @@ public class MovieCategoryHandler {
     }
 
     public void addMovieCategory(MovieCategory movieCategory, ExecuteMovieItemListener listener) {
-        //this.remoteDB.addMovieCategory(movieCategory, listener);
         this.executor.execute(() -> {
             localDB.movieCategoryDao().insertAll(movieCategory);
             mainThreadHandler.post(listener::onComplete);
