@@ -1,17 +1,25 @@
 package com.example.movieshare.repository;
 
-import com.example.movieshare.repository.handlers.*;
+import com.example.movieshare.repository.firebase.FirebaseModel;
+import com.example.movieshare.repository.room.LocalModel;
 
 public class Repository {
-    public static MovieCommentHandler getMovieCommentHandler() {
-        return MovieCommentHandler.instance();
+    public static final Repository repositoryInstance = new Repository();
+    private final LocalModel localModel = new LocalModel();
+    private final FirebaseModel firebaseModel = new FirebaseModel();
+
+    private Repository() {
     }
 
-    public static MovieHandler getMovieHandler() {
-        return MovieHandler.instance();
+    public static Repository getRepositoryInstance() {
+        return repositoryInstance;
     }
 
-    public static MovieCategoryHandler getMovieCategoryHandler() {
-        return MovieCategoryHandler.instance();
+    public LocalModel getLocalModel() {
+        return this.localModel;
+    }
+
+    public FirebaseModel getFirebaseModel() {
+        return this.firebaseModel;
     }
 }

@@ -59,7 +59,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     }
 
     private void reloadUserMovieComments() {
-        Repository.getMovieCommentHandler()
+        Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                 .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
                     this.viewModel.setAllUserMovieComments(movieCommentList);
                     this.viewModel.setMovieComment(this.viewModel.getAllUserMovieComments()
@@ -69,7 +69,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     }
 
     private void findMovieCommentPositionInTotalList() {
-        Repository.getMovieCommentHandler()
+        Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                 .getAllMovieComments(allMovieComments -> {
                     this.viewModel.setAllMovieComments(allMovieComments);
                     this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
@@ -100,7 +100,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentEditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
-                Repository.getMovieCommentHandler()
+                Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                         .removeMovieComment(this.viewModel.getMovieCommentPositionInTotalList(), () -> {
                             new DeleteUserMovieCommentDialogFragment()
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
@@ -108,7 +108,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                         }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             updateUserComment();
-            Repository.getMovieCommentHandler()
+            Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                     .updateMovieComment(this.viewModel.getMovieCommentPositionInTotalList(),
                             this.viewModel.getMovieComment(), () -> {
                                 new UpdateUserMovieCommentDialogFragment()

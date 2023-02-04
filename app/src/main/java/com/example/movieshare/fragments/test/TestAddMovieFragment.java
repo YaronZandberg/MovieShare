@@ -30,7 +30,7 @@ public class TestAddMovieFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.testMovieSaveBtn.setOnClickListener(view -> {
             Movie movie = buildNewMovie();
-            Repository.getMovieHandler()
+            Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
                     .addMovie(movie, () -> Toast.makeText(getContext(),
                                     "Add movie operation finished successfully",
                                     Toast.LENGTH_LONG)

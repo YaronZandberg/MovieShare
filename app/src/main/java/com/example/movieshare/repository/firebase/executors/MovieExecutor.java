@@ -1,4 +1,4 @@
-package com.example.movieshare.repository.executors;
+package com.example.movieshare.repository.firebase.executors;
 
 import static com.example.movieshare.constants.MovieConstants.*;
 
@@ -15,15 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieExecutor {
-    private static final MovieExecutor movieExecutorInstance = new MovieExecutor();
-    private final FirebaseFirestore db;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private MovieExecutor(){
-        this.db = FirebaseFirestore.getInstance();
-    }
-
-    public static MovieExecutor instance() {
-        return movieExecutorInstance;
+    public MovieExecutor() {
     }
 
     public void getAllMovies(GetMovieItemListListener<Movie> listener) {
@@ -62,7 +56,6 @@ public class MovieExecutor {
 
     }
 
-    // TODO: Handle exception elegantly when you are not tired
     public void getMovieByName(String name, GetMovieItemListener<Movie> listener) {
         this.db.collection(MOVIE_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_NAME, name)

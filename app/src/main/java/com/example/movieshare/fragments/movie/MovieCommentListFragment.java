@@ -68,7 +68,7 @@ public class MovieCommentListFragment extends Fragment {
 
     private void reloadMovieCommentList() {
         this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.VISIBLE);
-        Repository.getMovieCommentHandler()
+        Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                 .getAllMovieCommentsByMovieId(this.movieId, movieCommentList -> {
                     this.viewModel.setMovieCommentList(movieCommentList);
                     this.movieCommentAdapter.setMovieItemList(this.viewModel.getMovieCommentList());

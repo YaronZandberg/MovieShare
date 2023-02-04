@@ -61,7 +61,7 @@ public class MovieHomeFragment extends Fragment {
 
     private void reloadMovieCategoryList() {
         this.viewBindings.movieHomeFragmentProgressBar.setVisibility(View.VISIBLE);
-        Repository.getMovieCategoryHandler()
+        Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
                 .getAllMovieCategories(movieCategoryList -> {
                     this.viewModel.setMovieCategories(movieCategoryList);
                     this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories());

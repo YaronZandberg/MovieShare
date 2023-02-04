@@ -1,4 +1,4 @@
-package com.example.movieshare.repository.executors;
+package com.example.movieshare.repository.firebase.executors;
 
 import static com.example.movieshare.constants.MovieCategoryConstants.*;
 
@@ -15,15 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieCategoryExecutor {
-    private static final MovieCategoryExecutor movieCategoryExecutorInstance = new MovieCategoryExecutor();
-    private final FirebaseFirestore db;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private MovieCategoryExecutor(){
-        this.db = FirebaseFirestore.getInstance();
-    }
-
-    public static MovieCategoryExecutor instance() {
-        return movieCategoryExecutorInstance;
+    public MovieCategoryExecutor() {
     }
 
     public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {

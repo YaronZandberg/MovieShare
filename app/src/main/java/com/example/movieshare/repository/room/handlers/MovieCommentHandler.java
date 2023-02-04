@@ -1,4 +1,4 @@
-package com.example.movieshare.repository.handlers;
+package com.example.movieshare.repository.room.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -8,8 +8,8 @@ import androidx.core.os.HandlerCompat;
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
-import com.example.movieshare.repository.localdb.AppLocalDB;
-import com.example.movieshare.repository.localdb.AppLocalDbRepository;
+import com.example.movieshare.repository.room.localdb.AppLocalDB;
+import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.MovieComment;
 
 import java.util.List;

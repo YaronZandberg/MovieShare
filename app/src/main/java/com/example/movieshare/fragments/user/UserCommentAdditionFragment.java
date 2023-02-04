@@ -56,7 +56,8 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
     }
 
     public void initializeMovie() {
-        Repository.getMovieHandler().getMovieByName(this.movieName, movie -> {
+        Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
+                .getMovieByName(this.movieName, movie -> {
             this.viewModel.setMovie(movie);
             displayUserMovieCommentDetails();
         });
@@ -81,7 +82,7 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
             MovieComment movieComment = buildNewMovieComment();
-            Repository.getMovieCommentHandler()
+            Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                     .addMovieComment(movieComment, () -> {
                         new AddUserMovieCommentDialogFragment()
                                 .show(getActivity().getSupportFragmentManager(), "TAG");

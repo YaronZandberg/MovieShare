@@ -1,4 +1,4 @@
-package com.example.movieshare.repository.handlers;
+package com.example.movieshare.repository.room.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -8,10 +8,10 @@ import androidx.core.os.HandlerCompat;
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
-import com.example.movieshare.repository.localdb.AppLocalDB;
-import com.example.movieshare.repository.localdb.AppLocalDbRepository;
+import com.example.movieshare.repository.room.localdb.AppLocalDB;
+import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.Movie;
-import com.example.movieshare.repository.remotedb.FirebaseDB;
+import com.example.movieshare.repository.firebase.FirebaseModel;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -22,13 +22,13 @@ public class MovieHandler {
     private final Executor executor;
     private final Handler mainThreadHandler;
     private final AppLocalDbRepository localDB;
-    private final FirebaseDB remoteDB;
+    private final FirebaseModel remoteDB;
 
     private MovieHandler() {
         this.executor = Executors.newSingleThreadExecutor();
         this.mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
         this.localDB = AppLocalDB.getAppDB();
-        this.remoteDB = new FirebaseDB();
+        this.remoteDB = new FirebaseModel();
     }
 
     public static MovieHandler instance() {

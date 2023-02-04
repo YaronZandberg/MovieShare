@@ -57,7 +57,8 @@ public class MovieProfileFragment extends Fragment {
     }
 
     private void initializeMovie() {
-        Repository.getMovieHandler().getAllMoviesByCategoryId(this.movieCategoryId, movieList -> {
+        Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
+                .getAllMoviesByCategoryId(this.movieCategoryId, movieList -> {
             this.viewModel.setMovieList(movieList);
             this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
             getMovieCategoryName();
@@ -66,7 +67,7 @@ public class MovieProfileFragment extends Fragment {
 
     private void getMovieCategoryName() {
         if (Objects.nonNull(this.viewModel.getMovie())) {
-            Repository.getMovieCategoryHandler()
+            Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
                     .getMovieCategoryById(this.viewModel.getMovie().getMovieCategoryId(), movieCategory -> {
                         this.viewModel.setMovieCategory(movieCategory);
                         this.viewModel.setMovieCategoryName(this.viewModel.getMovieCategory().getCategoryName());

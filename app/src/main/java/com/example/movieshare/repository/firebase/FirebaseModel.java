@@ -1,26 +1,22 @@
-package com.example.movieshare.repository.remotedb;
+package com.example.movieshare.repository.firebase;
 
 import com.example.movieshare.listeners.*;
-import com.example.movieshare.repository.executors.*;
+import com.example.movieshare.repository.firebase.executors.*;
 import com.example.movieshare.repository.models.*;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
-public class FirebaseDB {
-    private final FirebaseFirestore db;
-    private final MovieCategoryExecutor movieCategoryExecutor;
-    private final MovieExecutor movieExecutor;
-    private final MovieCommentExecutor movieCommentExecutor;
+public class FirebaseModel {
+    private final MovieCategoryExecutor movieCategoryExecutor = new MovieCategoryExecutor();
+    private final MovieExecutor movieExecutor = new MovieExecutor();
+    private final MovieCommentExecutor movieCommentExecutor = new MovieCommentExecutor();
 
-    public FirebaseDB() {
+    public FirebaseModel() {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(false)
                 .build();
-        this.db = FirebaseFirestore.getInstance();
-        this.db.setFirestoreSettings(settings);
-        this.movieCategoryExecutor = MovieCategoryExecutor.instance();
-        this.movieExecutor = MovieExecutor.instance();
-        this.movieCommentExecutor = MovieCommentExecutor.instance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.setFirestoreSettings(settings);
     }
 
     public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {

@@ -1,4 +1,4 @@
-package com.example.movieshare.repository.executors;
+package com.example.movieshare.repository.firebase.executors;
 
 import static com.example.movieshare.constants.MovieCommentConstants.*;
 
@@ -13,15 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieCommentExecutor {
-    private static final MovieCommentExecutor movieCommentExecutorInstance = new MovieCommentExecutor();
-    private final FirebaseFirestore db;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private MovieCommentExecutor(){
-        this.db = FirebaseFirestore.getInstance();
-    }
-
-    public static MovieCommentExecutor instance() {
-        return movieCommentExecutorInstance;
+    public MovieCommentExecutor() {
     }
 
     public void getAllMovieComments(GetMovieItemListListener<MovieComment> listener) {
@@ -44,7 +38,7 @@ public class MovieCommentExecutor {
     }
 
     public void getAllMovieCommentsByUserId(Integer userId,
-                                            GetMovieItemListListener<MovieComment> listener){
+                                            GetMovieItemListListener<MovieComment> listener) {
         this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_COMMENT_USER_ID, userId)
                 .get()
@@ -61,7 +55,7 @@ public class MovieCommentExecutor {
     }
 
     public void getAllMovieCommentsByMovieId(Integer movieId,
-                                             GetMovieItemListListener<MovieComment> listener){
+                                             GetMovieItemListListener<MovieComment> listener) {
         this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_COMMENT_MOVIE_ID, movieId)
                 .get()
