@@ -26,7 +26,7 @@ public class UserProfileFragment extends Fragment {
     private Integer userId = 0;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentUserProfileBinding.inflate(inflater, container, false);
         configureMenuOptions();
