@@ -46,9 +46,6 @@
         android:label="fragment_user_comment_list"
         tools:layout="@layout/fragment_user_comment_list">
         <action
-            android:id="@+id/action_userCommentListFragment_to_userCommentAdditionFragment"
-            app:destination="@id/userCommentAdditionFragment" />
-        <action
             android:id="@+id/action_userCommentListFragment_to_userCommentEditionFragment"
             app:destination="@id/userCommentEditionFragment" />
         <argument
@@ -71,7 +68,11 @@
         android:id="@+id/userCommentAdditionFragment"
         android:name="com.example.movieshare.fragments.user.UserCommentAdditionFragment"
         android:label="fragment_user_comment_addition"
-        tools:layout="@layout/fragment_user_comment_addition" />
+        tools:layout="@layout/fragment_user_comment_addition" >
+        <argument
+            android:name="movieName"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/movieHomeFragment"
         android:name="com.example.movieshare.fragments.movie.MovieHomeFragment"
@@ -107,6 +108,9 @@
         <argument
             android:name="movieCategoryId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_movieProfileFragment_to_userCommentAdditionFragment"
+            app:destination="@id/userCommentAdditionFragment" />
     </fragment>
     <fragment
         android:id="@+id/movieCommentListFragment"

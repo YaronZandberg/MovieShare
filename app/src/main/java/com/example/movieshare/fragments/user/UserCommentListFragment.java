@@ -87,6 +87,7 @@ public class UserCommentListFragment extends Fragment {
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.removeItem(R.id.userCommentAdditionFragment);
             }
 
             @Override
@@ -96,13 +97,7 @@ public class UserCommentListFragment extends Fragment {
                     return true;
                 } else {
                     if (Objects.nonNull(viewBindings)) {
-                        NavDirections action;
-                        if (menuItem.getItemId() == R.id.userCommentAdditionFragment) {
-                            action = UserCommentListFragmentDirections
-                                    .actionUserCommentListFragmentToUserCommentAdditionFragment();
-                        } else {
-                            action = UserCommentListFragmentDirections.actionGlobalUserProfileFragment();
-                        }
+                        NavDirections action = UserCommentListFragmentDirections.actionGlobalUserProfileFragment();
                         Navigation.findNavController(viewBindings.getRoot()).navigate(action);
                         return true;
                     }

@@ -3,6 +3,7 @@ package com.example.movieshare.fragments.user;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
@@ -27,27 +28,41 @@ import java.util.Objects;
 
 public class UserCommentAdditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentAdditionBinding viewBindings;
+    private String movieName;
     private Movie movie;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.movieName = UserCommentAdditionFragmentArgs.fromBundle(getArguments()).getMovieName();
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.viewBindings =
-                FragmentUserCommentAdditionBinding.inflate(inflater, container, false);
-        displayUserMovieCommentDetails();
+        this.viewBindings = FragmentUserCommentAdditionBinding.inflate(inflater, container, false);
+        initializeMovie();
         configureMenuOptions();
         activateButtonsListeners();
         return this.viewBindings.getRoot();
     }
 
+    public void initializeMovie() {
+        Repository.getMovieHandler().getMovieByName(this.movieName, movie -> {
+            this.movie = movie;
+            displayUserMovieCommentDetails();
+        });
+    }
+
     @Override
     protected void displayUserMovieCommentDetails() {
+        this.viewBindings.userCommentAdditionFragmentMovieNameInputEt.setText(this.movieName);
         setUserCommentPropertiesState();
     }
 
     @Override
     protected void setUserCommentPropertiesState() {
-        this.viewBindings.userCommentAdditionFragmentMovieNameInputEt.setFocusable(true);
+        this.viewBindings.userCommentAdditionFragmentMovieNameInputEt.setFocusable(false);
         this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt.setFocusable(true);
         this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt.setFocusable(true);
     }
@@ -57,8 +72,6 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentAdditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
-            // TODO: Find a way to update the movie comment only if a movie exist
-            validateExistingMovie();
             MovieComment movieComment = buildNewMovieComment();
             Repository.getMovieCommentHandler()
                     .addMovieComment(movieComment, () -> {
@@ -70,23 +83,10 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         });
     }
 
-    private void validateExistingMovie() {
-        String movieName = this.viewBindings
-                .userCommentAdditionFragmentMovieNameInputEt.getText().toString();
-        Repository.getMovieHandler()
-                .getMovieByName(movieName, movieItem -> {
-                    this.movie = movieItem;
-                    if (Objects.isNull(this.movie)) {
-                        throw new Exception("There is no movie whose name is: " + movieName);
-                    }
-                });
-    }
-
     private MovieComment buildNewMovieComment() {
         Integer userId = 1;
         Integer movieId = this.movie.getMovieId();
-        String movieName = this.viewBindings
-                .userCommentAdditionFragmentMovieNameInputEt.getText().toString();
+        String movieName = this.movieName;
         String movieRatingOfComment = this.viewBindings
                 .userCommentAdditionFragmentMovieRatingInputEt.getText().toString();
         String description = this.viewBindings

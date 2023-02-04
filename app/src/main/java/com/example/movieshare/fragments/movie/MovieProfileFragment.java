@@ -104,7 +104,6 @@ public class MovieProfileFragment extends Fragment {
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.removeItem(R.id.userCommentAdditionFragment);
             }
 
             @Override
@@ -114,7 +113,13 @@ public class MovieProfileFragment extends Fragment {
                     return true;
                 } else {
                     if (Objects.nonNull(viewBindings)) {
-                        NavDirections action = MovieProfileFragmentDirections.actionGlobalUserProfileFragment();
+                        NavDirections action;
+                        if (menuItem.getItemId() == R.id.userCommentAdditionFragment) {
+                            action = MovieProfileFragmentDirections
+                                    .actionMovieProfileFragmentToUserCommentAdditionFragment(movie.getMovieName());
+                        } else {
+                            action = MovieProfileFragmentDirections.actionGlobalUserProfileFragment();
+                        }
                         Navigation.findNavController(viewBindings.getRoot()).navigate(action);
                         return true;
                     }

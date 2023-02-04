@@ -2,18 +2,16 @@ package com.example.movieshare.repository.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import androidx.core.os.HandlerCompat;
 
-import com.example.movieshare.context.MyApplication;
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
-import com.example.movieshare.listeners.GetMovieByNameListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.localdb.AppLocalDB;
 import com.example.movieshare.repository.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.Movie;
+import com.example.movieshare.repository.remotedb.FirebaseDB;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -24,11 +22,13 @@ public class MovieHandler {
     private final Executor executor;
     private final Handler mainThreadHandler;
     private final AppLocalDbRepository localDB;
+    private final FirebaseDB remoteDB;
 
     private MovieHandler() {
         this.executor = Executors.newSingleThreadExecutor();
         this.mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
         this.localDB = AppLocalDB.getAppDB();
+        this.remoteDB = new FirebaseDB();
     }
 
     public static MovieHandler instance() {
@@ -57,21 +57,15 @@ public class MovieHandler {
         });
     }
 
-    public void getMovieByName(String name, GetMovieByNameListener listener) {
+    public void getMovieByName(String name, GetMovieItemListener<Movie> listener) {
         this.executor.execute(() -> {
             Movie movie = localDB.movieDao().getMovieByName(name);
-            mainThreadHandler.post(() -> {
-                try {
-                    listener.onComplete(movie);
-                } catch (Exception e) {
-                    Toast.makeText(MyApplication.getAppContext(), e.getMessage(), Toast.LENGTH_LONG)
-                            .show();
-                }
-            });
+            mainThreadHandler.post(() -> listener.onComplete(movie));
         });
     }
 
     public void addMovie(Movie movie, ExecuteMovieItemListener listener) {
+        //this.remoteDB.addMovie(movie, listener);
         this.executor.execute(() -> {
             localDB.movieDao().insertAll(movie);
             mainThreadHandler.post(listener::onComplete);

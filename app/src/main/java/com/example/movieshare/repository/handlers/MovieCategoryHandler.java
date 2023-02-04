@@ -22,13 +22,13 @@ public class MovieCategoryHandler {
     private final Executor executor;
     private final Handler mainThreadHandler;
     private final AppLocalDbRepository localDB;
-    //private final FirebaseDB remoteDB;
+    private final FirebaseDB remoteDB;
 
     private MovieCategoryHandler() {
         this.executor = Executors.newSingleThreadExecutor();
         this.mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
         this.localDB = AppLocalDB.getAppDB();
-        //this.remoteDB = new FirebaseDB();
+        this.remoteDB = new FirebaseDB();
     }
 
     public static MovieCategoryHandler instance() {

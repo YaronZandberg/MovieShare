@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class MovieComment {
         this.description = description;
     }
 
+    @Ignore
     public MovieComment(Integer serialId, @NonNull Integer userId, @NonNull Integer movieId,
                         String movieName, String movieRatingOfComment, String description) {
         this.serialId = serialId;

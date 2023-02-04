@@ -3,7 +3,6 @@ package com.example.movieshare.repository.executors;
 import static com.example.movieshare.constants.MovieConstants.*;
 
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
-import com.example.movieshare.listeners.GetMovieByNameListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.models.Movie;
@@ -64,7 +63,7 @@ public class MovieExecutor {
     }
 
     // TODO: Handle exception elegantly when you are not tired
-    public void getMovieByName(String name, GetMovieByNameListener listener) {
+    public void getMovieByName(String name, GetMovieItemListener<Movie> listener) {
         this.db.collection(MOVIE_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_NAME, name)
                 .get()
@@ -75,11 +74,7 @@ public class MovieExecutor {
                         List<DocumentSnapshot> jsonDocument = json.getDocuments();
                         movie = Movie.fromJson(jsonDocument.get(0).getData());
                     }
-                    try {
-                        listener.onComplete(movie);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    listener.onComplete(movie);
                 });
     }
 

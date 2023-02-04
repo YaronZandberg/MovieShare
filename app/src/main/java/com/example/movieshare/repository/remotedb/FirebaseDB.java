@@ -57,7 +57,7 @@ public class FirebaseDB {
 
     }
 
-    public void getMovieByName(String name, GetMovieByNameListener listener) {
+    public void getMovieByName(String name, GetMovieItemListener<Movie> listener) {
         this.movieExecutor.getMovieByName(name, listener);
     }
 

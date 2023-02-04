@@ -4,6 +4,7 @@ import static com.example.movieshare.constants.MovieCategoryConstants.*;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -24,6 +25,7 @@ public class MovieCategory {
         this.description = description;
     }
 
+    @Ignore
     public MovieCategory(Integer categoryId, String categoryName,
                          String categoryRating, String description) {
         this.categoryId = categoryId;
