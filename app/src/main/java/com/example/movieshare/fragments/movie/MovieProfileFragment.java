@@ -1,5 +1,6 @@
 package com.example.movieshare.fragments.movie;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -21,21 +23,15 @@ import android.view.ViewGroup;
 import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentMovieProfileBinding;
 import com.example.movieshare.repository.Repository;
-import com.example.movieshare.repository.models.Movie;
-import com.example.movieshare.repository.models.MovieCategory;
+import com.example.movieshare.viewmodels.movie.MovieProfileFragmentViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class MovieProfileFragment extends Fragment {
     private FragmentMovieProfileBinding viewBindings;
     private Integer moviePosition;
     private Integer movieCategoryId;
-    private List<Movie> movieList = new ArrayList<>();
-    private Movie movie;
-    private MovieCategory movieCategory;
-    private String movieCategoryName;
+    private MovieProfileFragmentViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,31 +50,37 @@ public class MovieProfileFragment extends Fragment {
         return this.viewBindings.getRoot();
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.viewModel = new ViewModelProvider(this).get(MovieProfileFragmentViewModel.class);
+    }
+
     private void initializeMovie() {
         Repository.getMovieHandler().getAllMoviesByCategoryId(this.movieCategoryId, movieList -> {
-            this.movieList = movieList;
-            this.movie = this.movieList.get(this.moviePosition);
+            this.viewModel.setMovieList(movieList);
+            this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
             getMovieCategoryName();
         });
     }
 
     private void getMovieCategoryName() {
-        if (Objects.nonNull(this.movie)) {
+        if (Objects.nonNull(this.viewModel.getMovie())) {
             Repository.getMovieCategoryHandler()
-                    .getMovieCategoryById(this.movie.getMovieCategoryId(), movieCategory -> {
-                        this.movieCategory = movieCategory;
-                        this.movieCategoryName = this.movieCategory.getCategoryName();
+                    .getMovieCategoryById(this.viewModel.getMovie().getMovieCategoryId(), movieCategory -> {
+                        this.viewModel.setMovieCategory(movieCategory);
+                        this.viewModel.setMovieCategoryName(this.viewModel.getMovieCategory().getCategoryName());
                         displayMovieDetails();
                     });
         }
     }
 
     private void displayMovieDetails() {
-        if (Objects.nonNull(this.movie)) {
-            this.viewBindings.movieProfileFragmentMovieNameInputEt.setText(this.movie.getMovieName());
-            this.viewBindings.movieProfileFragmentMovieCategoryInputEt.setText(this.movieCategoryName);
-            this.viewBindings.movieProfileFragmentMovieDescriptionInputEt.setText(this.movie.getDescription());
-            this.viewBindings.movieProfileFragmentMovieRatingInputEt.setText(this.movie.getMovieRating());
+        if (Objects.nonNull(this.viewModel.getMovie())) {
+            this.viewBindings.movieProfileFragmentMovieNameInputEt.setText(this.viewModel.getMovie().getMovieName());
+            this.viewBindings.movieProfileFragmentMovieCategoryInputEt.setText(this.viewModel.getMovieCategoryName());
+            this.viewBindings.movieProfileFragmentMovieDescriptionInputEt.setText(this.viewModel.getMovie().getDescription());
+            this.viewBindings.movieProfileFragmentMovieRatingInputEt.setText(this.viewModel.getMovie().getMovieRating());
             setUserCommentPropertiesState();
         }
     }
@@ -94,7 +96,7 @@ public class MovieProfileFragment extends Fragment {
         this.viewBindings.movieProfileFragmentCommentsBtn.setOnClickListener(view -> {
             NavDirections action =
                     MovieProfileFragmentDirections
-                            .actionMovieProfileFragmentToMovieCommentListFragment(this.movie.getMovieId());
+                            .actionMovieProfileFragmentToMovieCommentListFragment(this.viewModel.getMovie().getMovieId());
             Navigation.findNavController(view).navigate(action);
         });
     }
@@ -116,7 +118,7 @@ public class MovieProfileFragment extends Fragment {
                         NavDirections action;
                         if (menuItem.getItemId() == R.id.userCommentAdditionFragment) {
                             action = MovieProfileFragmentDirections
-                                    .actionMovieProfileFragmentToUserCommentAdditionFragment(movie.getMovieName());
+                                    .actionMovieProfileFragmentToUserCommentAdditionFragment(viewModel.getMovie().getMovieName());
                         } else {
                             action = MovieProfileFragmentDirections.actionGlobalUserProfileFragment();
                         }

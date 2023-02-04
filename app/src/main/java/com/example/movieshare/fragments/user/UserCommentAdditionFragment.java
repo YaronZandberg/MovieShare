@@ -1,5 +1,6 @@
 package com.example.movieshare.fragments.user;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -20,16 +22,16 @@ import android.view.ViewGroup;
 import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
 import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
-import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.viewmodels.user.UserCommentAdditionFragmentViewModel;
 
 import java.util.Objects;
 
 public class UserCommentAdditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentAdditionBinding viewBindings;
     private String movieName;
-    private Movie movie;
+    private UserCommentAdditionFragmentViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,9 +49,15 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         return this.viewBindings.getRoot();
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.viewModel = new ViewModelProvider(this).get(UserCommentAdditionFragmentViewModel.class);
+    }
+
     public void initializeMovie() {
         Repository.getMovieHandler().getMovieByName(this.movieName, movie -> {
-            this.movie = movie;
+            this.viewModel.setMovie(movie);
             displayUserMovieCommentDetails();
         });
     }
@@ -85,7 +93,7 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
 
     private MovieComment buildNewMovieComment() {
         Integer userId = 1;
-        Integer movieId = this.movie.getMovieId();
+        Integer movieId = this.viewModel.getMovie().getMovieId();
         String movieName = this.movieName;
         String movieRatingOfComment = this.viewBindings
                 .userCommentAdditionFragmentMovieRatingInputEt.getText().toString();

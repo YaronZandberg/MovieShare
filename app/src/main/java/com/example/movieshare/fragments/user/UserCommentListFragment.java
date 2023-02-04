@@ -1,5 +1,6 @@
 package com.example.movieshare.fragments.user;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,19 +24,17 @@ import android.view.ViewGroup;
 import com.example.movieshare.R;
 import com.example.movieshare.adapters.CommentAdapter;
 import com.example.movieshare.databinding.FragmentUserCommentListBinding;
-import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.MovieUtils;
+import com.example.movieshare.viewmodels.user.UserCommentListFragmentViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class UserCommentListFragment extends Fragment {
     private FragmentUserCommentListBinding viewBindings;
-    private List<MovieComment> userCommentList = new ArrayList<>();
     private Integer userId;
     private CommentAdapter userCommentAdapter;
+    private UserCommentListFragmentViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,11 +48,17 @@ public class UserCommentListFragment extends Fragment {
         this.viewBindings = FragmentUserCommentListBinding.inflate(inflater, container, false);
         this.viewBindings.userCommentListFragmentList.setHasFixedSize(true);
         this.viewBindings.userCommentListFragmentList.setLayoutManager(new LinearLayoutManager(getContext()));
-        this.userCommentAdapter = new CommentAdapter(getLayoutInflater(), this.userCommentList);
+        this.userCommentAdapter = new CommentAdapter(getLayoutInflater(), this.viewModel.getUserCommentList());
         this.viewBindings.userCommentListFragmentList.setAdapter(this.userCommentAdapter);
         configureMenuOptions();
         activateItemListListener();
         return this.viewBindings.getRoot();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.viewModel = new ViewModelProvider(this).get(UserCommentListFragmentViewModel.class);
     }
 
     @Override
@@ -65,8 +71,8 @@ public class UserCommentListFragment extends Fragment {
         this.viewBindings.userCommentListFragmentProgressBar.setVisibility(View.VISIBLE);
         Repository.getMovieCommentHandler()
                 .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
-                    this.userCommentList = movieCommentList;
-                    this.userCommentAdapter.setMovieItemList(this.userCommentList);
+                    this.viewModel.setUserCommentList(movieCommentList);
+                    this.userCommentAdapter.setMovieItemList(this.viewModel.getUserCommentList());
                     MovieUtils.simulateSleeping();
                     this.viewBindings.userCommentListFragmentProgressBar.setVisibility(View.GONE);
                 });
