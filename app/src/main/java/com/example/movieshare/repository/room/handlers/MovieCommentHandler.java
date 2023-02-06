@@ -59,7 +59,7 @@ public class MovieCommentHandler {
         });
     }
 
-    public void getAllMovieCommentsByMovieId(Integer movieId,
+    public void getAllMovieCommentsByMovieId(String movieId,
                                              GetMovieItemListListener<MovieComment> listener){
         this.executor.execute(() -> {
             List<MovieComment> movieComments =

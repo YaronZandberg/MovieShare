@@ -12,6 +12,7 @@ import androidx.room.PrimaryKey;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: Add another foreign key of userId
 @Entity(foreignKeys = {
         @ForeignKey(entity = Movie.class,
                 parentColumns = "movieId",
@@ -19,20 +20,20 @@ import java.util.Map;
                 onDelete = ForeignKey.CASCADE)
 })
 public class MovieComment {
-    @PrimaryKey(autoGenerate = true)
-    private Integer serialId;
+    @PrimaryKey @NonNull
+    private String movieCommentId;
 
     @NonNull
     private Integer userId;
 
     @ColumnInfo(index = true)
     @NonNull
-    private Integer movieId;
+    private String movieId;
     private String movieName;
     private String movieRatingOfComment;
     private String description;
 
-    public MovieComment(@NonNull Integer userId, @NonNull Integer movieId,
+    public MovieComment(@NonNull Integer userId, @NonNull String movieId,
                         String movieName, String movieRatingOfComment, String description) {
         this.userId = userId;
         this.movieId = movieId;
@@ -42,9 +43,9 @@ public class MovieComment {
     }
 
     @Ignore
-    public MovieComment(Integer serialId, @NonNull Integer userId, @NonNull Integer movieId,
+    public MovieComment(@NonNull String movieCommentId, @NonNull Integer userId, @NonNull String movieId,
                         String movieName, String movieRatingOfComment, String description) {
-        this.serialId = serialId;
+        this.movieCommentId = movieCommentId;
         this.userId = userId;
         this.movieId = movieId;
         this.movieName = movieName;
@@ -54,18 +55,18 @@ public class MovieComment {
 
     // TODO: handle exceptions from casting or null
     public static MovieComment fromJson(Map<String, Object> json) {
-        Integer serialId = Integer.parseInt(String.valueOf(json.get(MOVIE_COMMENT_ID)));
+        String movieCommentId = String.valueOf(json.get(MOVIE_COMMENT_ID));
         Integer userId = Integer.parseInt(String.valueOf(json.get(MOVIE_COMMENT_USER_ID)));
-        Integer movieId = Integer.parseInt(String.valueOf(json.get(MOVIE_COMMENT_MOVIE_ID)));
+        String movieId = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_ID));
         String movieName = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_NAME));
         String movieRatingOfComment = String.valueOf(json.get(MOVIE_COMMENT_RATING));
         String description = String.valueOf(json.get(MOVIE_COMMENT_DESCRIPTION));
-        return new MovieComment(serialId, userId, movieId, movieName, movieRatingOfComment, description);
+        return new MovieComment(movieCommentId, userId, movieId, movieName, movieRatingOfComment, description);
     }
 
     public Map<String, Object> toJson() {
         Map<String, Object> movieCommentJson = new HashMap<>();
-        movieCommentJson.put(MOVIE_COMMENT_ID, this.getSerialId());
+        movieCommentJson.put(MOVIE_COMMENT_ID, this.getMovieCommentId());
         movieCommentJson.put(MOVIE_COMMENT_USER_ID, this.getUserId());
         movieCommentJson.put(MOVIE_COMMENT_MOVIE_ID, this.getMovieId());
         movieCommentJson.put(MOVIE_COMMENT_MOVIE_NAME, this.getMovieName());
@@ -75,12 +76,12 @@ public class MovieComment {
     }
 
     @NonNull
-    public Integer getSerialId() {
-        return this.serialId;
+    public String getMovieCommentId() {
+        return this.movieCommentId;
     }
 
-    public void setSerialId(@NonNull Integer serialId) {
-        this.serialId = serialId;
+    public void setMovieCommentId(@NonNull String movieCommentId) {
+        this.movieCommentId = movieCommentId;
     }
 
     @NonNull
@@ -93,11 +94,11 @@ public class MovieComment {
     }
 
     @NonNull
-    public Integer getMovieId() {
+    public String getMovieId() {
         return this.movieId;
     }
 
-    public void setMovieId(@NonNull Integer movieId) {
+    public void setMovieId(@NonNull String movieId) {
         this.movieId = movieId;
     }
 

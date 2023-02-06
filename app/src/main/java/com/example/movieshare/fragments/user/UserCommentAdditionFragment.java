@@ -82,19 +82,25 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
             MovieComment movieComment = buildNewMovieComment();
-            Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+            /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                    .addMovieComment(movieComment, () -> {
+                        new AddUserMovieCommentDialogFragment()
+                                .show(getActivity().getSupportFragmentManager(), "TAG");
+                        Navigation.findNavController(view).popBackStack();
+                    });*/
+            Repository.getRepositoryInstance().getFirebaseModel()
                     .addMovieComment(movieComment, () -> {
                         new AddUserMovieCommentDialogFragment()
                                 .show(getActivity().getSupportFragmentManager(), "TAG");
                         Navigation.findNavController(view).popBackStack();
                     });
-
         });
     }
 
+    // TODO: Put the userId of the user instead of dummy 1
     private MovieComment buildNewMovieComment() {
         Integer userId = 1;
-        Integer movieId = this.viewModel.getMovie().getMovieId();
+        String movieId = this.viewModel.getMovie().getMovieId();
         String movieName = this.movieName;
         String movieRatingOfComment = this.viewBindings
                 .userCommentAdditionFragmentMovieRatingInputEt.getText().toString();

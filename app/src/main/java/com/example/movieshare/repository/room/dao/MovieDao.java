@@ -16,7 +16,7 @@ public interface MovieDao {
     List<Movie> getAllMovies();
 
     @Query("SELECT * FROM Movie WHERE movieCategoryId = :categoryId")
-    List<Movie> getAllMoviesByCategoryId(Integer categoryId);
+    List<Movie> getAllMoviesByCategoryId(String categoryId);
 
     @Query("SELECT * FROM Movie WHERE movieId = :id")
     Movie getMovieById(Integer id);

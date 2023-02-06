@@ -13,8 +13,8 @@ import java.util.Map;
 
 @Entity(indices = {@Index(value = {"categoryName"}, unique = true)})
 public class MovieCategory {
-    @PrimaryKey(autoGenerate = true)
-    private Integer categoryId;
+    @PrimaryKey @NonNull
+    private String categoryId;
     private String categoryName;
     private String categoryRating;
     private String description;
@@ -26,7 +26,7 @@ public class MovieCategory {
     }
 
     @Ignore
-    public MovieCategory(Integer categoryId, String categoryName,
+    public MovieCategory(@NonNull String categoryId, String categoryName,
                          String categoryRating, String description) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -36,7 +36,7 @@ public class MovieCategory {
 
     // TODO: handle exceptions from casting or null
     public static MovieCategory fromJson(Map<String, Object> json) {
-        Integer categoryId = Integer.parseInt(String.valueOf(json.get(MOVIE_CATEGORY_ID)));
+        String categoryId = String.valueOf(json.get(MOVIE_CATEGORY_ID));
         String categoryName = String.valueOf(json.get(MOVIE_CATEGORY_NAME));
         String categoryRating = String.valueOf(json.get(MOVIE_CATEGORY_RATING));
         String description = String.valueOf(json.get(MOVIE_CATEGORY_DESCRIPTION));
@@ -53,11 +53,11 @@ public class MovieCategory {
     }
 
     @NonNull
-    public Integer getCategoryId() {
+    public String getCategoryId() {
         return this.categoryId;
     }
 
-    public void setCategoryId(@NonNull Integer categoryId) {
+    public void setCategoryId(@NonNull String categoryId) {
         this.categoryId = categoryId;
     }
 

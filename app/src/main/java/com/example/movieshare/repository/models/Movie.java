@@ -21,16 +21,18 @@ import java.util.Map;
         indices = {@Index(value = {"movieName"}, unique = true)}
 )
 public class Movie {
-    @PrimaryKey(autoGenerate = true)
-    private Integer movieId;
+    @PrimaryKey @NonNull
+    private String movieId;
+
     @ColumnInfo(index = true)
     @NonNull
-    private Integer movieCategoryId;
+    private String movieCategoryId;
     private String movieName;
     private String movieRating;
     private String description;
 
-    public Movie(@NonNull Integer movieCategoryId, String movieName, String movieRating, String description) {
+    public Movie(@NonNull String movieCategoryId, String movieName,
+                 String movieRating, String description) {
         this.movieCategoryId = movieCategoryId;
         this.movieName = movieName;
         this.movieRating = movieRating;
@@ -38,7 +40,7 @@ public class Movie {
     }
 
     @Ignore
-    public Movie(Integer movieId, @NonNull Integer movieCategoryId,
+    public Movie(@NonNull String movieId, @NonNull String movieCategoryId,
                  String movieName, String movieRating, String description) {
         this.movieId = movieId;
         this.movieCategoryId = movieCategoryId;
@@ -49,8 +51,8 @@ public class Movie {
 
     // TODO: handle exceptions from casting or null
     public static Movie fromJson(Map<String, Object> json) {
-        Integer movieId = Integer.parseInt(String.valueOf(json.get(MOVIE_ID)));
-        Integer movieCategoryId = Integer.parseInt(String.valueOf(json.get(MOVIE_CATEGORY_ID)));
+        String movieId = String.valueOf(json.get(MOVIE_ID));
+        String movieCategoryId = String.valueOf(json.get(MOVIE_CATEGORY_ID));
         String movieName = String.valueOf(json.get(MOVIE_NAME));
         String movieRating = String.valueOf(json.get(MOVIE_RATING));
         String description = String.valueOf(json.get(MOVIE_DESCRIPTION));
@@ -68,20 +70,20 @@ public class Movie {
     }
 
     @NonNull
-    public Integer getMovieId() {
+    public String getMovieId() {
         return this.movieId;
     }
 
-    public void setMovieId(@NonNull Integer movieId) {
+    public void setMovieId(@NonNull String movieId) {
         this.movieId = movieId;
     }
 
     @NonNull
-    public Integer getMovieCategoryId() {
+    public String getMovieCategoryId() {
         return this.movieCategoryId;
     }
 
-    public void setMovieCategoryId(@NonNull Integer movieCategoryId) {
+    public void setMovieCategoryId(@NonNull String movieCategoryId) {
         this.movieCategoryId = movieCategoryId;
     }
 

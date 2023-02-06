@@ -107,7 +107,7 @@
             app:destination="@id/movieCommentListFragment" />
         <argument
             android:name="movieCategoryId"
-            app:argType="integer" />
+            app:argType="string" />
         <action
             android:id="@+id/action_movieProfileFragment_to_userCommentAdditionFragment"
             app:destination="@id/userCommentAdditionFragment" />
@@ -119,7 +119,7 @@
         tools:layout="@layout/fragment_movie_comment_list" >
         <argument
             android:name="movieId"
-            app:argType="integer" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/testAddMovieCategoryFragment"

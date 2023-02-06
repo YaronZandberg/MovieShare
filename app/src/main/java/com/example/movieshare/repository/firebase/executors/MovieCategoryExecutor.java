@@ -36,6 +36,8 @@ public class MovieCategoryExecutor {
     }
 
     // TODO: Check correctness of this method
+    //  In addition, I'm not sure that we need to implement this with firebase,
+    //  because this function will be called in front of ROOM.
     public void getMovieCategoryById(Integer id, GetMovieItemListener<MovieCategory> listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_CATEGORY_ID, id)

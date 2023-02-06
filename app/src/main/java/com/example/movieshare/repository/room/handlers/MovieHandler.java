@@ -39,7 +39,7 @@ public class MovieHandler {
         });
     }
 
-    public void getAllMoviesByCategoryId(Integer categoryId,
+    public void getAllMoviesByCategoryId(String categoryId,
                                          GetMovieItemListListener<Movie> listener) {
         this.executor.execute(() -> {
             List<Movie> movies = localDB.movieDao().getAllMoviesByCategoryId(categoryId);

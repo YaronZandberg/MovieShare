@@ -2,6 +2,7 @@ package com.example.movieshare.fragments.test;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -18,7 +19,7 @@ public class TestAddMovieFragment extends Fragment {
     private FragmentTestAddMovieBinding viewBindings;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentTestAddMovieBinding.inflate(inflater, container, false);
         activateButtonsListeners();
@@ -30,7 +31,13 @@ public class TestAddMovieFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.testMovieSaveBtn.setOnClickListener(view -> {
             Movie movie = buildNewMovie();
-            Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
+            /*Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
+                    .addMovie(movie, () -> Toast.makeText(getContext(),
+                                    "Add movie operation finished successfully",
+                                    Toast.LENGTH_LONG)
+                            .show()
+                    );*/
+            Repository.getRepositoryInstance().getFirebaseModel()
                     .addMovie(movie, () -> Toast.makeText(getContext(),
                                     "Add movie operation finished successfully",
                                     Toast.LENGTH_LONG)
@@ -40,8 +47,7 @@ public class TestAddMovieFragment extends Fragment {
     }
 
     private Movie buildNewMovie() {
-        Integer categoryId =
-                Integer.parseInt(this.viewBindings.testMovieCategoryIdInputEt.getText().toString());
+        String categoryId = this.viewBindings.testMovieCategoryIdInputEt.getText().toString();
         String movieName = this.viewBindings.testMovieNameInputEt.getText().toString();
         String movieRating = this.viewBindings.testMovieRatingInputEt.getText().toString();
         String description = this.viewBindings.testMovieDesctiptionInputEt.getText().toString();

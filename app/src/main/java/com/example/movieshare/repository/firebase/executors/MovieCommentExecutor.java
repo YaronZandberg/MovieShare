@@ -2,10 +2,16 @@ package com.example.movieshare.repository.firebase.executors;
 
 import static com.example.movieshare.constants.MovieCommentConstants.*;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.models.MovieComment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -37,6 +43,8 @@ public class MovieCommentExecutor {
 
     }
 
+    // TODO: I'm not sure that we need to implement this with firebase,
+    //  because this function will be called in front of ROOM.
     public void getAllMovieCommentsByUserId(Integer userId,
                                             GetMovieItemListListener<MovieComment> listener) {
         this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)
@@ -54,6 +62,8 @@ public class MovieCommentExecutor {
                 });
     }
 
+    // TODO: I'm not sure that we need to implement this with firebase,
+    //  because this function will be called in front of ROOM.
     public void getAllMovieCommentsByMovieId(Integer movieId,
                                              GetMovieItemListListener<MovieComment> listener) {
         this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)
@@ -77,14 +87,42 @@ public class MovieCommentExecutor {
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 
-    // TODO: Add implementation
-    public void removeMovieComment(Integer index, ExecuteMovieItemListener listener) {
-
+    // TODO: Test implementation
+    public void removeMovieComment(String movieCommentId, ExecuteMovieItemListener listener) {
+        db.collection(MOVIE_COMMENT_COLLECTION_NAME)
+                .document(movieCommentId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error deleting document", e);
+                    }
+                });
     }
 
-    // TODO: Add implementation
-    public void updateMovieComment(Integer index, MovieComment movieComment,
+    // TODO: Test implementation
+    public void updateMovieComment(String movieCommentId, MovieComment movieComment,
                                    ExecuteMovieItemListener listener) {
-
+        db.collection(MOVIE_COMMENT_COLLECTION_NAME)
+                .document(movieCommentId)
+                .set(movieComment)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error writing document", e);
+                    }
+                });
     }
 }

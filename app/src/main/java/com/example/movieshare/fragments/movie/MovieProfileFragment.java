@@ -30,7 +30,7 @@ import java.util.Objects;
 public class MovieProfileFragment extends Fragment {
     private FragmentMovieProfileBinding viewBindings;
     private Integer moviePosition;
-    private Integer movieCategoryId;
+    private String movieCategoryId;
     private MovieProfileFragmentViewModel viewModel;
 
     @Override

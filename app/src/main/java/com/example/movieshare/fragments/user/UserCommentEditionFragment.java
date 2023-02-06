@@ -100,16 +100,29 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentEditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
-                Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                         .removeMovieComment(this.viewModel.getMovieCommentPositionInTotalList(), () -> {
+                            new DeleteUserMovieCommentDialogFragment()
+                                    .show(getActivity().getSupportFragmentManager(), "TAG");
+                            Navigation.findNavController(view).popBackStack();
+                        }));*/
+                Repository.getRepositoryInstance().getFirebaseModel()
+                        .removeMovieComment(this.viewModel.getMovieComment().getMovieCommentId(), () -> {
                             new DeleteUserMovieCommentDialogFragment()
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
                             Navigation.findNavController(view).popBackStack();
                         }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             updateUserComment();
-            Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+            /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                     .updateMovieComment(this.viewModel.getMovieCommentPositionInTotalList(),
+                            this.viewModel.getMovieComment(), () -> {
+                                new UpdateUserMovieCommentDialogFragment()
+                                        .show(getActivity().getSupportFragmentManager(), "TAG");
+                                Navigation.findNavController(view).popBackStack();
+                            });*/
+            Repository.getRepositoryInstance().getFirebaseModel()
+                    .updateMovieComment(this.viewModel.getMovieComment().getMovieCommentId(),
                             this.viewModel.getMovieComment(), () -> {
                                 new UpdateUserMovieCommentDialogFragment()
                                         .show(getActivity().getSupportFragmentManager(), "TAG");

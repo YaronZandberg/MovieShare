@@ -39,7 +39,7 @@ public class MovieCategoryHandler {
         });
     }
 
-    public void getMovieCategoryById(Integer id, GetMovieItemListener<MovieCategory> listener) {
+    public void getMovieCategoryById(String id, GetMovieItemListener<MovieCategory> listener) {
         this.executor.execute(() -> {
             MovieCategory movieCategory = localDB.movieCategoryDao().getMovieCategoryById(id);
             mainThreadHandler.post(() -> listener.onComplete(movieCategory));

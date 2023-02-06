@@ -32,7 +32,7 @@ import java.util.Objects;
 
 public class MovieCommentListFragment extends Fragment {
     private FragmentMovieCommentListBinding viewBindings;
-    private Integer movieId;
+    private String movieId;
     private CommentAdapter movieCommentAdapter;
     private MovieCommentListFragmentViewModel viewModel;
 
