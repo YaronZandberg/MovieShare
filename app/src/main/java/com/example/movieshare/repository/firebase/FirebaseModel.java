@@ -27,7 +27,7 @@ public class FirebaseModel {
     }
 
     // TODO: Probably shouldn't be implemented by Firebase
-    public void getMovieCategoryById(Integer id, GetMovieItemListener<MovieCategory> listener) {
+    public void getMovieCategoryById(String id, GetMovieItemListener<MovieCategory> listener) {
         this.movieCategoryExecutor.getMovieCategoryById(id, listener);
     }
 
@@ -54,7 +54,7 @@ public class FirebaseModel {
     }
 
     // TODO: Probably shouldn't be implemented by Firebase
-    public void getAllMoviesByCategoryId(Integer categoryId,
+    public void getAllMoviesByCategoryId(String categoryId,
                                          GetMovieItemListListener<Movie> listener) {
         this.movieExecutor.getAllMoviesByCategoryId(categoryId, listener);
     }
@@ -102,7 +102,7 @@ public class FirebaseModel {
     }
 
     // TODO: Probably shouldn't be implemented by Firebase
-    public void getAllMovieCommentsByMovieId(Integer movieId,
+    public void getAllMovieCommentsByMovieId(String movieId,
                                              GetMovieItemListListener<MovieComment> listener){
         this.movieCommentExecutor.getAllMovieCommentsByMovieId(movieId, listener);
     }

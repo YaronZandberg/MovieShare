@@ -7,6 +7,7 @@ import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.models.MovieCategory;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,6 +29,7 @@ public class MovieCategoryExecutor {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             MovieCategory movieCategory = MovieCategory.fromJson(document.getData());
+                            movieCategory.setCategoryId(document.getId());
                             movieCategories.add(movieCategory);
                         }
                     }
@@ -35,19 +37,18 @@ public class MovieCategoryExecutor {
                 });
     }
 
-    // TODO: Check correctness of this method
-    //  In addition, I'm not sure that we need to implement this with firebase,
+    // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
-    public void getMovieCategoryById(Integer id, GetMovieItemListener<MovieCategory> listener) {
+    public void getMovieCategoryById(String id, GetMovieItemListener<MovieCategory> listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
-                .whereEqualTo(MOVIE_CATEGORY_ID, id)
+                .whereEqualTo(FieldPath.documentId(), id)
                 .get()
                 .addOnCompleteListener(task -> {
                     MovieCategory movieCategory = null;
                     if (task.isSuccessful()) {
-                        QuerySnapshot json = task.getResult();
-                        List<DocumentSnapshot> jsonDocument = json.getDocuments();
-                        movieCategory = MovieCategory.fromJson(jsonDocument.get(0).getData());
+                        QuerySnapshot queryDocumentSnapshots = task.getResult();
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        movieCategory = MovieCategory.fromJson(documentSnapshot.getData());
                     }
                     listener.onComplete(movieCategory);
                 });

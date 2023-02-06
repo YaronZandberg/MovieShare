@@ -57,17 +57,29 @@ public class MovieProfileFragment extends Fragment {
     }
 
     private void initializeMovie() {
-        Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
+        /*Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
                 .getAllMoviesByCategoryId(this.movieCategoryId, movieList -> {
             this.viewModel.setMovieList(movieList);
             this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
             getMovieCategoryName();
-        });
+        });*/
+        Repository.getRepositoryInstance().getFirebaseModel()
+                .getAllMoviesByCategoryId(this.movieCategoryId, movieList -> {
+                    this.viewModel.setMovieList(movieList);
+                    this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
+                    getMovieCategoryName();
+                });
     }
 
     private void getMovieCategoryName() {
         if (Objects.nonNull(this.viewModel.getMovie())) {
-            Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
+            /*Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
+                    .getMovieCategoryById(this.viewModel.getMovie().getMovieCategoryId(), movieCategory -> {
+                        this.viewModel.setMovieCategory(movieCategory);
+                        this.viewModel.setMovieCategoryName(this.viewModel.getMovieCategory().getCategoryName());
+                        displayMovieDetails();
+                    });*/
+            Repository.getRepositoryInstance().getFirebaseModel()
                     .getMovieCategoryById(this.viewModel.getMovie().getMovieCategoryId(), movieCategory -> {
                         this.viewModel.setMovieCategory(movieCategory);
                         this.viewModel.setMovieCategoryName(this.viewModel.getMovieCategory().getCategoryName());

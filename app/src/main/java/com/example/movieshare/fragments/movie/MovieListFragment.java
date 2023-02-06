@@ -68,7 +68,14 @@ public class MovieListFragment extends Fragment {
     }
 
     private void initializeMovieCategory() {
-        Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
+        /*Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
+                .getAllMovieCategories(movieCategoryList -> {
+                    this.viewModel.setAllMovieCategories(movieCategoryList);
+                    this.viewModel.setMovieCategory(this.viewModel.getAllMovieCategories()
+                            .get(this.movieCategoryPosition));
+                    reloadMovieList();
+                });*/
+        Repository.getRepositoryInstance().getFirebaseModel()
                 .getAllMovieCategories(movieCategoryList -> {
                     this.viewModel.setAllMovieCategories(movieCategoryList);
                     this.viewModel.setMovieCategory(this.viewModel.getAllMovieCategories()
@@ -80,7 +87,14 @@ public class MovieListFragment extends Fragment {
     private void reloadMovieList() {
         if (Objects.nonNull(this.viewModel.getMovieCategory())) {
             this.viewBindings.movieListFragmentProgressBar.setVisibility(View.VISIBLE);
-            Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
+            /*Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
+                    .getAllMoviesByCategoryId(this.viewModel.getMovieCategory().getCategoryId(), movieList -> {
+                        this.viewModel.setMovieList(movieList);
+                        this.movieAdapter.setMovieItemList(this.viewModel.getMovieList());
+                        MovieUtils.simulateSleeping();
+                        this.viewBindings.movieListFragmentProgressBar.setVisibility(View.GONE);
+                    });*/
+            Repository.getRepositoryInstance().getFirebaseModel()
                     .getAllMoviesByCategoryId(this.viewModel.getMovieCategory().getCategoryId(), movieList -> {
                         this.viewModel.setMovieList(movieList);
                         this.movieAdapter.setMovieItemList(this.viewModel.getMovieList());

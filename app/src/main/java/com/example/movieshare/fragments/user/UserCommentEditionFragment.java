@@ -69,7 +69,14 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     }
 
     private void findMovieCommentPositionInTotalList() {
-        Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+        /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                .getAllMovieComments(allMovieComments -> {
+                    this.viewModel.setAllMovieComments(allMovieComments);
+                    this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
+                            .getAllMovieComments().indexOf(this.viewModel.getMovieComment()));
+                    displayUserMovieCommentDetails();
+                });*/
+        Repository.getRepositoryInstance().getFirebaseModel()
                 .getAllMovieComments(allMovieComments -> {
                     this.viewModel.setAllMovieComments(allMovieComments);
                     this.viewModel.setMovieCommentPositionInTotalList(this.viewModel

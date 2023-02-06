@@ -28,6 +28,7 @@ public class MovieExecutor {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Movie movie = Movie.fromJson(document.getData());
+                            movie.setMovieId(document.getId());
                             movies.add(movie);
                         }
                     }
@@ -37,7 +38,7 @@ public class MovieExecutor {
 
     // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
-    public void getAllMoviesByCategoryId(Integer categoryId,
+    public void getAllMoviesByCategoryId(String categoryId,
                                          GetMovieItemListListener<Movie> listener) {
         this.db.collection(MOVIE_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_CATEGORY_ID, categoryId)

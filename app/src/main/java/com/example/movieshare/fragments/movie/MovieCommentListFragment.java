@@ -67,8 +67,15 @@ public class MovieCommentListFragment extends Fragment {
     }
 
     private void reloadMovieCommentList() {
-        this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.VISIBLE);
+        /*this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.VISIBLE);
         Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                .getAllMovieCommentsByMovieId(this.movieId, movieCommentList -> {
+                    this.viewModel.setMovieCommentList(movieCommentList);
+                    this.movieCommentAdapter.setMovieItemList(this.viewModel.getMovieCommentList());
+                    MovieUtils.simulateSleeping();
+                    this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.GONE);
+                });*/
+        Repository.getRepositoryInstance().getFirebaseModel()
                 .getAllMovieCommentsByMovieId(this.movieId, movieCommentList -> {
                     this.viewModel.setMovieCommentList(movieCommentList);
                     this.movieCommentAdapter.setMovieItemList(this.viewModel.getMovieCommentList());

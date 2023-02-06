@@ -56,11 +56,16 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
     }
 
     public void initializeMovie() {
-        Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
+        /*Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
                 .getMovieByName(this.movieName, movie -> {
             this.viewModel.setMovie(movie);
             displayUserMovieCommentDetails();
-        });
+        });*/
+        Repository.getRepositoryInstance().getFirebaseModel()
+                .getMovieByName(this.movieName, movie -> {
+                    this.viewModel.setMovie(movie);
+                    displayUserMovieCommentDetails();
+                });
     }
 
     @Override

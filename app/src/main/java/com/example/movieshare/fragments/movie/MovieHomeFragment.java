@@ -61,7 +61,14 @@ public class MovieHomeFragment extends Fragment {
 
     private void reloadMovieCategoryList() {
         this.viewBindings.movieHomeFragmentProgressBar.setVisibility(View.VISIBLE);
-        Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
+        /*Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
+                .getAllMovieCategories(movieCategoryList -> {
+                    this.viewModel.setMovieCategories(movieCategoryList);
+                    this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories());
+                    MovieUtils.simulateSleeping();
+                    this.viewBindings.movieHomeFragmentProgressBar.setVisibility(View.GONE);
+                });*/
+        Repository.getRepositoryInstance().getFirebaseModel()
                 .getAllMovieCategories(movieCategoryList -> {
                     this.viewModel.setMovieCategories(movieCategoryList);
                     this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories());
