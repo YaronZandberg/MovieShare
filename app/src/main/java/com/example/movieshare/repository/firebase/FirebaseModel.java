@@ -26,6 +26,11 @@ public class FirebaseModel {
         this.movieCategoryExecutor.getAllMovieCategories(listener);
     }
 
+    public void getAllMovieCategoriesSinceLastUpdate(Long localLastUpdate,
+                                                     GetMovieItemListListener<MovieCategory> listener) {
+        this.movieCategoryExecutor.getAllMovieCategoriesSinceLastUpdate(localLastUpdate, listener);
+    }
+
     // TODO: Probably shouldn't be implemented by Firebase
     public void getMovieCategoryById(String id, GetMovieItemListener<MovieCategory> listener) {
         this.movieCategoryExecutor.getMovieCategoryById(id, listener);

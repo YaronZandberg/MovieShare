@@ -2,22 +2,30 @@ package com.example.movieshare.repository.models;
 
 import static com.example.movieshare.constants.MovieCategoryConstants.*;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.example.movieshare.context.MyApplication;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity(indices = {@Index(value = {"categoryName"}, unique = true)})
 public class MovieCategory {
-    @PrimaryKey @NonNull
+    @PrimaryKey
+    @NonNull
     private String categoryId;
     private String categoryName;
     private String categoryRating;
     private String description;
+    private Long categoryLastUpdate;
 
     public MovieCategory(String categoryName, String categoryRating, String description) {
         this.categoryName = categoryName;
@@ -40,7 +48,10 @@ public class MovieCategory {
         String categoryName = String.valueOf(json.get(MOVIE_CATEGORY_NAME));
         String categoryRating = String.valueOf(json.get(MOVIE_CATEGORY_RATING));
         String description = String.valueOf(json.get(MOVIE_CATEGORY_DESCRIPTION));
-        return new MovieCategory(categoryId, categoryName, categoryRating, description);
+        MovieCategory movieCategory = new MovieCategory(categoryId, categoryName, categoryRating, description);
+        Timestamp lastUpdate = (Timestamp) json.get(MOVIE_CATEGORY_LAST_UPDATE);
+        movieCategory.setCategoryLastUpdate(lastUpdate.getSeconds());
+        return movieCategory;
     }
 
     public Map<String, Object> toJson() {
@@ -49,7 +60,18 @@ public class MovieCategory {
         movieCategoryJson.put(MOVIE_CATEGORY_NAME, this.getCategoryName());
         movieCategoryJson.put(MOVIE_CATEGORY_RATING, this.getCategoryRating());
         movieCategoryJson.put(MOVIE_CATEGORY_DESCRIPTION, this.getDescription());
+        movieCategoryJson.put(MOVIE_CATEGORY_LAST_UPDATE, FieldValue.serverTimestamp());
         return movieCategoryJson;
+    }
+
+    public static Long getLocalLastUpdate() {
+        return MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong(MOVIE_CATEGORY_LOCAL_LAST_UPDATE, 0);
+    }
+
+    public static void setLocalLastUpdate(Long localLastUpdate) {
+        MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .edit().putLong(MOVIE_CATEGORY_LOCAL_LAST_UPDATE, localLastUpdate).commit();
     }
 
     @NonNull
@@ -83,5 +105,13 @@ public class MovieCategory {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getCategoryLastUpdate() {
+        return this.categoryLastUpdate;
+    }
+
+    public void setCategoryLastUpdate(Long categoryLastUpdate) {
+        this.categoryLastUpdate = categoryLastUpdate;
     }
 }

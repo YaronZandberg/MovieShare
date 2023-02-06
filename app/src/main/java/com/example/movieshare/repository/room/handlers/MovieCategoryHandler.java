@@ -32,11 +32,12 @@ public class MovieCategoryHandler {
         return movieCategoryHandlerInstance;
     }
 
-    public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {
-        this.executor.execute(() -> {
+    public List<MovieCategory> getAllMovieCategories(/*GetMovieItemListListener<MovieCategory> listener*/) {
+        /*this.executor.execute(() -> {
             List<MovieCategory> movieCategories = localDB.movieCategoryDao().getAllMovieCategories();
             mainThreadHandler.post(() -> listener.onComplete(movieCategories));
-        });
+        });*/
+        return localDB.movieCategoryDao().getAllMovieCategories();
     }
 
     public void getMovieCategoryById(String id, GetMovieItemListener<MovieCategory> listener) {
@@ -46,11 +47,12 @@ public class MovieCategoryHandler {
         });
     }
 
-    public void addMovieCategory(MovieCategory movieCategory, ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
+    public void addMovieCategory(MovieCategory movieCategory/*, ExecuteMovieItemListener listener*/) {
+        /*this.executor.execute(() -> {
             localDB.movieCategoryDao().insertAll(movieCategory);
             mainThreadHandler.post(listener::onComplete);
-        });
+        });*/
+        localDB.movieCategoryDao().insertAll(movieCategory);
     }
 
     public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {

@@ -6,6 +6,7 @@ import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.models.MovieCategory;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,6 +24,25 @@ public class MovieCategoryExecutor {
 
     public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
+                .get()
+                .addOnCompleteListener(task -> {
+                    List<MovieCategory> movieCategories = new ArrayList<>();
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            MovieCategory movieCategory = MovieCategory.fromJson(document.getData());
+                            movieCategory.setCategoryId(document.getId());
+                            movieCategories.add(movieCategory);
+                        }
+                    }
+                    listener.onComplete(movieCategories);
+                });
+    }
+
+    public void getAllMovieCategoriesSinceLastUpdate(Long localLastUpdate,
+                                                     GetMovieItemListListener<MovieCategory> listener) {
+        this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
+                .whereGreaterThanOrEqualTo(MOVIE_CATEGORY_LAST_UPDATE,
+                        new Timestamp(localLastUpdate, 0))
                 .get()
                 .addOnCompleteListener(task -> {
                     List<MovieCategory> movieCategories = new ArrayList<>();
