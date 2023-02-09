@@ -32,17 +32,14 @@ public class TestAddMovieCategoryFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.testCategorySaveBtn.setOnClickListener(view -> {
             MovieCategory movieCategory = buildNewMovieCategory();
-            /*Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
-                    .addMovieCategory(movieCategory, () -> Toast.makeText(getContext(),
-                                    "Add movie category operation finished successfully",
-                                    Toast.LENGTH_LONG)
-                            .show()
-                    );*/
             Repository.getRepositoryInstance().getFirebaseModel()
-                    .addMovieCategory(movieCategory, () -> Toast.makeText(getContext(),
-                                    "Add movie category operation finished successfully",
-                                    Toast.LENGTH_LONG)
-                            .show()
+                    .addMovieCategory(movieCategory, () -> {
+                                Toast.makeText(getContext(),
+                                                "Add movie category operation finished successfully",
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                                Repository.getRepositoryInstance().refreshAllMovieCategories();
+                            }
                     );
         });
     }

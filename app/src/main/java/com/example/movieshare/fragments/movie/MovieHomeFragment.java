@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import com.example.movieshare.R;
 import com.example.movieshare.adapters.MovieCategoryAdapter;
 import com.example.movieshare.databinding.FragmentMovieHomeBinding;
+import com.example.movieshare.enums.LoadingState;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.MovieUtils;
 import com.example.movieshare.viewmodels.movie.MovieHomeFragmentViewModel;
@@ -40,10 +41,22 @@ public class MovieHomeFragment extends Fragment {
         this.viewBindings = FragmentMovieHomeBinding.inflate(inflater, container, false);
         this.viewBindings.movieHomeFragmentMovieCategoriesList.setHasFixedSize(true);
         this.viewBindings.movieHomeFragmentMovieCategoriesList.setLayoutManager(new LinearLayoutManager(getContext()));
-        this.movieCategoryAdapter = new MovieCategoryAdapter(getLayoutInflater(), this.viewModel.getMovieCategories());
+        this.movieCategoryAdapter = new MovieCategoryAdapter(getLayoutInflater(),
+                this.viewModel.getMovieCategories().getValue());
         this.viewBindings.movieHomeFragmentMovieCategoriesList.setAdapter(this.movieCategoryAdapter);
+        this.viewBindings.swipeRefresh.setOnRefreshListener(this::reloadMovieCategoryList);
         configureMenuOptions();
         activateItemListListener();
+
+        this.viewModel.getMovieCategories().observe(getViewLifecycleOwner(), movieCategories -> {
+            this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories().getValue());
+            MovieUtils.simulateSleeping();
+        });
+        Repository.getRepositoryInstance()
+                .getEventMovieCategoryListLoadingState()
+                .observe(getViewLifecycleOwner(),
+                        loadingState -> this.viewBindings.swipeRefresh
+                                .setRefreshing(loadingState == LoadingState.LOADING));
         return this.viewBindings.getRoot();
     }
 
@@ -53,28 +66,8 @@ public class MovieHomeFragment extends Fragment {
         this.viewModel = new ViewModelProvider(this).get(MovieHomeFragmentViewModel.class);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        reloadMovieCategoryList();
-    }
-
     private void reloadMovieCategoryList() {
-        this.viewBindings.movieHomeFragmentProgressBar.setVisibility(View.VISIBLE);
-        /*Repository.getRepositoryInstance().getLocalModel().getMovieCategoryHandler()
-                .getAllMovieCategories(movieCategoryList -> {
-                    this.viewModel.setMovieCategories(movieCategoryList);
-                    this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories());
-                    MovieUtils.simulateSleeping();
-                    this.viewBindings.movieHomeFragmentProgressBar.setVisibility(View.GONE);
-                });*/
-        Repository.getRepositoryInstance().getFirebaseModel()
-                .getAllMovieCategories(movieCategoryList -> {
-                    this.viewModel.setMovieCategories(movieCategoryList);
-                    this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories());
-                    MovieUtils.simulateSleeping();
-                    this.viewBindings.movieHomeFragmentProgressBar.setVisibility(View.GONE);
-                });
+        Repository.getRepositoryInstance().refreshAllMovieCategories();
     }
 
     private void activateItemListListener() {

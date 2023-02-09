@@ -8,6 +8,7 @@ import com.example.movieshare.listeners.OnItemClickListener;
 import com.example.movieshare.viewholders.MovieItemViewHolder;
 
 import java.util.List;
+import java.util.Objects;
 
 public abstract class MovieItemAdapter <T> extends RecyclerView.Adapter<MovieItemViewHolder>{
     protected final LayoutInflater layoutInflater;
@@ -30,6 +31,10 @@ public abstract class MovieItemAdapter <T> extends RecyclerView.Adapter<MovieIte
 
     @Override
     public int getItemCount() {
-        return this.movieItemList.size();
+        if (Objects.isNull(this.movieItemList)) {
+            return 0;
+        } else {
+            return this.movieItemList.size();
+        }
     }
 }

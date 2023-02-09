@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
+import androidx.lifecycle.LiveData;
 
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
@@ -17,22 +18,22 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class MovieCategoryHandler {
-    private static final MovieCategoryHandler movieCategoryHandlerInstance = new MovieCategoryHandler();
-    private final Executor executor;
-    private final Handler mainThreadHandler;
-    private final AppLocalDbRepository localDB;
+    //private static final MovieCategoryHandler movieCategoryHandlerInstance = new MovieCategoryHandler();
+    private final Executor executor = Executors.newSingleThreadExecutor();
+    private final Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+    private final AppLocalDbRepository localDB = AppLocalDB.getAppDB();
 
-    private MovieCategoryHandler() {
-        this.executor = Executors.newSingleThreadExecutor();
+    public MovieCategoryHandler() {
+        /*this.executor = Executors.newSingleThreadExecutor();
         this.mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
-        this.localDB = AppLocalDB.getAppDB();
+        this.localDB = AppLocalDB.getAppDB();*/
     }
 
-    public static MovieCategoryHandler instance() {
+    /*public static MovieCategoryHandler instance() {
         return movieCategoryHandlerInstance;
-    }
+    }*/
 
-    public List<MovieCategory> getAllMovieCategories(/*GetMovieItemListListener<MovieCategory> listener*/) {
+    public LiveData<List<MovieCategory>> getAllMovieCategories(/*GetMovieItemListListener<MovieCategory> listener*/) {
         /*this.executor.execute(() -> {
             List<MovieCategory> movieCategories = localDB.movieCategoryDao().getAllMovieCategories();
             mainThreadHandler.post(() -> listener.onComplete(movieCategories));
@@ -58,7 +59,7 @@ public class MovieCategoryHandler {
     public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
             MovieCategory deletedMovieCategory =
-                    localDB.movieCategoryDao().getAllMovieCategories().get(index);
+                    localDB.movieCategoryDao().getAllMovieCategories().getValue().get(index);
             localDB.movieCategoryDao().delete(deletedMovieCategory);
             mainThreadHandler.post(listener::onComplete);
         });
@@ -68,7 +69,7 @@ public class MovieCategoryHandler {
                                     ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
             MovieCategory deletedMovieCategory =
-                    localDB.movieCategoryDao().getAllMovieCategories().get(index);
+                    localDB.movieCategoryDao().getAllMovieCategories().getValue().get(index);
             localDB.movieCategoryDao().delete(deletedMovieCategory);
             localDB.movieCategoryDao().insertAll(movieCategory);
             mainThreadHandler.post(listener::onComplete);
