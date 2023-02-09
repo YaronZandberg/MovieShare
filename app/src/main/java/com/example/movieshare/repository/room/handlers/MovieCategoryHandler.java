@@ -7,7 +7,6 @@ import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
-import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.room.localdb.AppLocalDB;
 import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;
@@ -18,26 +17,22 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class MovieCategoryHandler {
-    //private static final MovieCategoryHandler movieCategoryHandlerInstance = new MovieCategoryHandler();
-    private final Executor executor = Executors.newSingleThreadExecutor();
-    private final Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
-    private final AppLocalDbRepository localDB = AppLocalDB.getAppDB();
+    private static final MovieCategoryHandler movieCategoryHandlerInstance = new MovieCategoryHandler();
+    private final Executor executor;
+    private final Handler mainThreadHandler;
+    private final AppLocalDbRepository localDB;
 
-    public MovieCategoryHandler() {
-        /*this.executor = Executors.newSingleThreadExecutor();
+    private MovieCategoryHandler() {
+        this.executor = Executors.newSingleThreadExecutor();
         this.mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
-        this.localDB = AppLocalDB.getAppDB();*/
+        this.localDB = AppLocalDB.getAppDB();
     }
 
-    /*public static MovieCategoryHandler instance() {
+    public static MovieCategoryHandler instance() {
         return movieCategoryHandlerInstance;
-    }*/
+    }
 
-    public LiveData<List<MovieCategory>> getAllMovieCategories(/*GetMovieItemListListener<MovieCategory> listener*/) {
-        /*this.executor.execute(() -> {
-            List<MovieCategory> movieCategories = localDB.movieCategoryDao().getAllMovieCategories();
-            mainThreadHandler.post(() -> listener.onComplete(movieCategories));
-        });*/
+    public LiveData<List<MovieCategory>> getAllMovieCategories() {
         return localDB.movieCategoryDao().getAllMovieCategories();
     }
 
@@ -48,11 +43,7 @@ public class MovieCategoryHandler {
         });
     }
 
-    public void addMovieCategory(MovieCategory movieCategory/*, ExecuteMovieItemListener listener*/) {
-        /*this.executor.execute(() -> {
-            localDB.movieCategoryDao().insertAll(movieCategory);
-            mainThreadHandler.post(listener::onComplete);
-        });*/
+    public void addMovieCategory(MovieCategory movieCategory) {
         localDB.movieCategoryDao().insertAll(movieCategory);
     }
 
