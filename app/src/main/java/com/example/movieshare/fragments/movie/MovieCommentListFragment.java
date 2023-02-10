@@ -54,6 +54,7 @@ public class MovieCommentListFragment extends Fragment {
                 this.viewModel.getMovieCommentList().getValue());
         this.viewBindings.movieCommentListFragmentList.setAdapter(this.movieCommentAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::reloadMovieCommentList);
+        activateItemListListener();
         configureMenuOptions();
         this.viewModel.getMovieCommentList()
                 .observe(getViewLifecycleOwner(), movieComments -> reloadMovieCommentList());
@@ -79,6 +80,10 @@ public class MovieCommentListFragment extends Fragment {
         Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                 .getAllMovieCommentsByMovieId(this.movieId, movieCommentList ->
                         this.movieCommentAdapter.setMovieItemList(movieCommentList));
+    }
+
+    private void activateItemListListener() {
+        this.movieCommentAdapter.setOnItemClickListener(position -> {});
     }
 
     private void configureMenuOptions() {
