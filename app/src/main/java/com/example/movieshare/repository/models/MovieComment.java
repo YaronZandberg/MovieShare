@@ -2,12 +2,18 @@ package com.example.movieshare.repository.models;
 
 import static com.example.movieshare.constants.MovieCommentConstants.*;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import com.example.movieshare.context.MyApplication;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +26,8 @@ import java.util.Map;
                 onDelete = ForeignKey.CASCADE)
 })
 public class MovieComment {
-    @PrimaryKey @NonNull
+    @PrimaryKey
+    @NonNull
     private String movieCommentId;
 
     @NonNull
@@ -32,6 +39,7 @@ public class MovieComment {
     private String movieName;
     private String movieRatingOfComment;
     private String description;
+    private Long movieCommentLastUpdate;
 
     public MovieComment(@NonNull Integer userId, @NonNull String movieId,
                         String movieName, String movieRatingOfComment, String description) {
@@ -61,7 +69,10 @@ public class MovieComment {
         String movieName = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_NAME));
         String movieRatingOfComment = String.valueOf(json.get(MOVIE_COMMENT_RATING));
         String description = String.valueOf(json.get(MOVIE_COMMENT_DESCRIPTION));
-        return new MovieComment(movieCommentId, userId, movieId, movieName, movieRatingOfComment, description);
+        MovieComment movieComment = new MovieComment(movieCommentId, userId, movieId, movieName, movieRatingOfComment, description);
+        Timestamp lastUpdate = (Timestamp) json.get(MOVIE_COMMENT_LAST_UPDATE);
+        movieComment.setMovieCommentLastUpdate(lastUpdate.getSeconds());
+        return movieComment;
     }
 
     public Map<String, Object> toJson() {
@@ -72,7 +83,18 @@ public class MovieComment {
         movieCommentJson.put(MOVIE_COMMENT_MOVIE_NAME, this.getMovieName());
         movieCommentJson.put(MOVIE_COMMENT_RATING, this.getMovieRatingOfComment());
         movieCommentJson.put(MOVIE_COMMENT_DESCRIPTION, this.getDescription());
+        movieCommentJson.put(MOVIE_COMMENT_LAST_UPDATE, FieldValue.serverTimestamp());
         return movieCommentJson;
+    }
+
+    public static Long getLocalLastUpdate() {
+        return MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong(MOVIE_COMMENT_LOCAL_LAST_UPDATE, 0);
+    }
+
+    public static void setLocalLastUpdate(Long localLastUpdate) {
+        MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .edit().putLong(MOVIE_COMMENT_LOCAL_LAST_UPDATE, localLastUpdate).commit();
     }
 
     @NonNull
@@ -124,5 +146,13 @@ public class MovieComment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getMovieCommentLastUpdate() {
+        return this.movieCommentLastUpdate;
+    }
+
+    public void setMovieCommentLastUpdate(Long movieCommentLastUpdate) {
+        this.movieCommentLastUpdate = movieCommentLastUpdate;
     }
 }

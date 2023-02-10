@@ -6,6 +6,7 @@ import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.models.MovieComment;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -26,6 +27,25 @@ public class MovieCommentExecutor {
 
     public void getAllMovieComments(GetMovieItemListListener<MovieComment> listener) {
         this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)
+                .get()
+                .addOnCompleteListener(task -> {
+                    List<MovieComment> movieComments = new ArrayList<>();
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            MovieComment movieComment = MovieComment.fromJson(document.getData());
+                            movieComment.setMovieCommentId(document.getId());
+                            movieComments.add(movieComment);
+                        }
+                    }
+                    listener.onComplete(movieComments);
+                });
+    }
+
+    public void getAllMovieCommentsSinceLastUpdate(Long localLastUpdate,
+                                                   GetMovieItemListListener<MovieComment> listener) {
+        this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)
+                .whereGreaterThanOrEqualTo(MOVIE_COMMENT_LAST_UPDATE,
+                        new Timestamp(localLastUpdate, 0))
                 .get()
                 .addOnCompleteListener(task -> {
                     List<MovieComment> movieComments = new ArrayList<>();

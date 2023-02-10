@@ -80,10 +80,8 @@ public class MovieListFragment extends Fragment {
     private void reloadMovieList() {
         if (Objects.nonNull(this.viewModel.getMovieList().getValue())) {
             Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
-                    .getAllMoviesByCategoryId(this.viewModel.getMovieCategory().getCategoryId(), movieList -> {
-                        this.movieAdapter.setMovieItemList(this.viewModel.getMovieList().getValue());
-                        this.movieAdapter.setMovieItemList(movieList);
-                    });
+                    .getAllMoviesByCategoryId(this.viewModel.getMovieCategory().getCategoryId(),
+                            movieList -> this.movieAdapter.setMovieItemList(movieList));
         }
     }
 

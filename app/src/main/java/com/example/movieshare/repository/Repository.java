@@ -8,8 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.firebase.FirebaseModel;
-import com.example.movieshare.repository.models.Movie;
-import com.example.movieshare.repository.models.MovieCategory;
+import com.example.movieshare.repository.models.*;
 import com.example.movieshare.repository.room.LocalModel;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class Repository {
     private final Executor executor = Executors.newSingleThreadExecutor();
     private LiveData<List<MovieCategory>> movieCategories;
     private LiveData<List<Movie>> movies;
+    private LiveData<List<MovieComment>> movieComments;
 
     private Repository() {
     }
@@ -54,6 +54,14 @@ public class Repository {
             refreshAllMovies();
         }
         return this.movies;
+    }
+
+    public LiveData<List<MovieComment>> getAllMovieComments() {
+        if (Objects.isNull(this.movieComments)) {
+            this.movieComments = this.localModel.getMovieCommentHandler().getAllMovieComments();
+            refreshAllMovieComments();
+        }
+        return this.movieComments;
     }
 
     public void refreshAllMovieCategories() {
@@ -93,6 +101,26 @@ public class Repository {
                             Movie.setLocalLastUpdate(movieGlobalLastUpdate);
                             NotificationManager.instance()
                                     .getEventMovieListLoadingState().postValue(NOT_LOADING);
+                        }));
+    }
+
+    public void refreshAllMovieComments() {
+        NotificationManager.instance().getEventMovieCommentListLoadingState().setValue(LOADING);
+        Long localLastUpdate = MovieComment.getLocalLastUpdate();
+        this.getFirebaseModel().getMovieCommentExecutor()
+                .getAllMovieCommentsSinceLastUpdate(localLastUpdate, movieComments ->
+                        this.executor.execute(() -> {
+                            Log.d("TAG", "MovieComment: firebase return : " + movieComments.size());
+                            Long movieCommentGlobalLastUpdate = localLastUpdate;
+                            for (MovieComment movieComment : movieComments) {
+                                this.localModel.getMovieCommentHandler().addMovieComment(movieComment);
+                                if (movieCommentGlobalLastUpdate < movieComment.getMovieCommentLastUpdate()) {
+                                    movieCommentGlobalLastUpdate = movieComment.getMovieCommentLastUpdate();
+                                }
+                            }
+                            MovieComment.setLocalLastUpdate(movieCommentGlobalLastUpdate);
+                            NotificationManager.instance()
+                                    .getEventMovieCommentListLoadingState().postValue(NOT_LOADING);
                         }));
     }
 }
