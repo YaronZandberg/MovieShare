@@ -1,5 +1,6 @@
 package com.example.movieshare.fragments.user;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -21,20 +23,16 @@ import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
 import com.example.movieshare.fragments.dialogs.DeleteUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFragment;
-import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.viewmodels.user.UserCommentEditionFragmentViewModel;
 
-import java.util.List;
 import java.util.Objects;
 
 public class UserCommentEditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentEditionBinding viewBindings;
     private Integer userMovieCommentPosition;
     private Integer userId;
-    private List<MovieComment> allUserMovieComments;
-    private MovieComment movieComment;
-    private List<MovieComment> allMovieComments;
-    private Integer movieCommentPositionInTotalList;
+    private UserCommentEditionFragmentViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,31 +52,45 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         return this.viewBindings.getRoot();
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.viewModel = new ViewModelProvider(this).get(UserCommentEditionFragmentViewModel.class);
+    }
+
     private void reloadUserMovieComments() {
-        Repository.getMovieCommentHandler()
+        Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                 .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
-                    this.allUserMovieComments = movieCommentList;
-                    this.movieComment = this.allUserMovieComments.get(this.userMovieCommentPosition);
+                    this.viewModel.setAllUserMovieComments(movieCommentList);
+                    this.viewModel.setMovieComment(this.viewModel.getAllUserMovieComments()
+                            .get(this.userMovieCommentPosition));
                     findMovieCommentPositionInTotalList();
                 });
     }
 
     private void findMovieCommentPositionInTotalList() {
-        Repository.getMovieCommentHandler()
+        /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                 .getAllMovieComments(allMovieComments -> {
-                    this.allMovieComments = allMovieComments;
-                    this.movieCommentPositionInTotalList =
-                            this.allMovieComments.indexOf(this.movieComment);
+                    this.viewModel.setAllMovieComments(allMovieComments);
+                    this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
+                            .getAllMovieComments().indexOf(this.viewModel.getMovieComment()));
+                    displayUserMovieCommentDetails();
+                });*/
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
+                .getAllMovieComments(allMovieComments -> {
+                    this.viewModel.setAllMovieComments(allMovieComments);
+                    this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
+                            .getAllMovieComments().indexOf(this.viewModel.getMovieComment()));
                     displayUserMovieCommentDetails();
                 });
     }
 
     @Override
     protected void displayUserMovieCommentDetails() {
-        if (Objects.nonNull(this.movieComment)) {
-            this.viewBindings.userCommentEditionFragmentMovieNameInputEt.setText(this.movieComment.getMovieName());
-            this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setText(this.movieComment.getMovieRatingOfComment());
-            this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.setText(this.movieComment.getDescription());
+        if (Objects.nonNull(this.viewModel.getMovieComment())) {
+            this.viewBindings.userCommentEditionFragmentMovieNameInputEt.setText(this.viewModel.getMovieComment().getMovieName());
+            this.viewBindings.userCommentEditionFragmentMovieRatingInputEt.setText(this.viewModel.getMovieComment().getMovieRatingOfComment());
+            this.viewBindings.userCommentEditionFragmentMovieCommentInputEt.setText(this.viewModel.getMovieComment().getDescription());
             setUserCommentPropertiesState();
         }
     }
@@ -95,17 +107,30 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentEditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
-                Repository.getMovieCommentHandler()
-                        .removeMovieComment(this.movieCommentPositionInTotalList, () -> {
+                /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                        .removeMovieComment(this.viewModel.getMovieCommentPositionInTotalList(), () -> {
+                            new DeleteUserMovieCommentDialogFragment()
+                                    .show(getActivity().getSupportFragmentManager(), "TAG");
+                            Navigation.findNavController(view).popBackStack();
+                        }));*/
+                Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
+                        .removeMovieComment(this.viewModel.getMovieComment().getMovieCommentId(), () -> {
                             new DeleteUserMovieCommentDialogFragment()
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
                             Navigation.findNavController(view).popBackStack();
                         }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             updateUserComment();
-            Repository.getMovieCommentHandler()
-                    .updateMovieComment(this.movieCommentPositionInTotalList,
-                            this.movieComment, () -> {
+            /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                    .updateMovieComment(this.viewModel.getMovieCommentPositionInTotalList(),
+                            this.viewModel.getMovieComment(), () -> {
+                                new UpdateUserMovieCommentDialogFragment()
+                                        .show(getActivity().getSupportFragmentManager(), "TAG");
+                                Navigation.findNavController(view).popBackStack();
+                            });*/
+            Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
+                    .updateMovieComment(this.viewModel.getMovieComment().getMovieCommentId(),
+                            this.viewModel.getMovieComment(), () -> {
                                 new UpdateUserMovieCommentDialogFragment()
                                         .show(getActivity().getSupportFragmentManager(), "TAG");
                                 Navigation.findNavController(view).popBackStack();
@@ -118,8 +143,8 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                 .userCommentEditionFragmentMovieRatingInputEt.getText().toString();
         String updatedMovieDescription = this.viewBindings
                 .userCommentEditionFragmentMovieCommentInputEt.getText().toString();
-        this.movieComment.setMovieRatingOfComment(updatedMovieRating);
-        this.movieComment.setDescription(updatedMovieDescription);
+        this.viewModel.getMovieComment().setMovieRatingOfComment(updatedMovieRating);
+        this.viewModel.getMovieComment().setDescription(updatedMovieDescription);
     }
 
     private void configureMenuOptions() {

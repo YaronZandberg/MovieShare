@@ -1,5 +1,6 @@
-package com.example.movieshare.repository.dao;
+package com.example.movieshare.repository.room.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,10 +14,10 @@ import java.util.List;
 @Dao
 public interface MovieCategoryDao {
     @Query("SELECT * FROM MovieCategory")
-    List<MovieCategory> getAllMovieCategories();
+    LiveData<List<MovieCategory>> getAllMovieCategories();
 
     @Query("SELECT * FROM MovieCategory WHERE categoryId = :id")
-    MovieCategory getMovieCategoryById(Integer id);
+    MovieCategory getMovieCategoryById(String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(MovieCategory... movieCategories);

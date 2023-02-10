@@ -1,18 +1,16 @@
-package com.example.movieshare.repository.handlers;
+package com.example.movieshare.repository.room.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import androidx.core.os.HandlerCompat;
+import androidx.lifecycle.LiveData;
 
-import com.example.movieshare.context.MyApplication;
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
-import com.example.movieshare.listeners.GetMovieByNameListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
-import com.example.movieshare.repository.localdb.AppLocalDB;
-import com.example.movieshare.repository.localdb.AppLocalDbRepository;
+import com.example.movieshare.repository.room.localdb.AppLocalDB;
+import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.Movie;
 
 import java.util.List;
@@ -35,14 +33,11 @@ public class MovieHandler {
         return movieHandlerInstance;
     }
 
-    public void getAllMovies(GetMovieItemListListener<Movie> listener) {
-        this.executor.execute(() -> {
-            List<Movie> movies = localDB.movieDao().getAllMovies();
-            mainThreadHandler.post(() -> listener.onComplete(movies));
-        });
+    public LiveData<List<Movie>> getAllMovies() {
+        return this.localDB.movieDao().getAllMovies();
     }
 
-    public void getAllMoviesByCategoryId(Integer categoryId,
+    public void getAllMoviesByCategoryId(String categoryId,
                                          GetMovieItemListListener<Movie> listener) {
         this.executor.execute(() -> {
             List<Movie> movies = localDB.movieDao().getAllMoviesByCategoryId(categoryId);
@@ -57,30 +52,20 @@ public class MovieHandler {
         });
     }
 
-    public void getMovieByName(String name, GetMovieByNameListener listener) {
+    public void getMovieByName(String name, GetMovieItemListener<Movie> listener) {
         this.executor.execute(() -> {
             Movie movie = localDB.movieDao().getMovieByName(name);
-            mainThreadHandler.post(() -> {
-                try {
-                    listener.onComplete(movie);
-                } catch (Exception e) {
-                    Toast.makeText(MyApplication.getAppContext(), e.getMessage(), Toast.LENGTH_LONG)
-                            .show();
-                }
-            });
+            mainThreadHandler.post(() -> listener.onComplete(movie));
         });
     }
 
-    public void addMovie(Movie movie, ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
-            localDB.movieDao().insertAll(movie);
-            mainThreadHandler.post(listener::onComplete);
-        });
+    public void addMovie(Movie movie) {
+        this.localDB.movieDao().insertAll(movie);
     }
 
     public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
-            Movie deletedMovie = localDB.movieDao().getAllMovies().get(index);
+            Movie deletedMovie = localDB.movieDao().getAllMovies().getValue().get(index);
             localDB.movieDao().delete(deletedMovie);
             mainThreadHandler.post(listener::onComplete);
         });
@@ -88,7 +73,7 @@ public class MovieHandler {
 
     public void updateMovie(Integer index, Movie movie, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
-            Movie deletedMovie = localDB.movieDao().getAllMovies().get(index);
+            Movie deletedMovie = localDB.movieDao().getAllMovies().getValue().get(index);
             localDB.movieDao().delete(deletedMovie);
             localDB.movieDao().insertAll(movie);
             mainThreadHandler.post(listener::onComplete);

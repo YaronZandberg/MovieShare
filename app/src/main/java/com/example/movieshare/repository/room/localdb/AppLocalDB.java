@@ -1,4 +1,4 @@
-package com.example.movieshare.repository.localdb;
+package com.example.movieshare.repository.room.localdb;
 
 import androidx.room.Room;
 

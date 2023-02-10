@@ -2,6 +2,7 @@ package com.example.movieshare.fragments.test;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -18,7 +19,7 @@ public class TestAddMovieCategoryFragment extends Fragment {
     private FragmentTestAddMovieCategoryBinding viewBindings;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentTestAddMovieCategoryBinding
                 .inflate(inflater, container, false);
@@ -31,11 +32,14 @@ public class TestAddMovieCategoryFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.testCategorySaveBtn.setOnClickListener(view -> {
             MovieCategory movieCategory = buildNewMovieCategory();
-            Repository.getMovieCategoryHandler()
-                    .addMovieCategory(movieCategory, () -> Toast.makeText(getContext(),
-                                    "Add movie category operation finished successfully",
-                                    Toast.LENGTH_LONG)
-                            .show()
+            Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor()
+                    .addMovieCategory(movieCategory, () -> {
+                                Toast.makeText(getContext(),
+                                                "Add movie category operation finished successfully",
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                                Repository.getRepositoryInstance().refreshAllMovieCategories();
+                            }
                     );
         });
     }
