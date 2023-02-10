@@ -31,17 +31,14 @@ public class TestAddMovieFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.testMovieSaveBtn.setOnClickListener(view -> {
             Movie movie = buildNewMovie();
-            /*Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
-                    .addMovie(movie, () -> Toast.makeText(getContext(),
-                                    "Add movie operation finished successfully",
-                                    Toast.LENGTH_LONG)
-                            .show()
-                    );*/
             Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor()
-                    .addMovie(movie, () -> Toast.makeText(getContext(),
-                                    "Add movie operation finished successfully",
-                                    Toast.LENGTH_LONG)
-                            .show()
+                    .addMovie(movie, () -> {
+                                Toast.makeText(getContext(),
+                                                "Add movie operation finished successfully",
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                                Repository.getRepositoryInstance().refreshAllMovies();
+                            }
                     );
         });
     }

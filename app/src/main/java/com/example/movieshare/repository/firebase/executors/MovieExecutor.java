@@ -6,6 +6,7 @@ import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.models.Movie;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,6 +29,25 @@ public class MovieExecutor {
 
     public void getAllMovies(GetMovieItemListListener<Movie> listener) {
         this.db.collection(MOVIE_COLLECTION_NAME)
+                .get()
+                .addOnCompleteListener(task -> {
+                    List<Movie> movies = new ArrayList<>();
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Movie movie = Movie.fromJson(document.getData());
+                            movie.setMovieId(document.getId());
+                            movies.add(movie);
+                        }
+                    }
+                    listener.onComplete(movies);
+                });
+    }
+
+    public void getAllMoviesSinceLastUpdate(Long localLastUpdate,
+                                            GetMovieItemListListener<Movie> listener) {
+        this.db.collection(MOVIE_COLLECTION_NAME)
+                .whereGreaterThanOrEqualTo(MOVIE_LAST_UPDATE,
+                        new Timestamp(localLastUpdate, 0))
                 .get()
                 .addOnCompleteListener(task -> {
                     List<Movie> movies = new ArrayList<>();

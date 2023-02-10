@@ -48,10 +48,8 @@ public class MovieHomeFragment extends Fragment {
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::reloadMovieCategoryList);
         configureMenuOptions();
         activateItemListListener();
-
         this.viewModel.getMovieCategories().observe(getViewLifecycleOwner(), movieCategories -> {
             this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories().getValue());
-            MovieUtils.simulateSleeping();
         });
         NotificationManager.instance()
                 .getEventMovieCategoryListLoadingState()

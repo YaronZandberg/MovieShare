@@ -9,9 +9,11 @@ import com.example.movieshare.enums.LoadingState;
 public class NotificationManager {
     private static final NotificationManager notificationManagerInstance = new NotificationManager();
     private final MutableLiveData<LoadingState> eventMovieCategoryListLoadingState;
+    private final MutableLiveData<LoadingState> eventMovieListLoadingState;
 
     private NotificationManager() {
         this.eventMovieCategoryListLoadingState = new MutableLiveData<>(NOT_LOADING);
+        this.eventMovieListLoadingState = new MutableLiveData<>(NOT_LOADING);
     }
 
     public static NotificationManager instance() {
@@ -20,5 +22,9 @@ public class NotificationManager {
 
     public MutableLiveData<LoadingState> getEventMovieCategoryListLoadingState() {
         return this.eventMovieCategoryListLoadingState;
+    }
+
+    public MutableLiveData<LoadingState> getEventMovieListLoadingState() {
+        return this.eventMovieListLoadingState;
     }
 }

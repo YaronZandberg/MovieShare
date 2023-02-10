@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
+import androidx.lifecycle.LiveData;
 
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
@@ -32,11 +33,8 @@ public class MovieHandler {
         return movieHandlerInstance;
     }
 
-    public void getAllMovies(GetMovieItemListListener<Movie> listener) {
-        this.executor.execute(() -> {
-            List<Movie> movies = localDB.movieDao().getAllMovies();
-            mainThreadHandler.post(() -> listener.onComplete(movies));
-        });
+    public LiveData<List<Movie>> getAllMovies() {
+        return this.localDB.movieDao().getAllMovies();
     }
 
     public void getAllMoviesByCategoryId(String categoryId,
@@ -61,16 +59,13 @@ public class MovieHandler {
         });
     }
 
-    public void addMovie(Movie movie, ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
-            localDB.movieDao().insertAll(movie);
-            mainThreadHandler.post(listener::onComplete);
-        });
+    public void addMovie(Movie movie) {
+        this.localDB.movieDao().insertAll(movie);
     }
 
     public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
-            Movie deletedMovie = localDB.movieDao().getAllMovies().get(index);
+            Movie deletedMovie = localDB.movieDao().getAllMovies().getValue().get(index);
             localDB.movieDao().delete(deletedMovie);
             mainThreadHandler.post(listener::onComplete);
         });
@@ -78,7 +73,7 @@ public class MovieHandler {
 
     public void updateMovie(Integer index, Movie movie, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
-            Movie deletedMovie = localDB.movieDao().getAllMovies().get(index);
+            Movie deletedMovie = localDB.movieDao().getAllMovies().getValue().get(index);
             localDB.movieDao().delete(deletedMovie);
             localDB.movieDao().insertAll(movie);
             mainThreadHandler.post(listener::onComplete);
