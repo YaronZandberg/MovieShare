@@ -52,7 +52,7 @@ public class MovieListFragment extends Fragment {
         this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new LinearLayoutManager(getContext()));
         this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.viewModel.getMovieList().getValue());
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
-        this.viewBindings.swipeRefresh.setOnRefreshListener(this::reloadMovieList);
+        this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeMovieCategory);
         configureMenuOptions();
         activateItemListListener();
         this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> reloadMovieList());

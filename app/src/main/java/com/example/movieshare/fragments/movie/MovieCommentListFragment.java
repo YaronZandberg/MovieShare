@@ -53,7 +53,7 @@ public class MovieCommentListFragment extends Fragment {
         this.movieCommentAdapter = new CommentAdapter(getLayoutInflater(),
                 this.viewModel.getMovieCommentList().getValue());
         this.viewBindings.movieCommentListFragmentList.setAdapter(this.movieCommentAdapter);
-        this.viewBindings.swipeRefresh.setOnRefreshListener(this::reloadMovieCommentList);
+        this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeAllMovieComments);
         activateItemListListener();
         configureMenuOptions();
         this.viewModel.getMovieCommentList()

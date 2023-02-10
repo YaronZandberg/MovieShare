@@ -26,7 +26,6 @@ import com.example.movieshare.databinding.FragmentMovieHomeBinding;
 import com.example.movieshare.enums.LoadingState;
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
-import com.example.movieshare.utils.MovieUtils;
 import com.example.movieshare.viewmodels.movie.MovieHomeFragmentViewModel;
 
 import java.util.Objects;
@@ -48,9 +47,8 @@ public class MovieHomeFragment extends Fragment {
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::reloadMovieCategoryList);
         configureMenuOptions();
         activateItemListListener();
-        this.viewModel.getMovieCategories().observe(getViewLifecycleOwner(), movieCategories -> {
-            this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories().getValue());
-        });
+        this.viewModel.getMovieCategories().observe(getViewLifecycleOwner(), movieCategories ->
+                this.movieCategoryAdapter.setMovieItemList(this.viewModel.getMovieCategories().getValue()));
         NotificationManager.instance()
                 .getEventMovieCategoryListLoadingState()
                 .observe(getViewLifecycleOwner(),
