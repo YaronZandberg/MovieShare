@@ -37,7 +37,7 @@ public class TestAddMovieFragment extends Fragment {
                                     Toast.LENGTH_LONG)
                             .show()
                     );*/
-            Repository.getRepositoryInstance().getFirebaseModel()
+            Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor()
                     .addMovie(movie, () -> Toast.makeText(getContext(),
                                     "Add movie operation finished successfully",
                                     Toast.LENGTH_LONG)

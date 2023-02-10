@@ -61,7 +61,7 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
             this.viewModel.setMovie(movie);
             displayUserMovieCommentDetails();
         });*/
-        Repository.getRepositoryInstance().getFirebaseModel()
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor()
                 .getMovieByName(this.movieName, movie -> {
                     this.viewModel.setMovie(movie);
                     displayUserMovieCommentDetails();
@@ -93,7 +93,7 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
                                 .show(getActivity().getSupportFragmentManager(), "TAG");
                         Navigation.findNavController(view).popBackStack();
                     });*/
-            Repository.getRepositoryInstance().getFirebaseModel()
+            Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
                     .addMovieComment(movieComment, () -> {
                         new AddUserMovieCommentDialogFragment()
                                 .show(getActivity().getSupportFragmentManager(), "TAG");

@@ -50,7 +50,7 @@ public class Repository {
     public void refreshAllMovieCategories() {
         NotificationManager.instance().getEventMovieCategoryListLoadingState().setValue(LOADING);
         Long localLastUpdate = MovieCategory.getLocalLastUpdate();
-        this.getFirebaseModel()
+        this.getFirebaseModel().getMovieCategoryExecutor()
                 .getAllMovieCategoriesSinceLastUpdate(localLastUpdate, movieCategories ->
                         this.executor.execute(() -> {
                             Log.d("TAG", " firebase return : " + movieCategories.size());

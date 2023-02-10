@@ -76,7 +76,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                             .getAllMovieComments().indexOf(this.viewModel.getMovieComment()));
                     displayUserMovieCommentDetails();
                 });*/
-        Repository.getRepositoryInstance().getFirebaseModel()
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
                 .getAllMovieComments(allMovieComments -> {
                     this.viewModel.setAllMovieComments(allMovieComments);
                     this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
@@ -113,7 +113,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
                             Navigation.findNavController(view).popBackStack();
                         }));*/
-                Repository.getRepositoryInstance().getFirebaseModel()
+                Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
                         .removeMovieComment(this.viewModel.getMovieComment().getMovieCommentId(), () -> {
                             new DeleteUserMovieCommentDialogFragment()
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
@@ -128,7 +128,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                                         .show(getActivity().getSupportFragmentManager(), "TAG");
                                 Navigation.findNavController(view).popBackStack();
                             });*/
-            Repository.getRepositoryInstance().getFirebaseModel()
+            Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
                     .updateMovieComment(this.viewModel.getMovieComment().getMovieCommentId(),
                             this.viewModel.getMovieComment(), () -> {
                                 new UpdateUserMovieCommentDialogFragment()

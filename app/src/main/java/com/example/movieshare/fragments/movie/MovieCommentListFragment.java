@@ -75,7 +75,7 @@ public class MovieCommentListFragment extends Fragment {
                     MovieUtils.simulateSleeping();
                     this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.GONE);
                 });*/
-        Repository.getRepositoryInstance().getFirebaseModel()
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
                 .getAllMovieCommentsByMovieId(this.movieId, movieCommentList -> {
                     this.viewModel.setMovieCommentList(movieCommentList);
                     this.movieCommentAdapter.setMovieItemList(this.viewModel.getMovieCommentList());

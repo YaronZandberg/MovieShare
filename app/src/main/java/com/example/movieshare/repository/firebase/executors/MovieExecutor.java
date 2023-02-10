@@ -15,9 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieExecutor {
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final MovieExecutor movieExecutorInstance = new MovieExecutor();
+    private final FirebaseFirestore db;
 
-    public MovieExecutor() {
+    private MovieExecutor() {
+        this.db = FirebaseFirestore.getInstance();
+    }
+
+    public static MovieExecutor instance() {
+        return movieExecutorInstance;
     }
 
     public void getAllMovies(GetMovieItemListListener<Movie> listener) {
@@ -55,6 +61,7 @@ public class MovieExecutor {
                 });
     }
 
+    // TODO: There wasn't an original ROOM implementation
     public void getMovieById(Integer id, GetMovieItemListener<Movie> listener) {
 
     }
@@ -82,10 +89,12 @@ public class MovieExecutor {
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 
+    // TODO: There wasn't an original ROOM implementation
     public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
 
     }
 
+    // TODO: There wasn't an original ROOM implementation
     public void updateMovie(Integer index, Movie movie, ExecuteMovieItemListener listener) {
 
     }

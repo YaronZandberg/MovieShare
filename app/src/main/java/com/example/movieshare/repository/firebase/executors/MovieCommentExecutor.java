@@ -13,9 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieCommentExecutor {
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final MovieCommentExecutor movieCommentExecutorInstance = new MovieCommentExecutor();
+    private final FirebaseFirestore db;
 
-    public MovieCommentExecutor() {
+    private MovieCommentExecutor() {
+        this.db = FirebaseFirestore.getInstance();
+    }
+
+    public static MovieCommentExecutor instance() {
+        return movieCommentExecutorInstance;
     }
 
     public void getAllMovieComments(GetMovieItemListListener<MovieComment> listener) {
@@ -34,6 +40,7 @@ public class MovieCommentExecutor {
                 });
     }
 
+    // TODO: There wasn't an original ROOM implementation
     public void getMovieCommentById(Integer id, GetMovieItemListener<MovieComment> listener) {
 
     }

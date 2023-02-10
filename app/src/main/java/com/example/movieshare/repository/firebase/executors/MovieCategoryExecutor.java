@@ -17,11 +17,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieCategoryExecutor {
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final MovieCategoryExecutor movieCategoryExecutorInstance = new MovieCategoryExecutor();
+    private final FirebaseFirestore db;
 
-    public MovieCategoryExecutor() {
+    private MovieCategoryExecutor() {
+        this.db = FirebaseFirestore.getInstance();
     }
 
+    public static MovieCategoryExecutor instance() {
+        return movieCategoryExecutorInstance;
+    }
+
+    // TODO: Need to call this function at first app loading and save results to ROOM.
+    //  In addition, call this method after change from NotificationCenter of addMovieCategory
+    //  in order to load delta again and update ROOM.
     public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
                 .get()
@@ -80,10 +89,12 @@ public class MovieCategoryExecutor {
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 
+    // TODO: There wasn't an original ROOM implementation
     public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
 
     }
 
+    // TODO: There wasn't an original ROOM implementation
     public void updateMovieCategory(Integer index, MovieCategory movieCategory,
                                     ExecuteMovieItemListener listener) {
 

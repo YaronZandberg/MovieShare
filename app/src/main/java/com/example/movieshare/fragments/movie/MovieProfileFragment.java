@@ -63,7 +63,7 @@ public class MovieProfileFragment extends Fragment {
             this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
             getMovieCategoryName();
         });*/
-        Repository.getRepositoryInstance().getFirebaseModel()
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor()
                 .getAllMoviesByCategoryId(this.movieCategoryId, movieList -> {
                     this.viewModel.setMovieList(movieList);
                     this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
@@ -79,7 +79,7 @@ public class MovieProfileFragment extends Fragment {
                         this.viewModel.setMovieCategoryName(this.viewModel.getMovieCategory().getCategoryName());
                         displayMovieDetails();
                     });*/
-            Repository.getRepositoryInstance().getFirebaseModel()
+            Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor()
                     .getMovieCategoryById(this.viewModel.getMovie().getMovieCategoryId(), movieCategory -> {
                         this.viewModel.setMovieCategory(movieCategory);
                         this.viewModel.setMovieCategoryName(this.viewModel.getMovieCategory().getCategoryName());

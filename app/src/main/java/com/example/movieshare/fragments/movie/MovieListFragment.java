@@ -75,7 +75,7 @@ public class MovieListFragment extends Fragment {
                             .get(this.movieCategoryPosition));
                     reloadMovieList();
                 });*/
-        Repository.getRepositoryInstance().getFirebaseModel()
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor()
                 .getAllMovieCategories(movieCategoryList -> {
                     this.viewModel.setAllMovieCategories(movieCategoryList);
                     this.viewModel.setMovieCategory(this.viewModel.getAllMovieCategories()
@@ -94,7 +94,7 @@ public class MovieListFragment extends Fragment {
                         MovieUtils.simulateSleeping();
                         this.viewBindings.movieListFragmentProgressBar.setVisibility(View.GONE);
                     });*/
-            Repository.getRepositoryInstance().getFirebaseModel()
+            Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor()
                     .getAllMoviesByCategoryId(this.viewModel.getMovieCategory().getCategoryId(), movieList -> {
                         this.viewModel.setMovieList(movieList);
                         this.movieAdapter.setMovieItemList(this.viewModel.getMovieList());
