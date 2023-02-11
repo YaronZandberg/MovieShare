@@ -1,6 +1,6 @@
 package com.example.movieshare.repository.firebase;
 
-import com.example.movieshare.listeners.users.*;
+import com.example.movieshare.listeners.authentication.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

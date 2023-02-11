@@ -6,7 +6,7 @@ import android.os.Looper;
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 
-import com.example.movieshare.listeners.GetMovieItemListener;
+import com.example.movieshare.listeners.movies.GetMovieItemListener;
 import com.example.movieshare.repository.models.User;
 import com.example.movieshare.repository.room.localdb.AppLocalDB;
 import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;

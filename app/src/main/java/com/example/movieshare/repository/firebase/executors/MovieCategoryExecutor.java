@@ -2,9 +2,7 @@ package com.example.movieshare.repository.firebase.executors;
 
 import static com.example.movieshare.constants.MovieCategoryConstants.*;
 
-import com.example.movieshare.listeners.ExecuteMovieItemListener;
-import com.example.movieshare.listeners.GetMovieItemListListener;
-import com.example.movieshare.listeners.GetMovieItemListener;
+import com.example.movieshare.listeners.movies.*;
 import com.example.movieshare.repository.models.MovieCategory;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
