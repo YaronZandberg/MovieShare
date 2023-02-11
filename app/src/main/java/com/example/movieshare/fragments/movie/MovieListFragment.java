@@ -1,6 +1,13 @@
 package com.example.movieshare.fragments.movie;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,28 +19,30 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.movieshare.R;
 import com.example.movieshare.adapters.MovieAdapter;
 import com.example.movieshare.databinding.FragmentMovieListBinding;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.repository.dao.MovieApiCaller;
 import com.example.movieshare.repository.models.Movie;
+import com.example.movieshare.repository.models.MovieApi;
+import com.example.movieshare.repository.models.MovieApiList;
 import com.example.movieshare.repository.models.MovieCategory;
-import com.example.movieshare.utils.MovieUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+
 public class MovieListFragment extends Fragment {
     private FragmentMovieListBinding viewBindings;
-    private List<Movie> movieList = new ArrayList<>();
+    private List<Movie> movieList;
     private Integer movieCategoryPosition;
     private List<MovieCategory> allMovieCategories = new ArrayList<>();
     private MovieCategory movieCategory;
@@ -51,6 +60,7 @@ public class MovieListFragment extends Fragment {
         this.viewBindings = FragmentMovieListBinding.inflate(inflater, container, false);
         this.viewBindings.movieListFragmentMoviesList.setHasFixedSize(true);
         this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new LinearLayoutManager(getContext()));
+
         this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.movieList);
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
         configureMenuOptions();
@@ -74,16 +84,16 @@ public class MovieListFragment extends Fragment {
     }
 
     private void reloadMovieList() {
-        if (Objects.nonNull(this.movieCategory)) {
-            this.viewBindings.movieListFragmentProgressBar.setVisibility(View.VISIBLE);
-            Repository.getMovieHandler()
-                    .getAllMoviesByCategoryId(this.movieCategory.getCategoryId(), movieList -> {
-                        this.movieList = movieList;
-                        this.movieAdapter.setMovieItemList(this.movieList);
-                        MovieUtils.simulateSleeping();
-                        this.viewBindings.movieListFragmentProgressBar.setVisibility(View.GONE);
-                    });
-        }
+//        if (Objects.nonNull(this.movieCategory)) {
+//            this.viewBindings.movieListFragmentProgressBar.setVisibility(View.VISIBLE);
+//            Repository.getMovieHandler()
+//                    .getAllMoviesByCategoryId(this.movieCategory.getCategoryId(), movieList -> {
+//                        this.movieList = movieList;
+//                        this.movieAdapter.setMovieItemList(this.movieList);
+//                        MovieUtils.simulateSleeping();
+//                        this.viewBindings.movieListFragmentProgressBar.setVisibility(View.GONE);
+//                    });
+//        }
     }
 
     private void activateItemListListener() {
