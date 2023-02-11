@@ -1,10 +1,10 @@
-package com.example.movieshare.repository.localdb;
+package com.example.movieshare.repository.room.localdb;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-import com.example.movieshare.repository.dao.*;
 import com.example.movieshare.repository.models.*;
+import com.example.movieshare.repository.room.dao.*;
 
 @Database(entities = {MovieComment.class, Movie.class, MovieCategory.class}, version = 1)
 public abstract class AppLocalDbRepository extends RoomDatabase {

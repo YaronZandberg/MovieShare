@@ -37,4 +37,12 @@ public class MovieApi {
     public String getOverview() {
         return overview;
     }
+
+    public Double getVote_average() {
+        return vote_average;
+    }
+
+    public String getPoster_path() {
+        return poster_path;
+    }
 }

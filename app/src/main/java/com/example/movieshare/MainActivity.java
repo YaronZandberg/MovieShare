@@ -11,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.dao.MovieApiCaller;
+import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieApiList;
 
 import retrofit2.Call;
@@ -33,8 +34,11 @@ public class MainActivity extends AppCompatActivity {
         service.getJson("fd03ee4400dc93124b178d4ffbf867d1", 18).enqueue((new Callback<MovieApiList>() {
             @Override
             public void onResponse(Call<MovieApiList> call, Response<MovieApiList> response) {
-                response.body().getResults();
-                Repository.
+                response.body().getResults().forEach(item -> {
+                    Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie("M6EdqWm8BlVoRWPAyhjn", item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(),item.getPoster_path()),() -> {
+                        Log.d("test", "success");
+                    });
+                });
             }
 
             @Override

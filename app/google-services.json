@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "805095954223",
+    "project_id": "movie-share-e18db",
+    "storage_bucket": "movie-share-e18db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805095954223:android:e2b67a4f7850675ac733da",
+        "android_client_info": {
+          "package_name": "com.example.movieshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805095954223-d80d3uc688733oq2hj5150ecg3s8hjpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzIqf8_KLtG1hfzPXld2iXhWvTYO98GUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805095954223-d80d3uc688733oq2hj5150ecg3s8hjpq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

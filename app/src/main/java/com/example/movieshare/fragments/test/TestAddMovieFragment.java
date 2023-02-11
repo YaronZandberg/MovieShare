@@ -1,14 +1,14 @@
 package com.example.movieshare.fragments.test;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.movieshare.databinding.FragmentTestAddMovieBinding;
 import com.example.movieshare.repository.Repository;
@@ -18,7 +18,7 @@ public class TestAddMovieFragment extends Fragment {
     private FragmentTestAddMovieBinding viewBindings;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentTestAddMovieBinding.inflate(inflater, container, false);
         activateButtonsListeners();
@@ -30,21 +30,23 @@ public class TestAddMovieFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.testMovieSaveBtn.setOnClickListener(view -> {
             Movie movie = buildNewMovie();
-            Repository.getMovieHandler()
-                    .addMovie(movie, () -> Toast.makeText(getContext(),
-                                    "Add movie operation finished successfully",
-                                    Toast.LENGTH_LONG)
-                            .show()
+            Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor()
+                    .addMovie(movie, () -> {
+                                Toast.makeText(getContext(),
+                                                "Add movie operation finished successfully",
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                                Repository.getRepositoryInstance().refreshAllMovies();
+                            }
                     );
         });
     }
 
     private Movie buildNewMovie() {
-        Integer categoryId =
-                Integer.parseInt(this.viewBindings.testMovieCategoryIdInputEt.getText().toString());
+        String categoryId = this.viewBindings.testMovieCategoryIdInputEt.getText().toString();
         String movieName = this.viewBindings.testMovieNameInputEt.getText().toString();
         String movieRating = this.viewBindings.testMovieRatingInputEt.getText().toString();
         String description = this.viewBindings.testMovieDesctiptionInputEt.getText().toString();
-        return new Movie(categoryId, movieName, movieRating, description);
+        return new Movie(categoryId, movieName, movieRating, description, "/bxh5xCCW9Ynfg6EZJWUkc1zqTnr.jpg");
     }
 }

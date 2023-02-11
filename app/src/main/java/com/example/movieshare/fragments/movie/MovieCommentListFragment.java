@@ -1,17 +1,7 @@
 package com.example.movieshare.fragments.movie;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,22 +9,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.example.movieshare.R;
 import com.example.movieshare.adapters.CommentAdapter;
 import com.example.movieshare.databinding.FragmentMovieCommentListBinding;
-import com.example.movieshare.repository.models.MovieComment;
+import com.example.movieshare.enums.LoadingState;
+import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
-import com.example.movieshare.utils.MovieUtils;
+import com.example.movieshare.viewmodels.movie.MovieCommentListFragmentViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class MovieCommentListFragment extends Fragment {
     private FragmentMovieCommentListBinding viewBindings;
-    private List<MovieComment> movieCommentList = new ArrayList<>();
-    private Integer movieId;
+    private String movieId;
     private CommentAdapter movieCommentAdapter;
+    private MovieCommentListFragmentViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,30 +45,44 @@ public class MovieCommentListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initializeAllMovieComments();
         this.viewBindings = FragmentMovieCommentListBinding.inflate(inflater, container, false);
         this.viewBindings.movieCommentListFragmentList.setHasFixedSize(true);
         this.viewBindings.movieCommentListFragmentList.setLayoutManager(new LinearLayoutManager(getContext()));
-        this.movieCommentAdapter = new CommentAdapter(getLayoutInflater(), this.movieCommentList);
+        this.movieCommentAdapter = new CommentAdapter(getLayoutInflater(),
+                this.viewModel.getMovieCommentList().getValue());
         this.viewBindings.movieCommentListFragmentList.setAdapter(this.movieCommentAdapter);
+        this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeAllMovieComments);
+        activateItemListListener();
         configureMenuOptions();
+        this.viewModel.getMovieCommentList()
+                .observe(getViewLifecycleOwner(), movieComments -> reloadMovieCommentList());
+        NotificationManager.instance()
+                .getEventMovieCommentListLoadingState()
+                .observe(getViewLifecycleOwner(),
+                        loadingState -> this.viewBindings.swipeRefresh
+                                .setRefreshing(loadingState == LoadingState.LOADING));
         return this.viewBindings.getRoot();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        reloadMovieCommentList();
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.viewModel = new ViewModelProvider(this).get(MovieCommentListFragmentViewModel.class);
+    }
+
+    private void initializeAllMovieComments() {
+        Repository.getRepositoryInstance().refreshAllMovieComments();
     }
 
     private void reloadMovieCommentList() {
-        this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.VISIBLE);
-        Repository.getMovieCommentHandler()
-                .getAllMovieCommentsByMovieId(this.movieId, movieCommentList -> {
-                    this.movieCommentList = movieCommentList;
-                    this.movieCommentAdapter.setMovieItemList(this.movieCommentList);
-                    MovieUtils.simulateSleeping();
-                    this.viewBindings.movieCommentListFragmentProgressBar.setVisibility(View.GONE);
-                });
+        Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                .getAllMovieCommentsByMovieId(this.movieId, movieCommentList ->
+                        this.movieCommentAdapter.setMovieItemList(movieCommentList));
+    }
+
+    private void activateItemListListener() {
+        this.movieCommentAdapter.setOnItemClickListener(position -> {});
     }
 
     private void configureMenuOptions() {
