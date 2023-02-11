@@ -83,6 +83,21 @@ public class MovieCategoryExecutor {
                 });
     }
 
+    public void getMovieCategoryByName(String name, GetMovieItemListener<MovieCategory> listener) {
+        this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
+                .whereEqualTo(MOVIE_CATEGORY_NAME, name)
+                .get()
+                .addOnCompleteListener(task -> {
+                    MovieCategory movieCategory = null;
+                    if (task.isSuccessful()) {
+                        QuerySnapshot json = task.getResult();
+                        List<DocumentSnapshot> jsonDocument = json.getDocuments();
+                        movieCategory = MovieCategory.fromJson(jsonDocument.get(0).getData());
+                    }
+                    listener.onComplete(movieCategory);
+                });
+    }
+
     public void addMovieCategory(MovieCategory movieCategory, ExecuteMovieItemListener listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
                 .add(movieCategory.toJson())

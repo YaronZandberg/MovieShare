@@ -24,4 +24,8 @@ public class FirebaseModel {
     public MovieCommentExecutor getMovieCommentExecutor() {
         return MovieCommentExecutor.instance();
     }
+
+    public UserExecutor getUserExecutor() {
+        return UserExecutor.instance();
+    }
 }

@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.movieshare.listeners.OnItemClickListener;
+import com.example.movieshare.listeners.general.OnItemClickListener;
 import com.example.movieshare.viewholders.MovieItemViewHolder;
 
 import java.util.List;

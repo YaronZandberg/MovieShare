@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieshare.R;
-import com.example.movieshare.listeners.OnItemClickListener;
+import com.example.movieshare.listeners.general.OnItemClickListener;
 
 public abstract class MovieItemViewHolder <T> extends RecyclerView.ViewHolder {
     protected final TextView movieItemNameTv;
