@@ -104,7 +104,7 @@ public class Movie {
         this.movieId = movieId;
     }
 
-    public String getMovieImg()  { return this.movieImg; }
+    public String getMovieImg()  { return "https://image.tmdb.org/t/p/w500" + this.movieImg; }
 
     public void setMovieImg(@NonNull String movieImg)  {  this.movieImg = movieImg; }
 

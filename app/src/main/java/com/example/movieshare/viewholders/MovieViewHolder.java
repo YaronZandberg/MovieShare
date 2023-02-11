@@ -16,7 +16,7 @@ public class MovieViewHolder extends MovieItemViewHolder<Movie> {
 
     @Override
     public void bindMovieItem(Movie movie) {
-        Picasso.get().load("https://image.tmdb.org/t/p/w500" + movie.getMovieImg()).into(this.movieItemNameImg);
+        Picasso.get().load(movie.getMovieImg()).into(this.movieItemNameImg);
         this.movieItemNameTv.setText(movie.getMovieName());
         this.movieItemRatingTv.setText(movie.getMovieRating());
         this.movieItemDescriptionTv.setText(movie.getDescription());

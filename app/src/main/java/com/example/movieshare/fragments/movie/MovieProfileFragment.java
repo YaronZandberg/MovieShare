@@ -24,6 +24,7 @@ import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentMovieProfileBinding;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.movie.MovieProfileFragmentViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -78,6 +79,7 @@ public class MovieProfileFragment extends Fragment {
 
     private void displayMovieDetails() {
         if (Objects.nonNull(this.viewModel.getMovie())) {
+            Picasso.get().load(this.viewModel.getMovie().getMovieImg()).into(this.viewBindings.movieProfileFragmentImg);
             this.viewBindings.movieProfileFragmentMovieNameInputEt.setText(this.viewModel.getMovie().getMovieName());
             this.viewBindings.movieProfileFragmentMovieCategoryInputEt.setText(this.viewModel.getMovieCategoryName());
             this.viewBindings.movieProfileFragmentMovieDescriptionInputEt.setText(this.viewModel.getMovie().getDescription());
