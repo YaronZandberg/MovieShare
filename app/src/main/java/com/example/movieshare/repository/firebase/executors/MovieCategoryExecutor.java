@@ -74,11 +74,10 @@ public class MovieCategoryExecutor {
                     MovieCategory movieCategory = null;
                     if (task.isSuccessful()) {
                         QuerySnapshot json = task.getResult();
-                        if(json.isEmpty()) {
+                        if(!json.isEmpty()) {
                             List<DocumentSnapshot> jsonDocument = json.getDocuments();
-                            if(!json.getDocuments().isEmpty()) {
-                                movieCategory = MovieCategory.fromJson(jsonDocument.get(0).getData());
-                            }
+                            movieCategory = MovieCategory.fromJson(jsonDocument.get(0).getData());
+                            movieCategory.setCategoryId(jsonDocument.get(0).getId());
                         }
                     }
                     listener.onComplete(movieCategory);
@@ -98,6 +97,7 @@ public class MovieCategoryExecutor {
                         if(!queryDocumentSnapshots.getDocuments().isEmpty()) {
                             DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                             movieCategory = MovieCategory.fromJson(documentSnapshot.getData());
+                            movieCategory.setCategoryId(documentSnapshot.getId());
                         }
                     }
                     listener.onComplete(movieCategory);

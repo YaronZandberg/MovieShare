@@ -13,7 +13,7 @@ import java.util.List;
 
 @Dao
 public interface MovieCategoryDao {
-    @Query("SELECT * FROM MovieCategory LIMIT 15")
+    @Query("SELECT * FROM MovieCategory")
     LiveData<List<MovieCategory>> getAllMovieCategories();
 
     @Query("SELECT * FROM MovieCategory WHERE categoryId = :id")

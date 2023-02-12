@@ -99,6 +99,7 @@ public class MovieExecutor {
                         List<DocumentSnapshot> jsonDocument = json.getDocuments();
                         if(!jsonDocument.isEmpty()) {
                             movie = Movie.fromJson(jsonDocument.get(0).getData());
+                            movie.setMovieId(jsonDocument.get(0).getId());
                         }
                     }
                     listener.onComplete(movie);
