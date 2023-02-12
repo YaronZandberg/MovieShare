@@ -42,29 +42,20 @@ public class MainActivity extends AppCompatActivity {
                     String categoryName = cat.getCategoryById(item.getGenre_ids().get(0)).getAsString();
                     Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().getMovieCategoryByName(categoryName, catId -> {
                         if (catId == null) {
-                            Log.d("test", "success");
                             Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().addMovieCategory(new MovieCategory(categoryName, "0", categoryName), () -> {
                                 Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().getMovieCategoryByName(categoryName, category -> {
                                     Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().getMovieByName(item.getOriginal_title(), movie -> {
                                         if(movie == null && category != null) {
-                                            Log.d("category", category.getCategoryId());
-                                            Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie(category.getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()),() -> {
-                                                Log.d("category", category.getCategoryId());
-                                            });
+                                            Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie(category.getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()),() -> {});
                                         }
                                     });
                                 });
                             });
                         } else {
                             Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().getMovieCategoryByName(categoryName, category -> {
-                                Log.d("category", category.getCategoryId());
                                 Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().getMovieByName(item.getOriginal_title(), movie -> {
                                     if(movie == null && category != null) {
-                                        Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie(category.getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()),() -> {
-                                            Log.d("test", "success");
-                                        });
-                                    } else {
-                                        Log.d("movie", movie.getMovieId());
+                                        Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie(category.getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()),() -> {});
                                     }
                                 });
                             });
