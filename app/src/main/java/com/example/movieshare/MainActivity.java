@@ -9,10 +9,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.movieshare.constants.Categories;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.dao.MovieApiCaller;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieApiList;
+import com.example.movieshare.repository.models.MovieCategory;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,16 +30,31 @@ public class MainActivity extends AppCompatActivity {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.themoviedb.org").addConverterFactory(GsonConverterFactory.create()).build();
 
+        Categories cat = new Categories();
         MovieApiCaller service = retrofit.create(MovieApiCaller.class);
+
 
 
         service.getJson("fd03ee4400dc93124b178d4ffbf867d1", 18).enqueue((new Callback<MovieApiList>() {
             @Override
             public void onResponse(Call<MovieApiList> call, Response<MovieApiList> response) {
                 response.body().getResults().forEach(item -> {
-                    Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie("M6EdqWm8BlVoRWPAyhjn", item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(),item.getPoster_path()),() -> {
-                        Log.d("test", "success");
+                    String categoryName = cat.getCategoryById(item.getGenre_ids().get(0)).getAsString();
+                    Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().getMovieCategoryByName(categoryName, catId -> {
+                        if(catId != null) {
+                            Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().addMovieCategory(new MovieCategory(categoryName, "0", categoryName), () -> {});
+                        }
+                        Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().getMovieCategoryByName(categoryName, cat -> {
+                            Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().getMovieByName(item.getOriginal_title(), movie -> {
+                                if(movie == null && cat != null) {
+                                    Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie(cat.getCategoryId().toString(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()),() -> {
+                                        Log.d("test", "success");
+                                    });
+                                }
+                            });
+                        });
                     });
+
                 });
             }
 

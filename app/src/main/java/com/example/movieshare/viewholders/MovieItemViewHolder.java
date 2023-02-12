@@ -15,7 +15,6 @@ public abstract class MovieItemViewHolder <T> extends RecyclerView.ViewHolder {
     protected final TextView movieItemNameTv;
     protected final TextView movieItemRatingTv;
     protected final TextView movieItemDescriptionTv;
-
     protected final ImageView movieItemNameImg;
 
     public MovieItemViewHolder(@NonNull View itemView, OnItemClickListener listener) {

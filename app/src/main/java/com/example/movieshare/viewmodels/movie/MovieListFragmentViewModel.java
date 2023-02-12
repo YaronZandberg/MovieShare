@@ -15,9 +15,7 @@ public class MovieListFragmentViewModel extends ViewModel {
             Repository.getRepositoryInstance().getAllMovieCategories();
     private MovieCategory movieCategory;
 
-    public LiveData<List<Movie>> getMovieList() {
-        return this.movieList;
-    }
+    public LiveData<List<Movie>> getMovieList() { return this.movieList; }
 
     public LiveData<List<MovieCategory>> getAllMovieCategories() {
         return this.allMovieCategories;

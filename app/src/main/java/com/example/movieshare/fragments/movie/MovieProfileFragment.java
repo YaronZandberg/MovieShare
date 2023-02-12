@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.movieshare.R;
+import com.example.movieshare.adapters.CommentAdapter;
+import com.example.movieshare.databinding.FragmentMovieCommentListBinding;
 import com.example.movieshare.databinding.FragmentMovieProfileBinding;
+import com.example.movieshare.enums.LoadingState;
+import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.movie.MovieProfileFragmentViewModel;
 import com.squareup.picasso.Picasso;

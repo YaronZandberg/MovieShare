@@ -19,6 +19,5 @@ public class MovieViewHolder extends MovieItemViewHolder<Movie> {
         Picasso.get().load(movie.getMovieImg()).into(this.movieItemNameImg);
         this.movieItemNameTv.setText(movie.getMovieName());
         this.movieItemRatingTv.setText(movie.getMovieRating());
-        this.movieItemDescriptionTv.setText(movie.getDescription());
     }
 }
