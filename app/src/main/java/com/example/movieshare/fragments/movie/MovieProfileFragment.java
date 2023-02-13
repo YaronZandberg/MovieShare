@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,12 +21,13 @@ import android.view.ViewGroup;
 
 import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentMovieProfileBinding;
+import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.movie.MovieProfileFragmentViewModel;
 
 import java.util.Objects;
 
-public class MovieProfileFragment extends Fragment {
+public class MovieProfileFragment extends MovieBaseFragment {
     private FragmentMovieProfileBinding viewBindings;
     private Integer moviePosition;
     private String movieCategoryId;
@@ -45,7 +45,7 @@ public class MovieProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentMovieProfileBinding.inflate(inflater, container, false);
         initializeMovie();
-        configureMenuOptions();
+        this.configureMenuOptions(this.viewBindings.getRoot());
         activateButtonsListeners();
         return this.viewBindings.getRoot();
     }
@@ -59,10 +59,10 @@ public class MovieProfileFragment extends Fragment {
     private void initializeMovie() {
         Repository.getRepositoryInstance().getLocalModel().getMovieHandler()
                 .getAllMoviesByCategoryId(this.movieCategoryId, movieList -> {
-            this.viewModel.setMovieList(movieList);
-            this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
-            getMovieCategoryName();
-        });
+                    this.viewModel.setMovieList(movieList);
+                    this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
+                    getMovieCategoryName();
+                });
     }
 
     private void getMovieCategoryName() {
@@ -102,7 +102,8 @@ public class MovieProfileFragment extends Fragment {
         });
     }
 
-    private void configureMenuOptions() {
+    @Override
+    protected void configureMenuOptions(View view) {
         FragmentActivity parentActivity = getActivity();
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
@@ -115,15 +116,17 @@ public class MovieProfileFragment extends Fragment {
                     Navigation.findNavController(viewBindings.getRoot()).popBackStack();
                     return true;
                 } else {
-                    if (Objects.nonNull(viewBindings)) {
-                        NavDirections action;
+                    if (Objects.nonNull(view)) {
                         if (menuItem.getItemId() == R.id.userCommentAdditionFragment) {
-                            action = MovieProfileFragmentDirections
+                            NavDirections action = MovieProfileFragmentDirections
                                     .actionMovieProfileFragmentToUserCommentAdditionFragment(viewModel.getMovie().getMovieName());
+                            Navigation.findNavController(viewBindings.getRoot()).navigate(action);
+                        } else if (menuItem.getItemId() == R.id.userProfileFragment) {
+                            NavDirections action = MovieProfileFragmentDirections.actionGlobalUserProfileFragment();
+                            Navigation.findNavController(viewBindings.getRoot()).navigate(action);
                         } else {
-                            action = MovieProfileFragmentDirections.actionGlobalUserProfileFragment();
+                            Repository.getRepositoryInstance().getAuthModel().logout(() -> startIntroActivity());
                         }
-                        Navigation.findNavController(viewBindings.getRoot()).navigate(action);
                         return true;
                     }
                 }
