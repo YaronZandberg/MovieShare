@@ -20,6 +20,7 @@ import com.example.movieshare.databinding.FragmentSignUpBinding;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.models.User;
 import com.example.movieshare.utils.InputValidator;
+import com.example.movieshare.utils.UserUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
@@ -51,10 +52,10 @@ public class SignUpFragment extends Fragment {
 
     private void setRegisterButtonOnClickListener() {
         this.viewBindings.signUpFragmentRegisterBtn.setOnClickListener(view -> {
-            setErrorIfFirstNameIsInvalid();
-            setErrorIfLastNameIsInvalid();
-            setErrorIfEmailIsInvalid();
-            setErrorIfPasswordIsInvalid();
+            UserUtils.setErrorIfFirstNameIsInvalid(this.viewBindings.signUpFragmentFirstNameInputEt);
+            UserUtils.setErrorIfLastNameIsInvalid(this.viewBindings.signUpFragmentLastNameInputEt);
+            UserUtils.setErrorIfEmailIsInvalid(this.viewBindings.signUpFragmentEmailInputEt);
+            UserUtils.setErrorIfPasswordIsInvalid(this.viewBindings.signUpFragmentPasswordInputEt);
             if (isFormValid()) {
                 registerIfValid(view);
             }
@@ -89,7 +90,7 @@ public class SignUpFragment extends Fragment {
                             this.viewBindings.signUpFragmentPasswordInputEt.getText().toString());
         } else {
             Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
-                    .uploadUserImage(profileImage, user.getEmail() + ".jpg", (url) -> {
+                    .uploadUserImage(profileImage, user.getEmail() + ".jpg", url -> {
                         user.setImageUrl(url);
                         Repository.getRepositoryInstance()
                                 .register(this::navigateToHomePageAfterRegister,
@@ -113,21 +114,21 @@ public class SignUpFragment extends Fragment {
 
     private void setFirstNameEditTextOnKeyListener() {
         this.viewBindings.signUpFragmentFirstNameInputEt.setOnKeyListener((view, i, keyEvent) -> {
-            setErrorIfFirstNameIsInvalid();
+            UserUtils.setErrorIfFirstNameIsInvalid(this.viewBindings.signUpFragmentFirstNameInputEt);
             return false;
         });
     }
 
     private void setLastNameEditTextOnKeyListener() {
         this.viewBindings.signUpFragmentLastNameInputEt.setOnKeyListener((view, i, keyEvent) -> {
-            setErrorIfLastNameIsInvalid();
+            UserUtils.setErrorIfLastNameIsInvalid(this.viewBindings.signUpFragmentLastNameInputEt);
             return false;
         });
     }
 
     private void setEmailEditTextOnKeyListener() {
         this.viewBindings.signUpFragmentEmailInputEt.setOnKeyListener((view, i, keyEvent) -> {
-            setErrorIfEmailIsInvalid();
+            UserUtils.setErrorIfEmailIsInvalid(this.viewBindings.signUpFragmentEmailInputEt);
             return false;
         });
     }
@@ -135,40 +136,8 @@ public class SignUpFragment extends Fragment {
 
     private void setPasswordEditTextOnKeyListener() {
         this.viewBindings.signUpFragmentPasswordInputEt.setOnKeyListener((view, i, keyEvent) -> {
-            setErrorIfPasswordIsInvalid();
+            UserUtils.setErrorIfPasswordIsInvalid(this.viewBindings.signUpFragmentPasswordInputEt);
             return false;
         });
-    }
-
-    private void setErrorIfFirstNameIsInvalid() {
-        if (!InputValidator.isFirstNameValid(this.viewBindings.signUpFragmentFirstNameInputEt.getText())) {
-            this.viewBindings.signUpFragmentFirstNameInputEt.setError(REGISTER_INVALID_NAME);
-        } else {
-            this.viewBindings.signUpFragmentFirstNameInputEt.setError(null);
-        }
-    }
-
-    private void setErrorIfLastNameIsInvalid() {
-        if (!InputValidator.isLastNameValid(this.viewBindings.signUpFragmentLastNameInputEt.getText())) {
-            this.viewBindings.signUpFragmentLastNameInputEt.setError(REGISTER_INVALID_NAME);
-        } else {
-            this.viewBindings.signUpFragmentLastNameInputEt.setError(null);
-        }
-    }
-
-    private void setErrorIfEmailIsInvalid() {
-        if (!InputValidator.isEmailValid(this.viewBindings.signUpFragmentEmailInputEt.getText())) {
-            this.viewBindings.signUpFragmentEmailInputEt.setError(REGISTER_INVALID_EMAIL);
-        } else {
-            this.viewBindings.signUpFragmentEmailInputEt.setError(null);
-        }
-    }
-
-    private void setErrorIfPasswordIsInvalid() {
-        if (!InputValidator.isPasswordValid(this.viewBindings.signUpFragmentPasswordInputEt.getText())) {
-            this.viewBindings.signUpFragmentPasswordInputEt.setError(REGISTER_INVALID_PASSWORD);
-        } else {
-            this.viewBindings.signUpFragmentPasswordInputEt.setError(null);
-        }
     }
 }

@@ -31,7 +31,7 @@ import java.util.Objects;
 public class UserCommentEditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentEditionBinding viewBindings;
     private Integer userMovieCommentPosition;
-    private Integer userId;
+    private String userId;
     private UserCommentEditionFragmentViewModel viewModel;
 
     @Override

@@ -5,10 +5,14 @@ import static com.example.movieshare.constants.UserConstants.*;
 import android.graphics.Bitmap;
 
 import com.example.movieshare.listeners.authentication.*;
+import com.example.movieshare.listeners.movies.GetMovieItemListener;
 import com.example.movieshare.repository.models.User;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +65,21 @@ public class UserExecutor {
                 });
     }
 
+    public void getUserById(String id, GetMovieItemListener<User> listener) {
+        this.db.collection(USER_COLLECTION_NAME)
+                .whereEqualTo(FieldPath.documentId(), id)
+                .get()
+                .addOnCompleteListener(task -> {
+                    User user = null;
+                    if (task.isSuccessful()) {
+                        QuerySnapshot queryDocumentSnapshots = task.getResult();
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        user = User.fromJson(documentSnapshot.getData());
+                    }
+                    listener.onComplete(user);
+                });
+    }
+
     public void addUser(User user, AddUserListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .document(user.getUserId())
@@ -71,7 +90,7 @@ public class UserExecutor {
     public void updateUser(User user, UpdateUserListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .document(user.getUserId())
-                .update(user.toJson())
+                .set(user.toJson())
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 

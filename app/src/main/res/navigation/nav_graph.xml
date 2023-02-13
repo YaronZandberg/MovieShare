@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_profileFragment_to_userCommentListFragment"
             app:destination="@id/userCommentListFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_userProfileEditionFragment"
+            app:destination="@id/userProfileEditionFragment" />
     </fragment>
     <fragment
         android:id="@+id/userCommentListFragment"
@@ -50,7 +53,7 @@
             app:destination="@id/userCommentEditionFragment" />
         <argument
             android:name="userId"
-            app:argType="integer" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/userCommentEditionFragment"
@@ -62,7 +65,7 @@
             app:argType="integer" />
         <argument
             android:name="userId"
-            app:argType="integer" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/userCommentAdditionFragment"
@@ -132,4 +135,13 @@
         android:label="fragment_test_add_movie"
         tools:layout="@layout/fragment_test_add_movie" />
     <action android:id="@+id/action_global_userProfileFragment" app:destination="@id/userProfileFragment" />
+    <fragment
+        android:id="@+id/userProfileEditionFragment"
+        android:name="com.example.movieshare.fragments.user.UserProfileEditionFragment"
+        android:label="fragment_user_profile_edition"
+        tools:layout="@layout/fragment_user_profile_edition" >
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
 </navigation>

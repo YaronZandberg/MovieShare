@@ -32,7 +32,7 @@ import java.util.Objects;
 
 public class UserCommentListFragment extends Fragment {
     private FragmentUserCommentListBinding viewBindings;
-    private Integer userId;
+    private String userId;
     private CommentAdapter userCommentAdapter;
     private UserCommentListFragmentViewModel viewModel;
 

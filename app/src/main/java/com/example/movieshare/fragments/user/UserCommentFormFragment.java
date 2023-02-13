@@ -1,8 +1,8 @@
 package com.example.movieshare.fragments.user;
 
-import androidx.fragment.app.Fragment;
+import com.example.movieshare.fragments.base.MovieBaseFragment;
 
-public abstract class UserCommentFormFragment extends Fragment {
+public abstract class UserCommentFormFragment extends MovieBaseFragment {
 
     protected abstract void displayUserMovieCommentDetails();
 

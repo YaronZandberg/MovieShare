@@ -22,7 +22,7 @@ import com.example.movieshare.repository.Repository;
 
 import java.util.Objects;
 
-public class MovieBaseFragment extends Fragment {
+public abstract class MovieBaseFragment extends Fragment {
 
     protected void configureMenuOptions(View view) {
         FragmentActivity parentActivity = getActivity();
@@ -53,7 +53,7 @@ public class MovieBaseFragment extends Fragment {
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
-    private void startIntroActivity() {
+    protected void startIntroActivity() {
         if (Objects.nonNull(getActivity())) {
             Intent introActivityIntent = new Intent(getActivity(), IntroActivity.class);
             startActivity(introActivityIntent);

@@ -23,7 +23,7 @@ public interface MovieCommentDao {
     List<MovieComment> getAllMovieCommentsByMovieId(String movieId);
 
     @Query("SELECT * FROM MovieComment WHERE userId = :userId")
-    List<MovieComment> getAllMovieCommentsByUserId(Integer userId);
+    List<MovieComment> getAllMovieCommentsByUserId(String userId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(MovieComment... movieComments);
