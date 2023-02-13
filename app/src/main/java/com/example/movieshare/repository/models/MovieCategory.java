@@ -1,6 +1,11 @@
 package com.example.movieshare.repository.models;
 
-import static com.example.movieshare.constants.MovieCategoryConstants.*;
+import static com.example.movieshare.constants.MovieCategoryConstants.MOVIE_CATEGORY_DESCRIPTION;
+import static com.example.movieshare.constants.MovieCategoryConstants.MOVIE_CATEGORY_ID;
+import static com.example.movieshare.constants.MovieCategoryConstants.MOVIE_CATEGORY_LAST_UPDATE;
+import static com.example.movieshare.constants.MovieCategoryConstants.MOVIE_CATEGORY_LOCAL_LAST_UPDATE;
+import static com.example.movieshare.constants.MovieCategoryConstants.MOVIE_CATEGORY_NAME;
+import static com.example.movieshare.constants.MovieCategoryConstants.MOVIE_CATEGORY_RATING;
 
 import android.content.Context;
 

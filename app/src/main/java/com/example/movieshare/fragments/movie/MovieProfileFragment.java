@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,9 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.movieshare.R;
+import com.example.movieshare.adapters.CommentAdapter;
+import com.example.movieshare.databinding.FragmentMovieCommentListBinding;
 import com.example.movieshare.databinding.FragmentMovieProfileBinding;
+import com.example.movieshare.enums.LoadingState;
+import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.movie.MovieProfileFragmentViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -78,6 +84,7 @@ public class MovieProfileFragment extends Fragment {
 
     private void displayMovieDetails() {
         if (Objects.nonNull(this.viewModel.getMovie())) {
+            Picasso.get().load(this.viewModel.getMovie().getMovieImg()).into(this.viewBindings.movieProfileFragmentImg);
             this.viewBindings.movieProfileFragmentMovieNameInputEt.setText(this.viewModel.getMovie().getMovieName());
             this.viewBindings.movieProfileFragmentMovieCategoryInputEt.setText(this.viewModel.getMovieCategoryName());
             this.viewBindings.movieProfileFragmentMovieDescriptionInputEt.setText(this.viewModel.getMovie().getDescription());

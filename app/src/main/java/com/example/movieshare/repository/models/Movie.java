@@ -38,23 +38,25 @@ public class Movie {
     private String movieRating;
     private String description;
     private Long movieLastUpdate;
-
+    private String movieImg;
     public Movie(@NonNull String movieCategoryId, String movieName,
-                 String movieRating, String description) {
+                 String movieRating, String description, String movieImg) {
         this.movieCategoryId = movieCategoryId;
         this.movieName = movieName;
         this.movieRating = movieRating;
         this.description = description;
+        this.movieImg = movieImg;
     }
 
     @Ignore
     public Movie(@NonNull String movieId, @NonNull String movieCategoryId,
-                 String movieName, String movieRating, String description) {
+                 String movieName, String movieRating, String description, String movieImg) {
         this.movieId = movieId;
         this.movieCategoryId = movieCategoryId;
         this.movieName = movieName;
         this.movieRating = movieRating;
         this.description = description;
+        this.movieImg = movieImg;
     }
 
     // TODO: handle exceptions from casting or null
@@ -64,7 +66,8 @@ public class Movie {
         String movieName = String.valueOf(json.get(MOVIE_NAME));
         String movieRating = String.valueOf(json.get(MOVIE_RATING));
         String description = String.valueOf(json.get(MOVIE_DESCRIPTION));
-        Movie movie = new Movie(movieId, movieCategoryId, movieName, movieRating, description);
+        String img = String.valueOf(json.get(MOVIE_IMAGE));
+        Movie movie = new Movie(movieId, movieCategoryId, movieName, movieRating, description, img);
         Timestamp lastUpdate = (Timestamp) json.get(MOVIE_LAST_UPDATE);
         movie.setMovieLastUpdate(lastUpdate.getSeconds());
         return movie;
@@ -78,6 +81,7 @@ public class Movie {
         movieJson.put(MOVIE_RATING, this.getMovieRating());
         movieJson.put(MOVIE_DESCRIPTION, this.getDescription());
         movieJson.put(MOVIE_LAST_UPDATE, FieldValue.serverTimestamp());
+        movieJson.put(MOVIE_IMAGE, this.movieImg);
         return movieJson;
     }
 
@@ -99,6 +103,10 @@ public class Movie {
     public void setMovieId(@NonNull String movieId) {
         this.movieId = movieId;
     }
+
+    public String getMovieImg()  { return "https://image.tmdb.org/t/p/w500" + this.movieImg; }
+
+    public void setMovieImg(@NonNull String movieImg)  {  this.movieImg = movieImg; }
 
     @NonNull
     public String getMovieCategoryId() {

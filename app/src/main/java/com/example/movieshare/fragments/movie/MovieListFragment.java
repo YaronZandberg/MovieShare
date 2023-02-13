@@ -2,6 +2,13 @@ package com.example.movieshare.fragments.movie;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,22 +21,27 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.movieshare.R;
 import com.example.movieshare.adapters.MovieAdapter;
 import com.example.movieshare.databinding.FragmentMovieListBinding;
 import com.example.movieshare.enums.LoadingState;
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.repository.dao.MovieApiCaller;
+import com.example.movieshare.repository.models.Movie;
+import com.example.movieshare.repository.models.MovieApi;
+import com.example.movieshare.repository.models.MovieApiList;
+import com.example.movieshare.repository.models.MovieCategory;
 import com.example.movieshare.viewmodels.movie.MovieListFragmentViewModel;
 
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class MovieListFragment extends Fragment {
     private FragmentMovieListBinding viewBindings;

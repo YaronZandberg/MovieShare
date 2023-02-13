@@ -15,7 +15,5 @@ public class MovieCategoryViewHolder extends MovieItemViewHolder<MovieCategory> 
     @Override
     public void bindMovieItem(MovieCategory movieCategory) {
         this.movieItemNameTv.setText(movieCategory.getCategoryName());
-        this.movieItemRatingTv.setText(movieCategory.getCategoryRating());
-        this.movieItemDescriptionTv.setText(movieCategory.getDescription());
     }
 }

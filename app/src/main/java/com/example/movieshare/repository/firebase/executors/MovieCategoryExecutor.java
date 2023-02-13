@@ -66,6 +66,24 @@ public class MovieCategoryExecutor {
                 });
     }
 
+    public void getMovieCategoryByName(String name, GetMovieItemListener<MovieCategory> listener) {
+        this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
+                .whereEqualTo(MOVIE_CATEGORY_NAME, name)
+                .get()
+                .addOnCompleteListener(task -> {
+                    MovieCategory movieCategory = null;
+                    if (task.isSuccessful()) {
+                        QuerySnapshot json = task.getResult();
+                        if(!json.isEmpty()) {
+                            List<DocumentSnapshot> jsonDocument = json.getDocuments();
+                            movieCategory = MovieCategory.fromJson(jsonDocument.get(0).getData());
+                            movieCategory.setCategoryId(jsonDocument.get(0).getId());
+                        }
+                    }
+                    listener.onComplete(movieCategory);
+                });
+    }
+
     // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
     public void getMovieCategoryById(String id, GetMovieItemListener<MovieCategory> listener) {
@@ -76,8 +94,11 @@ public class MovieCategoryExecutor {
                     MovieCategory movieCategory = null;
                     if (task.isSuccessful()) {
                         QuerySnapshot queryDocumentSnapshots = task.getResult();
-                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-                        movieCategory = MovieCategory.fromJson(documentSnapshot.getData());
+                        if(!queryDocumentSnapshots.getDocuments().isEmpty()) {
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                            movieCategory = MovieCategory.fromJson(documentSnapshot.getData());
+                            movieCategory.setCategoryId(documentSnapshot.getId());
+                        }
                     }
                     listener.onComplete(movieCategory);
                 });
