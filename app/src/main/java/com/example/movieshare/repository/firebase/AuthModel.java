@@ -47,7 +47,7 @@ public class AuthModel {
         return null;
     }
 
-    public void isEmailExist(String email,
+    public void isEmailExists(String email,
                              IsEmailExistOnSuccessListener onSuccessListener,
                              IsEmailExistOnFailureListener onFailureListener) {
         this.firebaseAuth.fetchSignInMethodsForEmail(email)

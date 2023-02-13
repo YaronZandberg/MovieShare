@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 
+import com.example.movieshare.listeners.authentication.AddUserListener;
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.firebase.AuthModel;
 import com.example.movieshare.repository.firebase.FirebaseModel;
@@ -30,7 +31,7 @@ public class Repository {
     private LiveData<List<MovieCategory>> movieCategories;
     private LiveData<List<Movie>> movies;
     private LiveData<List<MovieComment>> movieComments;
-    private LiveData<List<User>> users;
+    //private LiveData<List<User>> users;
 
     private Repository() {
     }
@@ -83,13 +84,14 @@ public class Repository {
         return this.movieComments;
     }
 
-    public LiveData<List<User>> getAllUsers() {
+    // TODO: Check if we need to use it
+    /*public LiveData<List<User>> getAllUsers() {
         if (Objects.isNull(this.users)) {
             this.users = this.localModel.getUserHandler().getAllUsers();
             refreshAllUsers();
         }
         return this.users;
-    }
+    }*/
 
     public void refreshAllMovieCategories() {
         NotificationManager.instance().getEventMovieCategoryListLoadingState().setValue(LOADING);
@@ -151,7 +153,8 @@ public class Repository {
                         }));
     }
 
-    private void refreshAllUsers() {
+    // TODO: Check if we need to use it
+    /*private void refreshAllUsers() {
         NotificationManager.instance().getEventUserListLoadingState().setValue(LOADING);
         Long localLastUpdate = User.getLocalLastUpdate();
         this.firebaseModel.getUserExecutor()
@@ -170,5 +173,12 @@ public class Repository {
                                             .getEventUserListLoadingState().postValue(NOT_LOADING);
                                 }
                         ));
+    }*/
+
+    public void register(AddUserListener addUserListener, User user, String password) {
+        this.authModel.register(user.getEmail(), password, uid -> {
+            user.setUserId(uid);
+            this.firebaseModel.getUserExecutor().addUser(user, addUserListener);
+        });
     }
 }

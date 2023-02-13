@@ -2,7 +2,9 @@ package com.example.movieshare.repository.firebase.executors;
 
 import static com.example.movieshare.constants.UserConstants.*;
 
-import com.example.movieshare.listeners.movies.*;
+import android.graphics.Bitmap;
+
+import com.example.movieshare.listeners.authentication.*;
 import com.example.movieshare.repository.models.User;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,7 +28,7 @@ public class UserExecutor {
         return userExecutorInstance;
     }
 
-    public void getAllUsers(GetMovieItemListListener<User> listener) {
+    public void getAllUsers(GetAllUsersListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -42,7 +44,7 @@ public class UserExecutor {
     }
 
     public void getAllUsersSinceLastUpdate(Long localLastUpdate,
-                                           GetMovieItemListListener<User> listener) {
+                                           GetAllUsersListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .whereGreaterThanOrEqualTo(USER_LAST_UPDATE,
                         new Timestamp(localLastUpdate, 0))
@@ -59,14 +61,14 @@ public class UserExecutor {
                 });
     }
 
-    public void addUser(User user, ExecuteMovieItemListener listener) {
+    public void addUser(User user, AddUserListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .document(user.getUserId())
                 .set(user.toJson())
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 
-    public void updateUser(User user, ExecuteMovieItemListener listener) {
+    public void updateUser(User user, UpdateUserListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .document(user.getUserId())
                 .update(user.toJson())
@@ -74,8 +76,8 @@ public class UserExecutor {
     }
 
     // TODO: Need to implement after implementing working with firebase storage
-    /*public void uploadUserImage(Bitmap imageBmp, String name, UploadUserImageListener listener){
-        final StorageReference imagesRef = storage.getReference().child(IMAGE_FOLDER).child(name);
+    public void uploadUserImage(Bitmap imageBmp, String name, UploadUserImageListener listener) {
+        /*final StorageReference imagesRef = storage.getReference().child(IMAGE_FOLDER).child(name);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -85,6 +87,6 @@ public class UserExecutor {
         uploadTask.addOnFailureListener(exception -> listener.onComplete(null))
                 .addOnSuccessListener(taskSnapshot -> imagesRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     listener.onComplete(uri.toString());
-                }));
-    };*/
+                }));*/
+    }
 }
