@@ -22,6 +22,7 @@ import com.example.movieshare.databinding.FragmentUserProfileBinding;
 import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.user.UserProfileFragmentViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -36,7 +37,6 @@ public class UserProfileFragment extends MovieBaseFragment {
         this.viewBindings = FragmentUserProfileBinding.inflate(inflater, container, false);
         this.configureMenuOptions(this.viewBindings.getRoot());
         initializeUser();
-        // TODO: Add loading of user image profile
         activateButtonsListeners();
         return this.viewBindings.getRoot();
     }
@@ -61,7 +61,18 @@ public class UserProfileFragment extends MovieBaseFragment {
             this.viewBindings.userProfileFragmentFirstnameInputEt.setText(this.viewModel.getUser().getFirstName());
             this.viewBindings.userProfileFragmentLastnameInputEt.setText(this.viewModel.getUser().getLastName());
             this.viewBindings.userProfileFragmentEmailInputEt.setText(this.viewModel.getUser().getEmail());
+            loadUserProfileImage();
             setUserProfilePropertiesState();
+        }
+    }
+
+    private void loadUserProfileImage() {
+        if (Objects.nonNull(this.viewModel.getUser().getImageUrl())) {
+            Picasso.get().load(this.viewModel.getUser().getImageUrl())
+                    .placeholder(R.drawable.avatar)
+                    .into(this.viewBindings.userProfileFragmentImg);
+        } else {
+            this.viewBindings.userProfileFragmentImg.setImageResource(R.drawable.avatar);
         }
     }
 

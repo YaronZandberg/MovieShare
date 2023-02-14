@@ -49,6 +49,7 @@ public class SignUpFragment extends MovieBaseFragment {
                 result -> {
                     if (Objects.nonNull(result)) {
                         viewBindings.signUpFragmentImg.setImageBitmap(result);
+                        viewBindings.cameraButton.setVisibility(View.GONE);
                         this.viewModel.setProfilePictureSelected(true);
                     }}));
     }
@@ -75,7 +76,6 @@ public class SignUpFragment extends MovieBaseFragment {
 
     private void setListeners() {
         setCameraButtonOnClickListener();
-        setGalleryButtonOnClickListener();
         setRegisterButtonOnClickListener();
         setFirstNameEditTextOnKeyListener();
         setLastNameEditTextOnKeyListener();
@@ -85,11 +85,6 @@ public class SignUpFragment extends MovieBaseFragment {
 
     private void setCameraButtonOnClickListener() {
         this.viewBindings.cameraButton.setOnClickListener(view ->
-                this.viewModel.getCameraLauncher().launch(null));
-    }
-
-    private void setGalleryButtonOnClickListener() {
-        this.viewBindings.galleryButton.setOnClickListener(view ->
                 this.viewModel.getCameraLauncher().launch(null));
     }
 

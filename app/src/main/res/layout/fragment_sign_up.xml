@@ -32,6 +32,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_fragment_headline" />
 
+    <ImageButton
+        android:id="@+id/cameraButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_baseline_photo_camera_24"
+        app:layout_constraintStart_toStartOf="@+id/sign_up_fragment_img"
+        app:layout_constraintTop_toTopOf="@+id/sign_up_fragment_img" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/sign_up_fragment_first_name_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -122,21 +130,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_fragment_password_input_layout" />
-
-    <ImageButton
-        android:id="@+id/cameraButton"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:src="@drawable/ic_baseline_photo_camera_24"
-        app:layout_constraintBottom_toBottomOf="@+id/sign_up_fragment_img"
-        app:layout_constraintEnd_toStartOf="@+id/sign_up_fragment_img" />
-
-    <ImageButton
-        android:id="@+id/galleryButton"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:src="@drawable/ic_baseline_insert_photo_24"
-        app:layout_constraintBottom_toBottomOf="@+id/sign_up_fragment_img"
-        app:layout_constraintStart_toEndOf="@+id/sign_up_fragment_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

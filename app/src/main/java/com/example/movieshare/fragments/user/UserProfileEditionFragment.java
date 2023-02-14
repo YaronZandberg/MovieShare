@@ -1,10 +1,13 @@
 package com.example.movieshare.fragments.user;
 
+import static com.example.movieshare.constants.UserConstants.USER_IMAGE_PROFILE_EXTENSION;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,12 +17,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentUserProfileEditionBinding;
 import com.example.movieshare.fragments.dialogs.UpdateUserProfileDialogFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.InputValidator;
 import com.example.movieshare.utils.UserUtils;
 import com.example.movieshare.viewmodels.user.UserProfileEditionFragmentViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -32,6 +37,12 @@ public class UserProfileEditionFragment extends UserCommentFormFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.userId = UserProfileEditionFragmentArgs.fromBundle(getArguments()).getUserId();
+        this.viewModel.setCameraLauncher(registerForActivityResult(new ActivityResultContracts.TakePicturePreview(),
+                result -> {
+                    if (Objects.nonNull(result)) {
+                        viewBindings.userProfileEditionFragmentImg.setImageBitmap(result);
+                        this.viewModel.setProfilePictureSelected(true);
+                    }}));
     }
 
     @Override
@@ -40,7 +51,6 @@ public class UserProfileEditionFragment extends UserCommentFormFragment {
         this.viewBindings = FragmentUserProfileEditionBinding.inflate(inflater, container, false);
         this.configureMenuOptions(this.viewBindings.getRoot());
         initializeUser();
-        // TODO: Add loading of user image profile
         activateButtonsListeners();
         return this.viewBindings.getRoot();
     }
@@ -64,7 +74,18 @@ public class UserProfileEditionFragment extends UserCommentFormFragment {
         if (Objects.nonNull(this.viewModel.getUser())) {
             this.viewBindings.userProfileEditionFragmentFirstnameInputEt.setText(this.viewModel.getUser().getFirstName());
             this.viewBindings.userProfileEditionFragmentLastnameInputEt.setText(this.viewModel.getUser().getLastName());
+            loadUserProfileImage();
             setUserCommentPropertiesState();
+        }
+    }
+
+    private void loadUserProfileImage() {
+        if (Objects.nonNull(this.viewModel.getUser().getImageUrl())) {
+            Picasso.get().load(this.viewModel.getUser().getImageUrl())
+                    .placeholder(R.drawable.avatar)
+                    .into(this.viewBindings.userProfileEditionFragmentImg);
+        } else {
+            this.viewBindings.userProfileEditionFragmentImg.setImageResource(R.drawable.avatar);
         }
     }
 
@@ -92,26 +113,32 @@ public class UserProfileEditionFragment extends UserCommentFormFragment {
         this.viewBindings.userProfileEditionFragmentSaveBtn.setEnabled(false);
         this.viewModel.getUser().setFirstName(this.viewBindings.userProfileEditionFragmentFirstnameInputEt.getText().toString());
         this.viewModel.getUser().setLastName(this.viewBindings.userProfileEditionFragmentLastnameInputEt.getText().toString());
-        Bitmap profileImage = ((BitmapDrawable) this.viewBindings.userProfileEditionFragmentImg.getDrawable()).getBitmap();
-        if (Objects.nonNull(profileImage)) {
-            Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
-                    .updateUser(this.viewModel.getUser(), () -> {
-                        new UpdateUserProfileDialogFragment()
-                                .show(getActivity().getSupportFragmentManager(), "TAG");
-                        Navigation.findNavController(view).popBackStack();
-                    });
+
+        if (!this.viewModel.isProfilePictureSelected()) {
+            updateUser(view);
         } else {
-            Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
-                    .uploadUserImage(profileImage, this.viewModel.getUser().getEmail() + ".jpg", url -> {
-                        this.viewModel.getUser().setImageUrl(url);
-                        Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
-                                .updateUser(this.viewModel.getUser(), () -> {
-                                    new UpdateUserProfileDialogFragment()
-                                            .show(getActivity().getSupportFragmentManager(), "TAG");
-                                    Navigation.findNavController(view).popBackStack();
-                                });
-                    });
+            Bitmap profileImage = ((BitmapDrawable) this.viewBindings.userProfileEditionFragmentImg.getDrawable()).getBitmap();
+            uploadUserProfilePhoto(profileImage, view);
         }
+    }
+
+    private void uploadUserProfilePhoto(Bitmap profileImage, View view) {
+        Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
+                .uploadUserImage(profileImage, this.viewModel.getUser().getEmail() + USER_IMAGE_PROFILE_EXTENSION, url -> {
+                    if (Objects.nonNull(url)) {
+                        this.viewModel.getUser().setImageUrl(url);
+                    }
+                    updateUser(view);
+                });
+    }
+
+    private void updateUser(View view) {
+        Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
+                .updateUser(this.viewModel.getUser(), () -> {
+                    new UpdateUserProfileDialogFragment()
+                            .show(getActivity().getSupportFragmentManager(), "TAG");
+                    Navigation.findNavController(view).popBackStack();
+                });
     }
 
     private boolean isFormValid() {
@@ -119,9 +146,9 @@ public class UserProfileEditionFragment extends UserCommentFormFragment {
                 InputValidator.isLastNameValid(this.viewBindings.userProfileEditionFragmentLastnameInputEt.getText()));
     }
 
-    // TODO: Implement after dealing wit Firebase storage
     private void setProfileImageViewOnClickListener() {
-        //profileImageView.setOnClickListener(this::showCameraMenu);
+        this.viewBindings.userProfileEditionFragmentImgBtn.setOnClickListener(view ->
+                this.viewModel.getCameraLauncher().launch(null));
     }
 
     private void setFirstNameEditTextOnKeyListener() {
