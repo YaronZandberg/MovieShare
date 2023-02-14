@@ -24,8 +24,7 @@ import java.util.Map;
         @ForeignKey(entity = MovieCategory.class,
                 parentColumns = "categoryId",
                 childColumns = "movieCategoryId",
-                onDelete = ForeignKey.CASCADE)},
-        indices = {@Index(value = {"movieName"}, unique = true)}
+                onDelete = ForeignKey.CASCADE)}
 )
 public class Movie {
     @PrimaryKey

@@ -1,6 +1,7 @@
 package com.example.movieshare.fragments.movie;
 
 import static com.example.movieshare.constants.MovieConstants.MOVIE_API_KEY;
+import static com.example.movieshare.constants.MovieConstants.MOVIE_API_URL;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -44,8 +45,8 @@ public class MovieListFragment extends MovieBaseFragment {
     private Integer movieCategoryPosition;
     private MovieAdapter movieAdapter;
     private MovieListFragmentViewModel viewModel;
-    private Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.themoviedb.org").addConverterFactory(GsonConverterFactory.create()).build();
-    private MovieApiCaller service = retrofit.create(MovieApiCaller.class);
+    private final Retrofit retrofit = new Retrofit.Builder().baseUrl(MOVIE_API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+    private final MovieApiCaller service = retrofit.create(MovieApiCaller.class);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,8 +83,7 @@ public class MovieListFragment extends MovieBaseFragment {
 
     private void initializeMovieCategory() {
         Repository.getRepositoryInstance().refreshAllMovieCategories();
-        this.viewModel.setMovieCategory(this.viewModel.getAllMovieCategories().getValue()
-                .get(this.movieCategoryPosition));
+        this.viewModel.setMovieCategory(this.viewModel.getAllMovieCategories().getValue().get(this.movieCategoryPosition));
         Repository.getRepositoryInstance().refreshAllMovies();
     }
 
