@@ -13,7 +13,11 @@ import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +25,11 @@ public class UserExecutor {
     private static final UserExecutor userExecutorInstance = new UserExecutor();
     public static final String IMAGE_FOLDER = "users";
     private final FirebaseFirestore db;
-
-    // TODO: Add FirebaseStorage after implementing working with firebase storage
+    private final FirebaseStorage storage;
 
     private UserExecutor() {
         this.db = FirebaseFirestore.getInstance();
+        this.storage = FirebaseStorage.getInstance();
     }
 
     public static UserExecutor instance() {
@@ -94,18 +98,17 @@ public class UserExecutor {
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 
-    // TODO: Need to implement after implementing working with firebase storage
     public void uploadUserImage(Bitmap imageBmp, String name, UploadUserImageListener listener) {
-        /*final StorageReference imagesRef = storage.getReference().child(IMAGE_FOLDER).child(name);
+        final StorageReference imagesRef = this.storage.getReference().child(IMAGE_FOLDER).child(name);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] data = byteArrayOutputStream.toByteArray();
 
         UploadTask uploadTask = imagesRef.putBytes(data);
         uploadTask.addOnFailureListener(exception -> listener.onComplete(null))
-                .addOnSuccessListener(taskSnapshot -> imagesRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    listener.onComplete(uri.toString());
-                }));*/
+                .addOnSuccessListener(taskSnapshot -> imagesRef.getDownloadUrl()
+                        .addOnFailureListener(uri -> listener.onComplete(null))
+                        .addOnSuccessListener(uri -> listener.onComplete(uri.toString())));
     }
 }

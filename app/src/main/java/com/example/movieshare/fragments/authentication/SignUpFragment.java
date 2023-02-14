@@ -1,53 +1,96 @@
 package com.example.movieshare.fragments.authentication;
 
 import static com.example.movieshare.constants.AuthConstants.*;
+import static com.example.movieshare.constants.UserConstants.USER_IMAGE_PROFILE_EXTENSION;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentSignUpBinding;
+import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.models.User;
 import com.example.movieshare.utils.InputValidator;
 import com.example.movieshare.utils.UserUtils;
+import com.example.movieshare.viewmodels.authentication.SignUpFragmentViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-public class SignUpFragment extends Fragment {
+public class SignUpFragment extends MovieBaseFragment {
     private FragmentSignUpBinding viewBindings;
-    private NavController navController;
+    private SignUpFragmentViewModel viewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.viewModel.setCameraLauncher(registerForActivityResult(new ActivityResultContracts.TakePicturePreview(),
+                result -> {
+                    if (Objects.nonNull(result)) {
+                        viewBindings.signUpFragmentImg.setImageBitmap(result);
+                        this.viewModel.setProfilePictureSelected(true);
+                    }}));
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentSignUpBinding.inflate(inflater, container, false);
+        this.configureMenuOptions(this.viewBindings.getRoot());
         initializeDataMembers();
         setListeners();
         return this.viewBindings.getRoot();
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.viewModel = new ViewModelProvider(this).get(SignUpFragmentViewModel.class);
+    }
+
     private void initializeDataMembers() {
-        this.navController = NavHostFragment.findNavController(this);
+        this.viewModel.setNavController(NavHostFragment.findNavController(this));
     }
 
     private void setListeners() {
+        setCameraButtonOnClickListener();
+        setGalleryButtonOnClickListener();
         setRegisterButtonOnClickListener();
         setFirstNameEditTextOnKeyListener();
         setLastNameEditTextOnKeyListener();
         setEmailEditTextOnKeyListener();
         setPasswordEditTextOnKeyListener();
+    }
+
+    private void setCameraButtonOnClickListener() {
+        this.viewBindings.cameraButton.setOnClickListener(view ->
+                this.viewModel.getCameraLauncher().launch(null));
+    }
+
+    private void setGalleryButtonOnClickListener() {
+        this.viewBindings.galleryButton.setOnClickListener(view ->
+                this.viewModel.getCameraLauncher().launch(null));
     }
 
     private void setRegisterButtonOnClickListener() {
@@ -70,39 +113,46 @@ public class SignUpFragment extends Fragment {
                                 this.viewBindings.signUpFragmentEmailInputEt
                                         .setError(REGISTER_EMAIL_ALREADY_EXIST);
                             } else {
-                                this.register(view);
+                                this.registerUserProcess();
                             }
                         },
                         errorMessage -> Snackbar.make(view, errorMessage, Snackbar.LENGTH_SHORT).show());
     }
 
-    private void register(View view) {
+    private void registerUserProcess() {
         this.viewBindings.signUpFragmentRegisterBtn.setEnabled(false);
         User user = new User(this.viewBindings.signUpFragmentFirstNameInputEt.getText().toString(),
                 this.viewBindings.signUpFragmentLastNameInputEt.getText().toString(),
                 this.viewBindings.signUpFragmentEmailInputEt.getText().toString());
-        //Bitmap profileImage = ((BitmapDrawable) this.viewBindings.signUpFragmentImg.getDrawable()).getBitmap();
-        Bitmap profileImage = null;
-        if (Objects.isNull(profileImage)) {
-            Repository.getRepositoryInstance()
-                    .register(this::navigateToHomePageAfterRegister,
-                            user,
-                            this.viewBindings.signUpFragmentPasswordInputEt.getText().toString());
+
+        if (!this.viewModel.isProfilePictureSelected()) {
+            registerUser(user);
         } else {
-            Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
-                    .uploadUserImage(profileImage, user.getEmail() + ".jpg", url -> {
-                        user.setImageUrl(url);
-                        Repository.getRepositoryInstance()
-                                .register(this::navigateToHomePageAfterRegister,
-                                        user,
-                                        this.viewBindings.signUpFragmentPasswordInputEt.getText().toString());
-                    });
+            Bitmap profileImage = ((BitmapDrawable) this.viewBindings.signUpFragmentImg.getDrawable()).getBitmap();
+            uploadUserProfilePhoto(profileImage, user);
         }
+    }
+
+    private void uploadUserProfilePhoto(Bitmap profileImage, User user) {
+        Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
+                .uploadUserImage(profileImage, user.getEmail() + USER_IMAGE_PROFILE_EXTENSION, url -> {
+                    if (Objects.nonNull(url)) {
+                        user.setImageUrl(url);
+                    }
+                    registerUser(user);
+                });
+    }
+
+    private void registerUser(User user) {
+        Repository.getRepositoryInstance()
+                .register(this::navigateToHomePageAfterRegister,
+                        user,
+                        this.viewBindings.signUpFragmentPasswordInputEt.getText().toString());
     }
 
     private void navigateToHomePageAfterRegister() {
         NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToNavGraph();
-        navController.navigate(action);
+        this.viewModel.getNavController().navigate(action);
     }
 
     private boolean isFormValid() {
@@ -139,5 +189,27 @@ public class SignUpFragment extends Fragment {
             UserUtils.setErrorIfPasswordIsInvalid(this.viewBindings.signUpFragmentPasswordInputEt);
             return false;
         });
+    }
+
+    @Override
+    protected void configureMenuOptions(View view) {
+        FragmentActivity parentActivity = getActivity();
+        parentActivity.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.removeItem(R.id.userCommentAdditionFragment);
+                menu.removeItem(R.id.userProfileFragment);
+                menu.removeItem(R.id.logoutMenuItem);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == android.R.id.home) {
+                    Navigation.findNavController(view).popBackStack();
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 }

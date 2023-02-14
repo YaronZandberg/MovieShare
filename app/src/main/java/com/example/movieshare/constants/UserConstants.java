@@ -9,4 +9,5 @@ public class UserConstants {
     public static final String USER_IMAGE_URL = "user_image_url";
     public static final String USER_LAST_UPDATE = "user_last_update";
     public static final String USER_LOCAL_LAST_UPDATE = "user_local_last_update";
+    public static final String USER_IMAGE_PROFILE_EXTENSION = ".jpg";
 }

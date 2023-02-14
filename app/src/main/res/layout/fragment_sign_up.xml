@@ -23,13 +23,11 @@
 
     <ImageView
         android:id="@+id/sign_up_fragment_img"
-        android:layout_width="105dp"
-        android:layout_height="125dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="120dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/blank_profile_picture"
-        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_fragment_headline" />
@@ -40,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toStartOf="@+id/sign_up_fragment_last_name_input_layout"
         app:layout_constraintHorizontal_bias="0.5"
@@ -124,5 +122,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_fragment_password_input_layout" />
+
+    <ImageButton
+        android:id="@+id/cameraButton"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:src="@drawable/ic_baseline_photo_camera_24"
+        app:layout_constraintBottom_toBottomOf="@+id/sign_up_fragment_img"
+        app:layout_constraintEnd_toStartOf="@+id/sign_up_fragment_img" />
+
+    <ImageButton
+        android:id="@+id/galleryButton"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:src="@drawable/ic_baseline_insert_photo_24"
+        app:layout_constraintBottom_toBottomOf="@+id/sign_up_fragment_img"
+        app:layout_constraintStart_toEndOf="@+id/sign_up_fragment_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

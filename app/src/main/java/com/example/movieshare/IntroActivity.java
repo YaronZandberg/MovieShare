@@ -1,9 +1,12 @@
 package com.example.movieshare;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.MovieUtils;
@@ -38,5 +41,19 @@ public class IntroActivity extends AppCompatActivity {
         Intent intent = new Intent(this, activityClass);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        menu.removeItem(R.id.userCommentAdditionFragment);
+        menu.removeItem(R.id.userProfileFragment);
+        menu.removeItem(R.id.logoutMenuItem);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }

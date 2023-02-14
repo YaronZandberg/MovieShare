@@ -1,37 +1,54 @@
 package com.example.movieshare.fragments.authentication;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentSignInBinding;
+import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.UserUtils;
+import com.example.movieshare.viewmodels.authentication.SignInFragmentViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
-public class SignInFragment extends Fragment {
+public class SignInFragment extends MovieBaseFragment {
     private FragmentSignInBinding viewBindings;
-    private NavController navController;
+    private SignInFragmentViewModel viewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentSignInBinding.inflate(inflater, container, false);
+        this.configureMenuOptions(this.viewBindings.getRoot());
         initializeDataMembers();
         setListeners();
         return this.viewBindings.getRoot();
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.viewModel = new ViewModelProvider(this).get(SignInFragmentViewModel.class);
+    }
+
     private void initializeDataMembers() {
-        this.navController = NavHostFragment.findNavController(this);
+        this.viewModel.setNavController(NavHostFragment.findNavController(this));
     }
 
     private void setListeners() {
@@ -53,7 +70,7 @@ public class SignInFragment extends Fragment {
                         this.viewBindings.signInFragmentPasswordInputEt.getText().toString(),
                         () -> {
                             NavDirections action = SignInFragmentDirections.actionSignInFragmentToNavGraph();
-                            navController.navigate(action);
+                            this.viewModel.getNavController().navigate(action);
                         },
                         errorMessage -> {
                             Snackbar.make(view, errorMessage, Snackbar.LENGTH_SHORT).show();
@@ -72,7 +89,7 @@ public class SignInFragment extends Fragment {
     private void setRegisterButtonOnClickListener() {
         this.viewBindings.signInFragmentRegisterBtn.setOnClickListener(view -> {
             NavDirections action = SignInFragmentDirections.actionSignInFragmentToSignUpFragment();
-            navController.navigate(action);
+            this.viewModel.getNavController().navigate(action);
         });
     }
 
@@ -88,5 +105,27 @@ public class SignInFragment extends Fragment {
             UserUtils.setErrorIfPasswordIsInvalid(this.viewBindings.signInFragmentPasswordInputEt);
             return false;
         });
+    }
+
+    @Override
+    protected void configureMenuOptions(View view) {
+        FragmentActivity parentActivity = getActivity();
+        parentActivity.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.removeItem(R.id.userCommentAdditionFragment);
+                menu.removeItem(R.id.userProfileFragment);
+                menu.removeItem(R.id.logoutMenuItem);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == android.R.id.home) {
+                    Navigation.findNavController(view).popBackStack();
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 }
