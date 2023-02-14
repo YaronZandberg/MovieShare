@@ -7,9 +7,7 @@ import android.util.Log;
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 
-import com.example.movieshare.listeners.ExecuteMovieItemListener;
-import com.example.movieshare.listeners.GetMovieItemListListener;
-import com.example.movieshare.listeners.GetMovieItemListener;
+import com.example.movieshare.listeners.movies.*;
 import com.example.movieshare.repository.room.localdb.AppLocalDB;
 import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.Movie;
@@ -64,7 +62,7 @@ public class MovieHandler {
         try {
             this.localDB.movieDao().insertAll(movie);
         } catch (Exception e) {
-            Log.d("error", e.getMessage());
+            Log.d("TAG", e.getMessage());
         }
     }
 

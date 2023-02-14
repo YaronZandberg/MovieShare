@@ -6,9 +6,7 @@ import android.os.Looper;
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 
-import com.example.movieshare.listeners.ExecuteMovieItemListener;
-import com.example.movieshare.listeners.GetMovieItemListListener;
-import com.example.movieshare.listeners.GetMovieItemListener;
+import com.example.movieshare.listeners.movies.*;
 import com.example.movieshare.repository.room.localdb.AppLocalDB;
 import com.example.movieshare.repository.room.localdb.AppLocalDbRepository;
 import com.example.movieshare.repository.models.MovieComment;
@@ -44,7 +42,7 @@ public class MovieCommentHandler {
         });
     }
 
-    public void getAllMovieCommentsByUserId(Integer userId,
+    public void getAllMovieCommentsByUserId(String userId,
                                             GetMovieItemListListener<MovieComment> listener){
         this.executor.execute(() -> {
             List<MovieComment> movieComments =

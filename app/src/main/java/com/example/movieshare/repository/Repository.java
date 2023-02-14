@@ -2,11 +2,16 @@ package com.example.movieshare.repository;
 
 import static com.example.movieshare.enums.LoadingState.*;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
+import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 
+import com.example.movieshare.listeners.authentication.AddUserListener;
 import com.example.movieshare.notifications.NotificationManager;
+import com.example.movieshare.repository.firebase.AuthModel;
 import com.example.movieshare.repository.firebase.FirebaseModel;
 import com.example.movieshare.repository.models.*;
 import com.example.movieshare.repository.room.LocalModel;
@@ -20,10 +25,13 @@ public class Repository {
     private static final Repository repositoryInstance = new Repository();
     private final LocalModel localModel = new LocalModel();
     private final FirebaseModel firebaseModel = new FirebaseModel();
+    private final AuthModel authModel = new AuthModel();
     private final Executor executor = Executors.newSingleThreadExecutor();
+    private final Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
     private LiveData<List<MovieCategory>> movieCategories;
     private LiveData<List<Movie>> movies;
     private LiveData<List<MovieComment>> movieComments;
+    //private LiveData<List<User>> users;
 
     private Repository() {
     }
@@ -38,6 +46,18 @@ public class Repository {
 
     public FirebaseModel getFirebaseModel() {
         return this.firebaseModel;
+    }
+
+    public AuthModel getAuthModel() {
+        return this.authModel;
+    }
+
+    public Executor getExecutor() {
+        return this.executor;
+    }
+
+    public Handler getMainThreadHandler() {
+        return this.mainThreadHandler;
     }
 
     public LiveData<List<MovieCategory>> getAllMovieCategories() {
@@ -63,6 +83,15 @@ public class Repository {
         }
         return this.movieComments;
     }
+
+    // TODO: Check if we need to use it
+    /*public LiveData<List<User>> getAllUsers() {
+        if (Objects.isNull(this.users)) {
+            this.users = this.localModel.getUserHandler().getAllUsers();
+            refreshAllUsers();
+        }
+        return this.users;
+    }*/
 
     public void refreshAllMovieCategories() {
         NotificationManager.instance().getEventMovieCategoryListLoadingState().setValue(LOADING);
@@ -122,5 +151,34 @@ public class Repository {
                             NotificationManager.instance()
                                     .getEventMovieCommentListLoadingState().postValue(NOT_LOADING);
                         }));
+    }
+
+    // TODO: Check if we need to use it
+    /*private void refreshAllUsers() {
+        NotificationManager.instance().getEventUserListLoadingState().setValue(LOADING);
+        Long localLastUpdate = User.getLocalLastUpdate();
+        this.firebaseModel.getUserExecutor()
+                .getAllUsersSinceLastUpdate(localLastUpdate, users ->
+                        this.executor.execute(() -> {
+                                    Log.d("TAG", "User: firebase return : " + users.size());
+                                    Long userGlobalLastUpdate = localLastUpdate;
+                                    for (User user : users) {
+                                        this.localModel.getUserHandler().addUser(user);
+                                        if (userGlobalLastUpdate < user.getUserLastUpdate()) {
+                                            userGlobalLastUpdate = user.getUserLastUpdate();
+                                        }
+                                    }
+                                    User.setLocalLastUpdate(userGlobalLastUpdate);
+                                    NotificationManager.instance()
+                                            .getEventUserListLoadingState().postValue(NOT_LOADING);
+                                }
+                        ));
+    }*/
+
+    public void register(AddUserListener addUserListener, User user, String password) {
+        this.authModel.register(user.getEmail(), password, uid -> {
+            user.setUserId(uid);
+            this.firebaseModel.getUserExecutor().addUser(user, addUserListener);
+        });
     }
 }

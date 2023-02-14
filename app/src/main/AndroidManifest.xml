@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".context.MyApplication"
         android:allowBackup="true"
@@ -14,23 +15,36 @@
         android:theme="@style/Theme.MovieShare"
         tools:targetApi="31">
         <service
-            android:name=".MovieApi"
+            android:name=".repository.models.MovieApi"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false">
+        </service>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".IntroActivity"
             android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+        </activity>
+        <activity
+            android:name=".GuestsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -4,7 +4,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.example.movieshare.listeners.OnItemClickListener;
+import com.example.movieshare.listeners.general.OnItemClickListener;
 import com.example.movieshare.repository.models.MovieCategory;
 
 public class MovieCategoryViewHolder extends MovieItemViewHolder<MovieCategory> {

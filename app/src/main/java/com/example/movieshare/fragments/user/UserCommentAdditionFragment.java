@@ -2,30 +2,21 @@ package com.example.movieshare.fragments.user;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.example.movieshare.R;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
 import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
-import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.models.MovieComment;
+import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.user.UserCommentAdditionFragmentViewModel;
-
-import java.util.Objects;
 
 public class UserCommentAdditionFragment extends UserCommentFormFragment {
     private FragmentUserCommentAdditionBinding viewBindings;
@@ -43,7 +34,7 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
                              Bundle savedInstanceState) {
         this.viewBindings = FragmentUserCommentAdditionBinding.inflate(inflater, container, false);
         initializeMovie();
-        configureMenuOptions();
+        this.configureMenuOptions(this.viewBindings.getRoot());
         activateButtonsListeners();
         return this.viewBindings.getRoot();
     }
@@ -101,30 +92,5 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         String description = this.viewBindings
                 .userCommentAdditionFragmentMovieCommentInputEt.getText().toString();
         return new MovieComment(userId, movieId, movieName, movieRatingOfComment, description);
-    }
-
-    private void configureMenuOptions() {
-        FragmentActivity parentActivity = getActivity();
-        parentActivity.addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.removeItem(R.id.userCommentAdditionFragment);
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == android.R.id.home) {
-                    Navigation.findNavController(viewBindings.getRoot()).popBackStack();
-                    return true;
-                } else {
-                    if (Objects.nonNull(viewBindings)) {
-                        NavDirections action = UserCommentAdditionFragmentDirections.actionGlobalUserProfileFragment();
-                        Navigation.findNavController(viewBindings.getRoot()).navigate(action);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 }

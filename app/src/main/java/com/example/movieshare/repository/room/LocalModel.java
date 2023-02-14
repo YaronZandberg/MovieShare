@@ -14,4 +14,8 @@ public class LocalModel {
     public MovieCommentHandler getMovieCommentHandler() {
         return MovieCommentHandler.instance();
     }
+
+    public UserHandler getUserHandler() {
+        return UserHandler.instance();
+    }
 }
