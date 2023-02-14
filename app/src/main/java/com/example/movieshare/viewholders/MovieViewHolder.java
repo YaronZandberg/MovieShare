@@ -18,18 +18,10 @@ public class MovieViewHolder extends MovieItemViewHolder<Movie> {
 
     @Override
     public void bindMovieItem(Movie movie) {
-        loadUserProfileImage(movie);
+        Picasso.get().load(movie.getImageUrl(true))
+                .placeholder(R.drawable.movie_default_image)
+                .into(this.movieItemImg);
         this.movieItemNameTv.setText(movie.getMovieName());
         this.movieItemRatingTv.setText(movie.getMovieRating());
-    }
-
-    private void loadUserProfileImage(Movie movie) {
-        if (Objects.nonNull(movie.getImageUrl())) {
-            Picasso.get().load(movie.getImageUrl())
-                    .placeholder(R.drawable.movie_default_image)
-                    .into(this.movieItemImg);
-        } else {
-            this.movieItemImg.setImageResource(R.drawable.movie_default_image);
-        }
     }
 }
