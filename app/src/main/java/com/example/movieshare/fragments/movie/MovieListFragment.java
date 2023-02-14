@@ -1,5 +1,7 @@
 package com.example.movieshare.fragments.movie;
 
+import static com.example.movieshare.constants.MovieConstants.MOVIE_API_KEY;
+
 import android.content.Context;
 import android.os.Bundle;
 
@@ -22,12 +24,10 @@ import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.dao.MovieApiCaller;
-import com.example.movieshare.repository.firebase.executors.MovieCategoryExecutor;
 import com.example.movieshare.repository.firebase.executors.MovieExecutor;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieApi;
 import com.example.movieshare.repository.models.MovieApiList;
-import com.example.movieshare.repository.models.MovieCategory;
 
 import com.example.movieshare.viewmodels.movie.MovieListFragmentViewModel;
 
@@ -59,15 +59,13 @@ public class MovieListFragment extends MovieBaseFragment {
         initializeMovieCategory();
         this.viewBindings = FragmentMovieListBinding.inflate(inflater, container, false);
         this.viewBindings.movieListFragmentMoviesList.setHasFixedSize(true);
-        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new LinearLayoutManager(getContext()));
         this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.viewModel.getMovieList().getValue());
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeMovieCategory);
         syncMoviesApiWithRemoteDb();
         this.configureMenuOptions(this.viewBindings.getRoot());
         activateItemListListener();
-        this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> reloadMovieList());
-        this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> Repository.getRepositoryInstance().refreshAllMovies());
         NotificationManager.instance()
                 .getEventMovieListLoadingState()
                 .observe(getViewLifecycleOwner(),
@@ -109,9 +107,8 @@ public class MovieListFragment extends MovieBaseFragment {
     }
 
     public void syncMoviesApiWithRemoteDb() {
-        Log.d("test", new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName()));
         if (Objects.nonNull(this.viewModel.getMovieCategory()) && this.viewModel.getMovieCategory().getCategoryId() != "0" && new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName()) != "0") {
-            this.service.getJson("fd03ee4400dc93124b178d4ffbf867d1", new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName())).enqueue((new Callback<MovieApiList>() {
+            this.service.getJson(MOVIE_API_KEY, new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName())).enqueue((new Callback<MovieApiList>() {
                 @Override
                 public void onResponse(Call<MovieApiList> call, Response<MovieApiList> response) {
                     addMoviesToDb(response);
@@ -123,9 +120,8 @@ public class MovieListFragment extends MovieBaseFragment {
                 }
             }));
         }
-        Repository.getRepositoryInstance().refreshAllMovies();
-        reloadMovieList();
-        movieAdapter.notifyDataSetChanged();
+        this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> Repository.getRepositoryInstance().refreshAllMovies());
+        this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> reloadMovieList());
     }
 
     public void addMoviesToDb(Response<MovieApiList> response) {

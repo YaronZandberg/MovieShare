@@ -1,15 +1,5 @@
 package com.example.movieshare.constants;
-
-import android.util.Log;
-
-import com.example.movieshare.repository.models.MovieCategory;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.List;
 import java.util.Objects;
 
 public class Categories {
@@ -52,11 +42,8 @@ public class Categories {
     }
 
     public String getIdByName(String Name) {
-        Log.d("name", Name);
         for (String localId : this.Categories.keySet()) {
-            Log.d("test", this.Categories.get(localId).getAsString() + " " + Name);
             if(this.Categories.get(localId).getAsString().contentEquals(Name)) {
-                Log.d("return name", localId);
                 return localId;
             }
         }
@@ -69,7 +56,6 @@ public class Categories {
 
     public String getImageByName(String name) {
         String Id = getIdByName(name);
-        Log.d("getImageByName", this.CategoriesImages.get(Id).getAsString());
         return CategoriesImages.get(Id).getAsString();
     }
 
