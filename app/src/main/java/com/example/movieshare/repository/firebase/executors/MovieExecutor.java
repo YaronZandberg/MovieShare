@@ -95,7 +95,10 @@ public class MovieExecutor {
                     if (task.isSuccessful()) {
                         QuerySnapshot json = task.getResult();
                         List<DocumentSnapshot> jsonDocument = json.getDocuments();
-                        movie = Movie.fromJson(jsonDocument.get(0).getData());
+                        if(!jsonDocument.isEmpty()) {
+                            movie = Movie.fromJson(jsonDocument.get(0).getData());
+                            movie.setMovieId(jsonDocument.get(0).getId());
+                        }
                     }
                     listener.onComplete(movie);
                 });

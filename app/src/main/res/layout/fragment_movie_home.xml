@@ -6,33 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".fragments.movie.MovieHomeFragment">
 
-    <ImageView
-        android:id="@+id/movie_home_fragment_img"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:src="@drawable/avater2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="409dp"
-        android:layout_height="429dp"
-        android:layout_marginTop="2dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_home_fragment_img">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/movie_home_fragment_movie_categories_list"
             android:layout_width="409dp"
-            android:layout_height="429dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/movie_home_fragment_img" />
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

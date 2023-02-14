@@ -2,6 +2,7 @@ package com.example.movieshare.repository.room.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
@@ -58,7 +59,11 @@ public class MovieHandler {
     }
 
     public void addMovie(Movie movie) {
-        this.localDB.movieDao().insertAll(movie);
+        try {
+            this.localDB.movieDao().insertAll(movie);
+        } catch (Exception e) {
+            Log.d("TAG", e.getMessage());
+        }
     }
 
     public void removeMovie(Integer index, ExecuteMovieItemListener listener) {

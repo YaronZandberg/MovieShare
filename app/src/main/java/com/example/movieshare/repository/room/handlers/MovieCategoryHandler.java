@@ -2,6 +2,7 @@ package com.example.movieshare.repository.room.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
@@ -43,7 +44,11 @@ public class MovieCategoryHandler {
     }
 
     public void addMovieCategory(MovieCategory movieCategory) {
-        localDB.movieCategoryDao().insertAll(movieCategory);
+        try {
+            localDB.movieCategoryDao().insertAll(movieCategory);
+        } catch (Exception e) {
+            Log.d("TAG", e.getMessage());
+        }
     }
 
     public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
