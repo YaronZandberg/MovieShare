@@ -2,6 +2,12 @@ package com.example.movieshare.fragments.movie;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,18 +18,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentMovieProfileBinding;
 import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.movie.MovieProfileFragmentViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -82,7 +82,18 @@ public class MovieProfileFragment extends MovieBaseFragment {
             this.viewBindings.movieProfileFragmentMovieCategoryInputEt.setText(this.viewModel.getMovieCategoryName());
             this.viewBindings.movieProfileFragmentMovieDescriptionInputEt.setText(this.viewModel.getMovie().getDescription());
             this.viewBindings.movieProfileFragmentMovieRatingInputEt.setText(this.viewModel.getMovie().getMovieRating());
+            loadUserProfileImage();
             setUserCommentPropertiesState();
+        }
+    }
+
+    private void loadUserProfileImage() {
+        if (Objects.nonNull(this.viewModel.getMovie().getImageUrl())) {
+            Picasso.get().load(this.viewModel.getMovie().getImageUrl())
+                    .placeholder(R.drawable.movie_default_image)
+                    .into(this.viewBindings.movieProfileFragmentImg);
+        } else {
+            this.viewBindings.movieProfileFragmentImg.setImageResource(R.drawable.movie_default_image);
         }
     }
 
