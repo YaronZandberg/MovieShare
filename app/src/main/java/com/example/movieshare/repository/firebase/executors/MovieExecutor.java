@@ -3,17 +3,12 @@ package com.example.movieshare.repository.firebase.executors;
 import static com.example.movieshare.constants.MovieConstants.*;
 
 import android.util.Log;
-
-import com.example.movieshare.listeners.ExecuteMovieItemListener;
-import com.example.movieshare.listeners.GetMovieItemListListener;
-import com.example.movieshare.listeners.GetMovieItemListener;
+import com.example.movieshare.listeners.movies.*;
 import com.example.movieshare.repository.models.Movie;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;

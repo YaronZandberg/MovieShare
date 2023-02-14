@@ -5,34 +5,24 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.movieshare.R;
 import com.example.movieshare.adapters.CommentAdapter;
 import com.example.movieshare.databinding.FragmentUserCommentListBinding;
+import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.MovieUtils;
 import com.example.movieshare.viewmodels.user.UserCommentListFragmentViewModel;
 
-import java.util.Objects;
-
-public class UserCommentListFragment extends Fragment {
+public class UserCommentListFragment extends MovieBaseFragment {
     private FragmentUserCommentListBinding viewBindings;
-    private Integer userId;
+    private String userId;
     private CommentAdapter userCommentAdapter;
     private UserCommentListFragmentViewModel viewModel;
 
@@ -50,7 +40,7 @@ public class UserCommentListFragment extends Fragment {
         this.viewBindings.userCommentListFragmentList.setLayoutManager(new LinearLayoutManager(getContext()));
         this.userCommentAdapter = new CommentAdapter(getLayoutInflater(), this.viewModel.getUserCommentList());
         this.viewBindings.userCommentListFragmentList.setAdapter(this.userCommentAdapter);
-        configureMenuOptions();
+        this.configureMenuOptions(this.viewBindings.getRoot());
         activateItemListListener();
         return this.viewBindings.getRoot();
     }
@@ -86,30 +76,5 @@ public class UserCommentListFragment extends Fragment {
                             .actionUserCommentListFragmentToUserCommentEditionFragment(position, this.userId);
             Navigation.findNavController(viewBindings.userCommentListFragmentList).navigate(action);
         });
-    }
-
-    private void configureMenuOptions() {
-        FragmentActivity parentActivity = getActivity();
-        parentActivity.addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.removeItem(R.id.userCommentAdditionFragment);
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == android.R.id.home) {
-                    Navigation.findNavController(viewBindings.getRoot()).popBackStack();
-                    return true;
-                } else {
-                    if (Objects.nonNull(viewBindings)) {
-                        NavDirections action = UserCommentListFragmentDirections.actionGlobalUserProfileFragment();
-                        Navigation.findNavController(viewBindings.getRoot()).navigate(action);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 }

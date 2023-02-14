@@ -1,4 +1,4 @@
-package com.example.movieshare.listeners;
+package com.example.movieshare.listeners.movies;
 
 import java.util.List;
 

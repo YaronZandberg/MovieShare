@@ -1,4 +1,4 @@
-package com.example.movieshare.listeners;
+package com.example.movieshare.listeners.general;
 
 public interface OnItemClickListener {
     void onItemClick(Integer position);

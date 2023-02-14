@@ -2,30 +2,23 @@ package com.example.movieshare.fragments.movie;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.movieshare.R;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.example.movieshare.adapters.MovieAdapter;
 import com.example.movieshare.constants.Categories;
 import com.example.movieshare.databinding.FragmentMovieListBinding;
 import com.example.movieshare.enums.LoadingState;
+import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.dao.MovieApiCaller;
@@ -35,6 +28,7 @@ import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieApi;
 import com.example.movieshare.repository.models.MovieApiList;
 import com.example.movieshare.repository.models.MovieCategory;
+
 import com.example.movieshare.viewmodels.movie.MovieListFragmentViewModel;
 
 import java.util.Objects;
@@ -45,8 +39,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-public class MovieListFragment extends Fragment {
+public class MovieListFragment extends MovieBaseFragment {
     private FragmentMovieListBinding viewBindings;
     private Integer movieCategoryPosition;
     private MovieAdapter movieAdapter;
@@ -71,7 +64,7 @@ public class MovieListFragment extends Fragment {
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeMovieCategory);
         syncMoviesApiWithRemoteDb();
-        configureMenuOptions();
+        this.configureMenuOptions(this.viewBindings.getRoot());
         activateItemListListener();
         this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> reloadMovieList());
         this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> Repository.getRepositoryInstance().refreshAllMovies());
@@ -145,30 +138,5 @@ public class MovieListFragment extends Fragment {
                 }
             });
         }
-    }
-
-    private void configureMenuOptions() {
-        FragmentActivity parentActivity = getActivity();
-        parentActivity.addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.removeItem(R.id.userCommentAdditionFragment);
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == android.R.id.home) {
-                    Navigation.findNavController(viewBindings.getRoot()).popBackStack();
-                    return true;
-                } else {
-                    if (Objects.nonNull(viewBindings)) {
-                        NavDirections action = MovieListFragmentDirections.actionGlobalUserProfileFragment();
-                        Navigation.findNavController(viewBindings.getRoot()).navigate(action);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 }
