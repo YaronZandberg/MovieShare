@@ -13,5 +13,5 @@ import retrofit2.http.Query;
 public interface MovieApiCaller {
     @Headers("Content-Type: application/json")
     @GET("/3/discover/movie")
-    Call<MovieApiList> getJson(@Query ("api_key") String api_key, @Query("with_genres") int with_genres);
+    Call<MovieApiList> getJson(@Query ("api_key") String api_key, @Query("with_genres") String with_genres);
 }

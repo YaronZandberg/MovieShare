@@ -25,7 +25,7 @@ public interface MovieDao {
     @Query("SELECT * FROM Movie WHERE movieName = :name")
     Movie getMovieByName(String name);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(Movie... movies);
 
     @Delete

@@ -5,16 +5,24 @@ import android.util.Log;
 import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.movieshare.constants.Categories;
+import com.example.movieshare.listeners.GetMovieItemListener;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.dao.MovieApiCaller;
+import com.example.movieshare.repository.firebase.executors.MovieCategoryExecutor;
+import com.example.movieshare.repository.firebase.executors.MovieExecutor;
 import com.example.movieshare.repository.models.Movie;
+import com.example.movieshare.repository.models.MovieApi;
 import com.example.movieshare.repository.models.MovieApiList;
 import com.example.movieshare.repository.models.MovieCategory;
+
+import java.util.List;
+import java.util.function.Function;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,49 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.themoviedb.org").addConverterFactory(GsonConverterFactory.create()).build();
-
-        Categories cat = new Categories();
-        MovieApiCaller service = retrofit.create(MovieApiCaller.class);
-
-
-
-        service.getJson("fd03ee4400dc93124b178d4ffbf867d1", 18).enqueue((new Callback<MovieApiList>() {
-            @Override
-            public void onResponse(Call<MovieApiList> call, Response<MovieApiList> response) {
-                response.body().getResults().forEach(item -> {
-                    String categoryName = cat.getCategoryById(item.getGenre_ids().get(0)).getAsString();
-                    Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().getMovieCategoryByName(categoryName, catId -> {
-                        if (catId == null) {
-                            Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().addMovieCategory(new MovieCategory(categoryName, "0", categoryName), () -> {
-                                Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().getMovieCategoryByName(categoryName, category -> {
-                                    Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().getMovieByName(item.getOriginal_title(), movie -> {
-                                        if(movie == null && category != null) {
-                                            Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie(category.getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()),() -> {});
-                                        }
-                                    });
-                                });
-                            });
-                        } else {
-                            Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor().getMovieCategoryByName(categoryName, category -> {
-                                Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().getMovieByName(item.getOriginal_title(), movie -> {
-                                    if(movie == null && category != null) {
-                                        Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor().addMovie(new Movie(category.getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()),() -> {});
-                                    }
-                                });
-                            });
-                        }
-                    });
-                });
-            }
-
-            @Override
-            public void onFailure(Call<MovieApiList> call, Throwable t) {
-                Log.d("test", t.toString());
-            }
-        }));
         super.onCreate(savedInstanceState);
+        this.createCategories();
         setContentView(R.layout.activity_main);
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_navhost);
@@ -81,5 +48,20 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void createCategories() {
+        MovieCategoryExecutor executor = Repository.getRepositoryInstance().getFirebaseModel().getMovieCategoryExecutor();
+        Categories cat = new Categories();
+
+        for(String CatId : cat.getCategories().keySet()) {
+            String categoryName = cat.getCategoryById(CatId);
+
+            executor.getMovieCategoryByName(categoryName, movieCategory -> {
+                if(movieCategory == null) {
+                    executor.addMovieCategory(new MovieCategory(categoryName, "0", categoryName), () -> {});
+                }
+            });
+        }
     }
 }

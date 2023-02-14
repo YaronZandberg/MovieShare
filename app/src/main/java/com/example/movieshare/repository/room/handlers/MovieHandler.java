@@ -38,8 +38,7 @@ public class MovieHandler {
         return this.localDB.movieDao().getAllMovies();
     }
 
-    public void getAllMoviesByCategoryId(String categoryId,
-                                         GetMovieItemListListener<Movie> listener) {
+    public void getAllMoviesByCategoryId(String categoryId, GetMovieItemListListener<Movie> listener) {
         this.executor.execute(() -> {
             List<Movie> movies = localDB.movieDao().getAllMoviesByCategoryId(categoryId);
             mainThreadHandler.post(() -> listener.onComplete(movies));

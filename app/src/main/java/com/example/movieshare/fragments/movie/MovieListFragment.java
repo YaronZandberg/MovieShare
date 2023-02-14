@@ -23,11 +23,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.movieshare.R;
 import com.example.movieshare.adapters.MovieAdapter;
+import com.example.movieshare.constants.Categories;
 import com.example.movieshare.databinding.FragmentMovieListBinding;
 import com.example.movieshare.enums.LoadingState;
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.dao.MovieApiCaller;
+import com.example.movieshare.repository.firebase.executors.MovieCategoryExecutor;
+import com.example.movieshare.repository.firebase.executors.MovieExecutor;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieApi;
 import com.example.movieshare.repository.models.MovieApiList;
@@ -48,6 +51,8 @@ public class MovieListFragment extends Fragment {
     private Integer movieCategoryPosition;
     private MovieAdapter movieAdapter;
     private MovieListFragmentViewModel viewModel;
+    private Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.themoviedb.org").addConverterFactory(GsonConverterFactory.create()).build();
+    private MovieApiCaller service = retrofit.create(MovieApiCaller.class);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,9 +70,11 @@ public class MovieListFragment extends Fragment {
         this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.viewModel.getMovieList().getValue());
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeMovieCategory);
+        syncMoviesApiWithRemoteDb();
         configureMenuOptions();
         activateItemListListener();
         this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> reloadMovieList());
+        this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> Repository.getRepositoryInstance().refreshAllMovies());
         NotificationManager.instance()
                 .getEventMovieListLoadingState()
                 .observe(getViewLifecycleOwner(),
@@ -106,6 +113,38 @@ public class MovieListFragment extends Fragment {
                                     this.viewModel.getMovieCategory().getCategoryId());
             Navigation.findNavController(viewBindings.movieListFragmentMoviesList).navigate(action);
         });
+    }
+
+    public void syncMoviesApiWithRemoteDb() {
+        Log.d("test", new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName()));
+        if (Objects.nonNull(this.viewModel.getMovieCategory()) && this.viewModel.getMovieCategory().getCategoryId() != "0" && new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName()) != "0") {
+            this.service.getJson("fd03ee4400dc93124b178d4ffbf867d1", new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName())).enqueue((new Callback<MovieApiList>() {
+                @Override
+                public void onResponse(Call<MovieApiList> call, Response<MovieApiList> response) {
+                    addMoviesToDb(response);
+                }
+
+                @Override
+                public void onFailure(Call<MovieApiList> call, Throwable t) {
+                    Log.d("apiError", t.toString());
+                }
+            }));
+        }
+        Repository.getRepositoryInstance().refreshAllMovies();
+        reloadMovieList();
+        movieAdapter.notifyDataSetChanged();
+    }
+
+    public void addMoviesToDb(Response<MovieApiList> response) {
+        MovieExecutor executor = Repository.getRepositoryInstance().getFirebaseModel().getMovieExecutor();
+
+        for (MovieApi item : response.body().getResults()) {
+            executor.getMovieByName(item.getOriginal_title(), movies -> {
+                if(movies.isEmpty() || movies.stream().filter(movie -> movie.getMovieCategoryId().contentEquals(this.viewModel.getMovieCategory().getCategoryId())).count() == 0) {
+                    executor.addMovie(new Movie(this.viewModel.getMovieCategory().getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()), () -> {});
+                }
+            });
+        }
     }
 
     private void configureMenuOptions() {

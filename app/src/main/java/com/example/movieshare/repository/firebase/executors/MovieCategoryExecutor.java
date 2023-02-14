@@ -1,11 +1,17 @@
 package com.example.movieshare.repository.firebase.executors;
 
 import static com.example.movieshare.constants.MovieCategoryConstants.*;
+import static com.example.movieshare.constants.MovieConstants.MOVIE_COLLECTION_NAME;
+import static com.example.movieshare.constants.MovieConstants.MOVIE_NAME;
+
+import android.util.Log;
 
 import com.example.movieshare.listeners.ExecuteMovieItemListener;
 import com.example.movieshare.listeners.GetMovieItemListListener;
 import com.example.movieshare.listeners.GetMovieItemListener;
+import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieCategory;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
@@ -34,14 +40,12 @@ public class MovieCategoryExecutor {
     public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
                 .get()
-                .addOnCompleteListener(task -> {
+                .addOnSuccessListener(task -> {
                     List<MovieCategory> movieCategories = new ArrayList<>();
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            MovieCategory movieCategory = MovieCategory.fromJson(document.getData());
-                            movieCategory.setCategoryId(document.getId());
-                            movieCategories.add(movieCategory);
-                        }
+                    for (DocumentSnapshot document : task.getDocuments()) {
+                        MovieCategory movieCategory = MovieCategory.fromJson(document.getData());
+                        movieCategory.setCategoryId(document.getId());
+                        movieCategories.add(movieCategory);
                     }
                     listener.onComplete(movieCategories);
                 });
@@ -53,35 +57,27 @@ public class MovieCategoryExecutor {
                 .whereGreaterThanOrEqualTo(MOVIE_CATEGORY_LAST_UPDATE,
                         new Timestamp(localLastUpdate, 0))
                 .get()
-                .addOnCompleteListener(task -> {
+                .addOnSuccessListener(task -> {
                     List<MovieCategory> movieCategories = new ArrayList<>();
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            MovieCategory movieCategory = MovieCategory.fromJson(document.getData());
-                            movieCategory.setCategoryId(document.getId());
-                            movieCategories.add(movieCategory);
-                        }
+                    for (DocumentSnapshot document : task.getDocuments()) {
+                        MovieCategory movieCategory = MovieCategory.fromJson(document.getData());
+                        movieCategory.setCategoryId(document.getId());
+                        movieCategories.add(movieCategory);
                     }
                     listener.onComplete(movieCategories);
                 });
     }
 
     public void getMovieCategoryByName(String name, GetMovieItemListener<MovieCategory> listener) {
-        this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
-                .whereEqualTo(MOVIE_CATEGORY_NAME, name)
-                .get()
-                .addOnCompleteListener(task -> {
-                    MovieCategory movieCategory = null;
-                    if (task.isSuccessful()) {
-                        QuerySnapshot json = task.getResult();
-                        if(!json.isEmpty()) {
-                            List<DocumentSnapshot> jsonDocument = json.getDocuments();
-                            movieCategory = MovieCategory.fromJson(jsonDocument.get(0).getData());
-                            movieCategory.setCategoryId(jsonDocument.get(0).getId());
-                        }
-                    }
-                    listener.onComplete(movieCategory);
-                });
+        this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME).whereEqualTo(MOVIE_CATEGORY_NAME, name).get().addOnSuccessListener(task -> {
+            MovieCategory movieCategory = null;
+            List<DocumentSnapshot> jsonDocument = task.getDocuments();
+            if(!jsonDocument.isEmpty()) {
+                movieCategory = MovieCategory.fromJson(jsonDocument.get(0).getData());
+                movieCategory.setCategoryId(jsonDocument.get(0).getId());
+            }
+            listener.onComplete(movieCategory);
+        });
     }
 
     // TODO: I'm not sure that we need to implement this with firebase,
@@ -90,15 +86,13 @@ public class MovieCategoryExecutor {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
                 .whereEqualTo(FieldPath.documentId(), id)
                 .get()
-                .addOnCompleteListener(task -> {
+                .addOnSuccessListener(task -> {
                     MovieCategory movieCategory = null;
-                    if (task.isSuccessful()) {
-                        QuerySnapshot queryDocumentSnapshots = task.getResult();
-                        if(!queryDocumentSnapshots.getDocuments().isEmpty()) {
-                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-                            movieCategory = MovieCategory.fromJson(documentSnapshot.getData());
-                            movieCategory.setCategoryId(documentSnapshot.getId());
-                        }
+                    List<DocumentSnapshot> jsonDocument = task.getDocuments();
+                    if(!jsonDocument.isEmpty()) {
+                        DocumentSnapshot documentSnapshot = jsonDocument.get(0);
+                        movieCategory = MovieCategory.fromJson(documentSnapshot.getData());
+                        movieCategory.setCategoryId(documentSnapshot.getId());
                     }
                     listener.onComplete(movieCategory);
                 });
@@ -107,7 +101,7 @@ public class MovieCategoryExecutor {
     public void addMovieCategory(MovieCategory movieCategory, ExecuteMovieItemListener listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
                 .add(movieCategory.toJson())
-                .addOnCompleteListener(task -> listener.onComplete());
+                .addOnSuccessListener(task -> listener.onComplete());
     }
 
     // TODO: There wasn't an original ROOM implementation
