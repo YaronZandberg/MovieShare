@@ -18,11 +18,14 @@ import com.google.firebase.firestore.FieldValue;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: Add another foreign key of userId
 @Entity(foreignKeys = {
         @ForeignKey(entity = Movie.class,
                 parentColumns = "movieId",
                 childColumns = "movieId",
+                onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = User.class,
+                parentColumns = "userId",
+                childColumns = "userId",
                 onDelete = ForeignKey.CASCADE)
 })
 public class MovieComment {
@@ -30,18 +33,20 @@ public class MovieComment {
     @NonNull
     private String movieCommentId;
 
+    @ColumnInfo(index = true)
     @NonNull
-    private Integer userId;
+    private String userId;
 
     @ColumnInfo(index = true)
     @NonNull
     private String movieId;
+
     private String movieName;
     private String movieRatingOfComment;
     private String description;
     private Long movieCommentLastUpdate;
 
-    public MovieComment(@NonNull Integer userId, @NonNull String movieId,
+    public MovieComment(@NonNull String userId, @NonNull String movieId,
                         String movieName, String movieRatingOfComment, String description) {
         this.userId = userId;
         this.movieId = movieId;
@@ -51,7 +56,7 @@ public class MovieComment {
     }
 
     @Ignore
-    public MovieComment(@NonNull String movieCommentId, @NonNull Integer userId, @NonNull String movieId,
+    public MovieComment(@NonNull String movieCommentId, @NonNull String userId, @NonNull String movieId,
                         String movieName, String movieRatingOfComment, String description) {
         this.movieCommentId = movieCommentId;
         this.userId = userId;
@@ -61,18 +66,21 @@ public class MovieComment {
         this.description = description;
     }
 
-    // TODO: handle exceptions from casting or null
     public static MovieComment fromJson(Map<String, Object> json) {
-        String movieCommentId = String.valueOf(json.get(MOVIE_COMMENT_ID));
-        Integer userId = Integer.parseInt(String.valueOf(json.get(MOVIE_COMMENT_USER_ID)));
-        String movieId = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_ID));
-        String movieName = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_NAME));
-        String movieRatingOfComment = String.valueOf(json.get(MOVIE_COMMENT_RATING));
-        String description = String.valueOf(json.get(MOVIE_COMMENT_DESCRIPTION));
-        MovieComment movieComment = new MovieComment(movieCommentId, userId, movieId, movieName, movieRatingOfComment, description);
-        Timestamp lastUpdate = (Timestamp) json.get(MOVIE_COMMENT_LAST_UPDATE);
-        movieComment.setMovieCommentLastUpdate(lastUpdate.getSeconds());
-        return movieComment;
+        try {
+            String movieCommentId = String.valueOf(json.get(MOVIE_COMMENT_ID));
+            String userId = String.valueOf(json.get(MOVIE_COMMENT_USER_ID));
+            String movieId = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_ID));
+            String movieName = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_NAME));
+            String movieRatingOfComment = String.valueOf(json.get(MOVIE_COMMENT_RATING));
+            String description = String.valueOf(json.get(MOVIE_COMMENT_DESCRIPTION));
+            MovieComment movieComment = new MovieComment(movieCommentId, userId, movieId, movieName, movieRatingOfComment, description);
+            Timestamp lastUpdate = (Timestamp) json.get(MOVIE_COMMENT_LAST_UPDATE);
+            movieComment.setMovieCommentLastUpdate(lastUpdate.getSeconds());
+            return movieComment;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Map<String, Object> toJson() {
@@ -107,11 +115,11 @@ public class MovieComment {
     }
 
     @NonNull
-    public Integer getUserId() {
+    public String getUserId() {
         return this.userId;
     }
 
-    public void setUserId(@NonNull Integer userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
 

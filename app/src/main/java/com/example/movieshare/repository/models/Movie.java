@@ -60,18 +60,22 @@ public class Movie {
         this.imageUrl = imageUrl;
     }
 
-    // TODO: handle exceptions from casting or null
     public static Movie fromJson(Map<String, Object> json) {
-        String movieId = String.valueOf(json.get(MOVIE_ID));
-        String movieCategoryId = String.valueOf(json.get(MOVIE_CATEGORY_ID));
-        String movieName = String.valueOf(json.get(MOVIE_NAME));
-        String movieRating = String.valueOf(json.get(MOVIE_RATING));
-        String description = String.valueOf(json.get(MOVIE_DESCRIPTION));
-        String imageUrl = String.valueOf(json.get(MOVIE_IMAGE_URL));
-        Movie movie = new Movie(movieId, movieCategoryId, movieName, movieRating, description, imageUrl);
-        Timestamp lastUpdate = (Timestamp) json.get(MOVIE_LAST_UPDATE);
-        movie.setMovieLastUpdate(lastUpdate.getSeconds());
-        return movie;
+        try {
+            String movieId = String.valueOf(json.get(MOVIE_ID));
+            String movieCategoryId = String.valueOf(json.get(MOVIE_CATEGORY_ID));
+            String movieName = String.valueOf(json.get(MOVIE_NAME));
+            String movieRating = String.valueOf(json.get(MOVIE_RATING));
+            String description = String.valueOf(json.get(MOVIE_DESCRIPTION));
+            String imageUrl = String.valueOf(json.get(MOVIE_IMAGE_URL));
+            Movie movie =
+                    new Movie(movieId, movieCategoryId, movieName, movieRating, description, imageUrl);
+            Timestamp lastUpdate = (Timestamp) json.get(MOVIE_LAST_UPDATE);
+            movie.setMovieLastUpdate(lastUpdate.getSeconds());
+            return movie;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Map<String, Object> toJson() {

@@ -36,7 +36,7 @@ public class UserExecutor {
         return userExecutorInstance;
     }
 
-    public void getAllUsers(GetAllUsersListener listener) {
+    /*public void getAllUsers(GetAllUsersListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -49,7 +49,7 @@ public class UserExecutor {
                     }
                     listener.onComplete(users);
                 });
-    }
+    }*/
 
     public void getAllUsersSinceLastUpdate(Long localLastUpdate,
                                            GetAllUsersListener listener) {
@@ -69,6 +69,7 @@ public class UserExecutor {
                 });
     }
 
+    // TODO: Exchange the usage of this method in the same method at UserHandler
     public void getUserById(String id, GetMovieItemListener<User> listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .whereEqualTo(FieldPath.documentId(), id)

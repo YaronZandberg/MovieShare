@@ -44,12 +44,12 @@ public class MovieHandler {
         });
     }
 
-    public void getMovieById(Integer id, GetMovieItemListener<Movie> listener) {
+    /*public void getMovieById(Integer id, GetMovieItemListener<Movie> listener) {
         this.executor.execute(() -> {
             Movie movie = localDB.movieDao().getMovieById(id);
             mainThreadHandler.post(() -> listener.onComplete(movie));
         });
-    }
+    }*/
 
     public void getMovieByName(String name, GetMovieItemListener<Movie> listener) {
         this.executor.execute(() -> {
@@ -66,7 +66,7 @@ public class MovieHandler {
         }
     }
 
-    public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
+    /*public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
             Movie deletedMovie = localDB.movieDao().getAllMovies().getValue().get(index);
             localDB.movieDao().delete(deletedMovie);
@@ -81,5 +81,5 @@ public class MovieHandler {
             localDB.movieDao().insertAll(movie);
             mainThreadHandler.post(listener::onComplete);
         });
-    }
+    }*/
 }

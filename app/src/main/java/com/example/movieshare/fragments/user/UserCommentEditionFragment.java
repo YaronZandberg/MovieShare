@@ -99,12 +99,8 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentEditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
-                /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
-                        .removeMovieComment(this.viewModel.getMovieCommentPositionInTotalList(), () -> {
-                            new DeleteUserMovieCommentDialogFragment()
-                                    .show(getActivity().getSupportFragmentManager(), "TAG");
-                            Navigation.findNavController(view).popBackStack();
-                        }));*/
+                // TODO: Add isDeleted DM to MovieComment and display only comments
+                //  that their isDeleted is false
                 Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
                         .removeMovieComment(this.viewModel.getMovieComment().getMovieCommentId(), () -> {
                             new DeleteUserMovieCommentDialogFragment()
@@ -113,13 +109,6 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                         }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             updateUserComment();
-            /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
-                    .updateMovieComment(this.viewModel.getMovieCommentPositionInTotalList(),
-                            this.viewModel.getMovieComment(), () -> {
-                                new UpdateUserMovieCommentDialogFragment()
-                                        .show(getActivity().getSupportFragmentManager(), "TAG");
-                                Navigation.findNavController(view).popBackStack();
-                            });*/
             Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
                     .updateMovieComment(this.viewModel.getMovieComment().getMovieCommentId(),
                             this.viewModel.getMovieComment(), () -> {

@@ -59,13 +59,13 @@ public class MovieCommentExecutor {
     }
 
     // TODO: There wasn't an original ROOM implementation
-    public void getMovieCommentById(Integer id, GetMovieItemListener<MovieComment> listener) {
+    /*public void getMovieCommentById(Integer id, GetMovieItemListener<MovieComment> listener) {
 
-    }
+    }*/
 
     // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
-    public void getAllMovieCommentsByUserId(Integer userId,
+    /*public void getAllMovieCommentsByUserId(Integer userId,
                                             GetMovieItemListListener<MovieComment> listener) {
         this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_COMMENT_USER_ID, userId)
@@ -80,11 +80,11 @@ public class MovieCommentExecutor {
                     }
                     listener.onComplete(movieComments);
                 });
-    }
+    }*/
 
     // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
-    public void getAllMovieCommentsByMovieId(String movieId,
+    /*public void getAllMovieCommentsByMovieId(String movieId,
                                              GetMovieItemListListener<MovieComment> listener) {
         this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_COMMENT_MOVIE_ID, movieId)
@@ -99,7 +99,7 @@ public class MovieCommentExecutor {
                     }
                     listener.onComplete(movieComments);
                 });
-    }
+    }*/
 
     public void addMovieComment(MovieComment movieComment, ExecuteMovieItemListener listener) {
         this.db.collection(MOVIE_COMMENT_COLLECTION_NAME)

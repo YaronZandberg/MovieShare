@@ -6,7 +6,6 @@ import com.example.movieshare.listeners.movies.*;
 import com.example.movieshare.repository.models.MovieCategory;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,7 +28,7 @@ public class MovieCategoryExecutor {
     // TODO: Need to call this function at first app loading and save results to ROOM.
     //  In addition, call this method after change from NotificationCenter of addMovieCategory
     //  in order to load delta again and update ROOM.
-    public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {
+    /*public void getAllMovieCategories(GetMovieItemListListener<MovieCategory> listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -43,7 +42,7 @@ public class MovieCategoryExecutor {
                     }
                     listener.onComplete(movieCategories);
                 });
-    }
+    }*/
 
     public void getAllMovieCategoriesSinceLastUpdate(Long localLastUpdate,
                                                      GetMovieItemListListener<MovieCategory> listener) {
@@ -84,7 +83,7 @@ public class MovieCategoryExecutor {
 
     // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
-    public void getMovieCategoryById(String id, GetMovieItemListener<MovieCategory> listener) {
+    /*public void getMovieCategoryById(String id, GetMovieItemListener<MovieCategory> listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
                 .whereEqualTo(FieldPath.documentId(), id)
                 .get()
@@ -100,7 +99,7 @@ public class MovieCategoryExecutor {
                     }
                     listener.onComplete(movieCategory);
                 });
-    }
+    }*/
 
     public void addMovieCategory(MovieCategory movieCategory, ExecuteMovieItemListener listener) {
         this.db.collection(MOVIE_CATEGORY_COLLECTION_NAME)
@@ -109,13 +108,13 @@ public class MovieCategoryExecutor {
     }
 
     // TODO: There wasn't an original ROOM implementation
-    public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
+    /*public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
 
-    }
+    }*/
 
     // TODO: There wasn't an original ROOM implementation
-    public void updateMovieCategory(Integer index, MovieCategory movieCategory,
+    /*public void updateMovieCategory(Integer index, MovieCategory movieCategory,
                                     ExecuteMovieItemListener listener) {
 
-    }
+    }*/
 }
