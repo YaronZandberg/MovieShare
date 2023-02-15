@@ -20,7 +20,9 @@ import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.movie.MovieHomeFragmentViewModel;
 
+
 public class MovieHomeFragment extends MovieBaseFragment {
+
     private FragmentMovieHomeBinding viewBindings;
     private MovieCategoryAdapter movieCategoryAdapter;
     private MovieHomeFragmentViewModel viewModel;

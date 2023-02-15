@@ -11,4 +11,6 @@ public class MovieConstants {
     public static final String MOVIE_IMAGE_URL = "movie_image_url";
     public static final String MOVIE_LAST_UPDATE = "movie_last_update";
     public static final String MOVIE_LOCAL_LAST_UPDATE = "movie_local_last_update";
+    public static final String MOVIE_API_KEY = "fd03ee4400dc93124b178d4ffbf867d1";
+    public static final String MOVIE_API_URL = "https://api.themoviedb.org";
 }

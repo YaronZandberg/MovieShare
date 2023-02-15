@@ -3,6 +3,7 @@ package com.example.movieshare.repository.models;
 import static com.example.movieshare.constants.MovieConstants.*;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -23,8 +24,7 @@ import java.util.Map;
         @ForeignKey(entity = MovieCategory.class,
                 parentColumns = "categoryId",
                 childColumns = "movieCategoryId",
-                onDelete = ForeignKey.CASCADE)},
-        indices = {@Index(value = {"movieName"}, unique = true)}
+                onDelete = ForeignKey.CASCADE)}
 )
 public class Movie {
     @PrimaryKey
@@ -151,7 +151,12 @@ public class Movie {
     }
 
     public String getImageUrl() {
-        return (MOVIE_IMAGE_BASE_URL.concat(this.imageUrl));
+        return getImageUrl(false);
+    }
+
+    public String getImageUrl(Boolean fullPath) {
+        if(fullPath) { return MOVIE_IMAGE_BASE_URL + this.imageUrl; }
+        else { return this.imageUrl; }
     }
 
     public void setImageUrl(String imageUrl) {

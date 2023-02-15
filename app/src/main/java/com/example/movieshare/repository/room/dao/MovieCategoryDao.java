@@ -19,7 +19,7 @@ public interface MovieCategoryDao {
     @Query("SELECT * FROM MovieCategory WHERE categoryId = :id")
     MovieCategory getMovieCategoryById(String id);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(MovieCategory... movieCategories);
 
     @Delete

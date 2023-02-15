@@ -89,7 +89,7 @@ public class MovieProfileFragment extends MovieBaseFragment {
 
     private void loadUserProfileImage() {
         if (Objects.nonNull(this.viewModel.getMovie().getImageUrl())) {
-            Picasso.get().load(this.viewModel.getMovie().getImageUrl())
+            Picasso.get().load(this.viewModel.getMovie().getImageUrl(true))
                     .placeholder(R.drawable.movie_default_image)
                     .into(this.viewBindings.movieProfileFragmentImg);
         } else {
