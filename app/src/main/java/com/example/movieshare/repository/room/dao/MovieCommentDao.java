@@ -25,7 +25,7 @@ public interface MovieCommentDao {
     @Query("SELECT * FROM MovieComment WHERE userId = :userId")
     List<MovieComment> getAllMovieCommentsByUserId(String userId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(MovieComment... movieComments);
 
     @Delete

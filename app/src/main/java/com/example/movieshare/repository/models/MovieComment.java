@@ -22,10 +22,6 @@ import java.util.Map;
         @ForeignKey(entity = Movie.class,
                 parentColumns = "movieId",
                 childColumns = "movieId",
-                onDelete = ForeignKey.CASCADE),
-        @ForeignKey(entity = User.class,
-                parentColumns = "userId",
-                childColumns = "userId",
                 onDelete = ForeignKey.CASCADE)
 })
 public class MovieComment {
@@ -33,7 +29,6 @@ public class MovieComment {
     @NonNull
     private String movieCommentId;
 
-    @ColumnInfo(index = true)
     @NonNull
     private String userId;
 

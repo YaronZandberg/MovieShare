@@ -2,6 +2,7 @@ package com.example.movieshare.repository.room.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
@@ -61,7 +62,11 @@ public class MovieCommentHandler {
     }
 
     public void addMovieComment(MovieComment movieComment) {
-        this.localDB.movieCommentDao().insertAll(movieComment);
+        try {
+            this.localDB.movieCommentDao().insertAll(movieComment);
+        } catch (Exception e) {
+            Log.d("TAG", e.getMessage());
+        }
     }
 
     /*public void removeMovieComment(Integer index, ExecuteMovieItemListener listener) {
