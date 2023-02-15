@@ -8,9 +8,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,7 +61,7 @@ public class MovieListFragment extends MovieBaseFragment {
         initializeMovieCategory();
         this.viewBindings = FragmentMovieListBinding.inflate(inflater, container, false);
         this.viewBindings.movieListFragmentMoviesList.setHasFixedSize(true);
-        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new LinearLayoutManager(getContext()));
+        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new GridLayoutManager(getContext(), 3));
         this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.viewModel.getMovieList().getValue());
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeMovieCategory);
@@ -83,7 +84,10 @@ public class MovieListFragment extends MovieBaseFragment {
 
     private void initializeMovieCategory() {
         Repository.getRepositoryInstance().refreshAllMovieCategories();
-        this.viewModel.setMovieCategory(this.viewModel.getAllMovieCategories().getValue().get(this.movieCategoryPosition));
+        this.viewModel.setMovieCategory(this.viewModel.getAllMovieCategories().getValue()
+                .get(this.movieCategoryPosition));
+        ((AppCompatActivity) getActivity()).getSupportActionBar()
+                .setTitle(this.viewModel.getMovieCategory().getCategoryName());
         Repository.getRepositoryInstance().refreshAllMovies();
     }
 
@@ -107,21 +111,23 @@ public class MovieListFragment extends MovieBaseFragment {
     }
 
     public void syncMoviesApiWithRemoteDb() {
-        if (Objects.nonNull(this.viewModel.getMovieCategory()) && this.viewModel.getMovieCategory().getCategoryId() != "0" && new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName()) != "0") {
+        if (Objects.nonNull(this.viewModel.getMovieCategory()) && !this.viewModel.getMovieCategory().getCategoryId().equals("0") && !new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName()).equals("0")) {
             this.service.getJson(MOVIE_API_KEY, new Categories().getIdByName(this.viewModel.getMovieCategory().getCategoryName())).enqueue((new Callback<MovieApiList>() {
                 @Override
-                public void onResponse(Call<MovieApiList> call, Response<MovieApiList> response) {
+                public void onResponse(@NonNull Call<MovieApiList> call, @NonNull Response<MovieApiList> response) {
                     addMoviesToDb(response);
                 }
 
                 @Override
-                public void onFailure(Call<MovieApiList> call, Throwable t) {
-                    Log.d("apiError", t.toString());
+                public void onFailure(@NonNull Call<MovieApiList> call, @NonNull Throwable throwable) {
+                    Log.d("apiError", throwable.toString());
                 }
             }));
         }
-        this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> Repository.getRepositoryInstance().refreshAllMovies());
-        this.viewModel.getMovieList().observe(getViewLifecycleOwner(), movies -> reloadMovieList());
+        this.viewModel.getMovieList().observe(getViewLifecycleOwner(),
+                movies -> Repository.getRepositoryInstance().refreshAllMovies());
+        this.viewModel.getMovieList().observe(getViewLifecycleOwner(),
+                movies -> reloadMovieList());
     }
 
     public void addMoviesToDb(Response<MovieApiList> response) {

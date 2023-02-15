@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
@@ -22,6 +23,7 @@ import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentMovieProfileBinding;
 import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.utils.RoundedTransformation;
 import com.example.movieshare.viewmodels.movie.MovieProfileFragmentViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -43,8 +45,8 @@ public class MovieProfileFragment extends MovieBaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.viewBindings = FragmentMovieProfileBinding.inflate(inflater, container, false);
         initializeMovie();
+        this.viewBindings = FragmentMovieProfileBinding.inflate(inflater, container, false);
         this.configureMenuOptions(this.viewBindings.getRoot());
         activateButtonsListeners();
         return this.viewBindings.getRoot();
@@ -61,6 +63,8 @@ public class MovieProfileFragment extends MovieBaseFragment {
                 .getAllMoviesByCategoryId(this.movieCategoryId, movieList -> {
                     this.viewModel.setMovieList(movieList);
                     this.viewModel.setMovie(this.viewModel.getMovieList().get(this.moviePosition));
+                    ((AppCompatActivity) getActivity()).getSupportActionBar()
+                            .setTitle(this.viewModel.getMovie().getMovieName());
                     getMovieCategoryName();
                 });
     }
@@ -90,6 +94,7 @@ public class MovieProfileFragment extends MovieBaseFragment {
     private void loadMovieProfileImage() {
         if (Objects.nonNull(this.viewModel.getMovie().getImageUrl())) {
             Picasso.get().load(this.viewModel.getMovie().getImageUrl(true))
+                    .transform(new RoundedTransformation(30, 0))
                     .placeholder(R.drawable.movie_default_image)
                     .into(this.viewBindings.movieProfileFragmentImg);
         } else {
