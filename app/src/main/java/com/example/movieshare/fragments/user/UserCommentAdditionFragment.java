@@ -16,6 +16,7 @@ import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
 import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.utils.UserUtils;
 import com.example.movieshare.viewmodels.user.UserCommentAdditionFragmentViewModel;
 
 public class UserCommentAdditionFragment extends UserCommentFormFragment {
@@ -71,15 +72,29 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         this.viewBindings.userCommentAdditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
-            MovieComment movieComment = buildNewMovieComment();
-            Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
-                    .addMovieComment(movieComment, () -> {
-                        new AddUserMovieCommentDialogFragment()
-                                .show(getActivity().getSupportFragmentManager(), "TAG");
-                        Repository.getRepositoryInstance().refreshAllMovieComments();
-                        Navigation.findNavController(view).popBackStack();
-                    });
+            if(isFormValid()) {
+                saveComment(view);
+            }
         });
+    }
+
+    private Boolean isFormValid() {
+        if(!UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt, 5) ||
+            !UserUtils.setErrorIfEmpty(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt)) {
+            return false;
+        }
+        return true;
+    }
+
+    private void saveComment(View view) {
+        MovieComment movieComment = buildNewMovieComment();
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
+                .addMovieComment(movieComment, () -> {
+                    new AddUserMovieCommentDialogFragment()
+                            .show(getActivity().getSupportFragmentManager(), "TAG");
+                    Repository.getRepositoryInstance().refreshAllMovieComments();
+                    Navigation.findNavController(view).popBackStack();
+                });
     }
 
     private MovieComment buildNewMovieComment() {

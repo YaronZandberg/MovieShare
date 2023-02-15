@@ -13,9 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
+import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.DeleteUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFragment;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.repository.models.MovieComment;
+import com.example.movieshare.utils.UserUtils;
 import com.example.movieshare.viewmodels.user.UserCommentEditionFragmentViewModel;
 
 import java.util.Objects;
@@ -108,15 +111,29 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                             Navigation.findNavController(view).popBackStack();
                         }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
-            updateUserComment();
-            Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
-                    .updateMovieComment(this.viewModel.getMovieComment().getMovieCommentId(),
-                            this.viewModel.getMovieComment(), () -> {
-                                new UpdateUserMovieCommentDialogFragment()
-                                        .show(getActivity().getSupportFragmentManager(), "TAG");
-                                Navigation.findNavController(view).popBackStack();
-                            });
+                if(isFormValid()) {
+                    saveComment(view);
+                }
         });
+    }
+
+    private Boolean isFormValid() {
+        if(!UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentEditionFragmentMovieRatingInputEt, 5) ||
+                !UserUtils.setErrorIfEmpty(this.viewBindings.userCommentEditionFragmentMovieCommentInputEt)) {
+            return false;
+        }
+        return true;
+    }
+
+    private void saveComment(View view) {
+        updateUserComment();
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
+                .updateMovieComment(this.viewModel.getMovieComment().getMovieCommentId(),
+                        this.viewModel.getMovieComment(), () -> {
+                            new UpdateUserMovieCommentDialogFragment()
+                                    .show(getActivity().getSupportFragmentManager(), "TAG");
+                            Navigation.findNavController(view).popBackStack();
+                        });
     }
 
     private void updateUserComment() {

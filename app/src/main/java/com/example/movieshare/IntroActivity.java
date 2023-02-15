@@ -56,8 +56,7 @@ public class IntroActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-                startActivity(intent);
+                isLogin();
                 finish();
             }
         }, SPLASH_TIME_OUT);
@@ -73,6 +72,7 @@ public class IntroActivity extends AppCompatActivity {
 
     private void startActivityFromIntent(Class<? extends AppCompatActivity> activityClass) {
         Intent intent = new Intent(this, activityClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
@@ -89,5 +89,15 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    private void isLogin() {
+        Repository.getRepositoryInstance().getExecutor().execute(() -> {
+            if (Repository.getRepositoryInstance().getAuthModel().isSignedIn()) {
+                Repository.getRepositoryInstance().getMainThreadHandler().post((this::startUsersActivity));
+            } else {
+                Repository.getRepositoryInstance().getMainThreadHandler().post((this::startGuestsActivity));
+            }
+        });
     }
 }

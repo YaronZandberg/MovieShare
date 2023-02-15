@@ -41,6 +41,8 @@
             android:id="@+id/user_comment_addition_fragment_movie_rating_input_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:maxLength="1"
             android:hint="Movie rating" />
     </com.google.android.material.textfield.TextInputLayout>
 
