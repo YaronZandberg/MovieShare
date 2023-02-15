@@ -50,24 +50,4 @@ public class MovieCategoryHandler {
             Log.d("TAG", e.getMessage());
         }
     }
-
-    /*public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
-            MovieCategory deletedMovieCategory =
-                    localDB.movieCategoryDao().getAllMovieCategories().getValue().get(index);
-            localDB.movieCategoryDao().delete(deletedMovieCategory);
-            mainThreadHandler.post(listener::onComplete);
-        });
-    }
-
-    public void updateMovieCategory(Integer index, MovieCategory movieCategory,
-                                    ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
-            MovieCategory deletedMovieCategory =
-                    localDB.movieCategoryDao().getAllMovieCategories().getValue().get(index);
-            localDB.movieCategoryDao().delete(deletedMovieCategory);
-            localDB.movieCategoryDao().insertAll(movieCategory);
-            mainThreadHandler.post(listener::onComplete);
-        });
-    }*/
 }

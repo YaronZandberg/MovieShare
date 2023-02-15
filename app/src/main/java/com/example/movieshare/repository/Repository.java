@@ -18,7 +18,6 @@ import com.example.movieshare.repository.room.LocalModel;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -32,7 +31,6 @@ public class Repository {
     private LiveData<List<MovieCategory>> movieCategories;
     private LiveData<List<Movie>> movies;
     private LiveData<List<MovieComment>> movieComments;
-    //private LiveData<List<User>> users;
 
     private Repository() {
     }
@@ -84,15 +82,6 @@ public class Repository {
         }
         return this.movieComments;
     }
-
-    // TODO: Check if we need to use it
-    /*public LiveData<List<User>> getAllUsers() {
-        if (Objects.isNull(this.users)) {
-            this.users = this.localModel.getUserHandler().getAllUsers();
-            refreshAllUsers();
-        }
-        return this.users;
-    }*/
 
     public void refreshAllMovieCategories() {
         NotificationManager.instance().getEventMovieCategoryListLoadingState().setValue(LOADING);
@@ -153,28 +142,6 @@ public class Repository {
                                     .getEventMovieCommentListLoadingState().postValue(NOT_LOADING);
                         }));
     }
-
-    // TODO: Check if we need to use it
-    /*private void refreshAllUsers() {
-        NotificationManager.instance().getEventUserListLoadingState().setValue(LOADING);
-        Long localLastUpdate = User.getLocalLastUpdate();
-        this.firebaseModel.getUserExecutor()
-                .getAllUsersSinceLastUpdate(localLastUpdate, users ->
-                        this.executor.execute(() -> {
-                                    Log.d("TAG", "User: firebase return : " + users.size());
-                                    Long userGlobalLastUpdate = localLastUpdate;
-                                    for (User user : users) {
-                                        this.localModel.getUserHandler().addUser(user);
-                                        if (userGlobalLastUpdate < user.getUserLastUpdate()) {
-                                            userGlobalLastUpdate = user.getUserLastUpdate();
-                                        }
-                                    }
-                                    User.setLocalLastUpdate(userGlobalLastUpdate);
-                                    NotificationManager.instance()
-                                            .getEventUserListLoadingState().postValue(NOT_LOADING);
-                                }
-                        ));
-    }*/
 
     public void register(AddUserListener addUserListener, User user, String password) {
         this.authModel.register(user.getEmail(), password, uid -> {

@@ -32,40 +32,6 @@ public class UserExecutor {
         return userExecutorInstance;
     }
 
-    /*public void getAllUsers(GetAllUsersListener listener) {
-        this.db.collection(USER_COLLECTION_NAME)
-                .get()
-                .addOnCompleteListener(task -> {
-                    List<User> users = new ArrayList<>();
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            User user = User.fromJson(document.getData());
-                            users.add(user);
-                        }
-                    }
-                    listener.onComplete(users);
-                });
-    }*/
-
-    /*public void getAllUsersSinceLastUpdate(Long localLastUpdate,
-                                           GetAllUsersListener listener) {
-        this.db.collection(USER_COLLECTION_NAME)
-                .whereGreaterThanOrEqualTo(USER_LAST_UPDATE,
-                        new Timestamp(localLastUpdate, 0))
-                .get()
-                .addOnCompleteListener(task -> {
-                    List<User> users = new ArrayList<>();
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            User user = User.fromJson(document.getData());
-                            users.add(user);
-                        }
-                    }
-                    listener.onComplete(users);
-                });
-    }*/
-
-    // TODO: Exchange the usage of this method in the same method at UserHandler
     public void getUserById(String id, GetMovieItemListener<User> listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .whereEqualTo(FieldPath.documentId(), id)

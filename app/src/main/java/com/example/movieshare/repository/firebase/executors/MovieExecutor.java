@@ -25,20 +25,6 @@ public class MovieExecutor {
         return movieExecutorInstance;
     }
 
-    /*public void getAllMovies(GetMovieItemListListener<Movie> listener) {
-        this.db.collection(MOVIE_COLLECTION_NAME)
-                .get()
-                .addOnSuccessListener(task -> {
-                    List<Movie> movies = new ArrayList<>();
-                    for (DocumentSnapshot document : task.getDocuments()) {
-                        Movie movie = Movie.fromJson(document.getData());
-                        movie.setMovieId(document.getId());
-                        movies.add(movie);
-                    }
-                    listener.onComplete(movies);
-                });
-    }*/
-
     public void getAllMoviesSinceLastUpdate(Long localLastUpdate,
                                             GetMovieItemListListener<Movie> listener) {
         this.db.collection(MOVIE_COLLECTION_NAME)
@@ -53,33 +39,8 @@ public class MovieExecutor {
                         movies.add(movie);
                     }
                     listener.onComplete(movies);
-                }).addOnFailureListener(task -> {
-                    Log.d("Error", task.getMessage());
-                });
+                }).addOnFailureListener(task -> Log.d("Error", task.getMessage()));
     }
-
-    // TODO: I'm not sure that we need to implement this with firebase,
-    //  because this function will be called in front of ROOM.
-    /*public void getAllMoviesByCategoryId(String categoryId,
-                                         GetMovieItemListListener<Movie> listener) {
-        this.db.collection(MOVIE_COLLECTION_NAME)
-                .whereEqualTo(MOVIE_CATEGORY_ID, categoryId)
-                .get()
-                .addOnSuccessListener(task -> {
-                    List<Movie> movies = new ArrayList<>();
-                    for (DocumentSnapshot document : task.getDocuments()) {
-                        Movie movie = Movie.fromJson(document.getData());
-                        movie.setMovieId(document.getId());
-                        movies.add(movie);
-                    }
-                    listener.onComplete(movies);
-                });
-    }*/
-
-    // TODO: There wasn't an original ROOM implementation
-    /*public void getMovieById(Integer id, GetMovieItemListener<Movie> listener) {
-
-    }*/
 
     // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
@@ -100,14 +61,4 @@ public class MovieExecutor {
                 .add(movie.toJson())
                 .addOnSuccessListener(task -> listener.onComplete());
     }
-
-    // TODO: There wasn't an original ROOM implementation
-    /*public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
-
-    }*/
-
-    // TODO: There wasn't an original ROOM implementation
-    /*public void updateMovie(Integer index, Movie movie, ExecuteMovieItemListener listener) {
-
-    }*/
 }

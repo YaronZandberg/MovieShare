@@ -36,13 +36,6 @@ public class MovieCommentHandler {
         return this.localDB.movieCommentDao().getAllMovieComments();
     }
 
-    /*public void getMovieCommentById(Integer id, GetMovieItemListener<MovieComment> listener) {
-        this.executor.execute(() -> {
-            MovieComment movieComment = localDB.movieCommentDao().getMovieCommentById(id);
-            mainThreadHandler.post(() -> listener.onComplete(movieComment));
-        });
-    }*/
-
     public void getAllMovieCommentsByUserId(String userId,
                                             GetMovieItemListListener<MovieComment> listener){
         this.executor.execute(() -> {
@@ -68,24 +61,4 @@ public class MovieCommentHandler {
             Log.d("TAG", e.getMessage());
         }
     }
-
-    /*public void removeMovieComment(Integer index, ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
-            MovieComment deletedMovieComment =
-                    localDB.movieCommentDao().getAllMovieComments().getValue().get(index);
-            localDB.movieCommentDao().delete(deletedMovieComment);
-            mainThreadHandler.post(listener::onComplete);
-        });
-    }
-
-    public void updateMovieComment(Integer index, MovieComment movieComment,
-                                   ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
-            MovieComment deletedMovieComment =
-                    localDB.movieCommentDao().getAllMovieComments().getValue().get(index);
-            localDB.movieCommentDao().delete(deletedMovieComment);
-            localDB.movieCommentDao().insertAll(movieComment);
-            mainThreadHandler.post(listener::onComplete);
-        });
-    }*/
 }

@@ -43,13 +43,6 @@ public class MovieHandler {
         });
     }
 
-    /*public void getMovieById(Integer id, GetMovieItemListener<Movie> listener) {
-        this.executor.execute(() -> {
-            Movie movie = localDB.movieDao().getMovieById(id);
-            mainThreadHandler.post(() -> listener.onComplete(movie));
-        });
-    }*/
-
     public void getMovieByName(String name, GetMovieItemListener<Movie> listener) {
         this.executor.execute(() -> {
             Movie movie = localDB.movieDao().getMovieByName(name);
@@ -64,21 +57,4 @@ public class MovieHandler {
             Log.d("TAG", e.getMessage());
         }
     }
-
-    /*public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
-            Movie deletedMovie = localDB.movieDao().getAllMovies().getValue().get(index);
-            localDB.movieDao().delete(deletedMovie);
-            mainThreadHandler.post(listener::onComplete);
-        });
-    }
-
-    public void updateMovie(Integer index, Movie movie, ExecuteMovieItemListener listener) {
-        this.executor.execute(() -> {
-            Movie deletedMovie = localDB.movieDao().getAllMovies().getValue().get(index);
-            localDB.movieDao().delete(deletedMovie);
-            localDB.movieDao().insertAll(movie);
-            mainThreadHandler.post(listener::onComplete);
-        });
-    }*/
 }
