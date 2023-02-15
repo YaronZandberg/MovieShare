@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
-import com.example.movieshare.fragments.dialogs.DeleteUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.UserUtils;
@@ -98,16 +97,6 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     protected void activateButtonsListeners() {
         this.viewBindings.userCommentEditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
-        this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
-                // TODO: Add isDeleted DM to MovieComment and display only comments
-                //  that their isDeleted is false
-                Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
-                        .removeMovieComment(this.viewModel.getMovieComment().getMovieCommentId(), () -> {
-                            new DeleteUserMovieCommentDialogFragment()
-                                    .show(getActivity().getSupportFragmentManager(), "TAG");
-                            Repository.getRepositoryInstance().refreshAllMovieComments();
-                            Navigation.findNavController(view).popBackStack();
-                        }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
             if (isFormValid()) {
                 saveComment(view);
@@ -116,11 +105,8 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     }
 
     private Boolean isFormValid() {
-        if (!UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentEditionFragmentMovieRatingInputEt, 5) ||
-                !UserUtils.setErrorIfEmpty(this.viewBindings.userCommentEditionFragmentMovieCommentInputEt)) {
-            return false;
-        }
-        return true;
+        return (UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentEditionFragmentMovieRatingInputEt, 5) &&
+                UserUtils.setErrorIfEmpty(this.viewBindings.userCommentEditionFragmentMovieCommentInputEt));
     }
 
     private void saveComment(View view) {

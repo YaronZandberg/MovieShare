@@ -15,7 +15,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.example.movieshare.repository.Repository;
-import com.example.movieshare.utils.MovieUtils;
 
 public class IntroActivity extends AppCompatActivity {
 

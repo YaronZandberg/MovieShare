@@ -50,7 +50,6 @@ public class UserCommentListFragment extends MovieBaseFragment {
         this.viewModel.getUserCommentList().observe(getViewLifecycleOwner(),
                 movieCommentList -> reloadUserCommentList());
         NotificationManager.instance()
-                // TODO: Change for getMovieComment...
                 .getEventMovieCommentListLoadingState()
                 .observe(getViewLifecycleOwner(),
                         loadingState -> this.viewBindings.swipeRefresh

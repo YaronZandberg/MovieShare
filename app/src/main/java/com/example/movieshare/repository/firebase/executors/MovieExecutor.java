@@ -43,8 +43,6 @@ public class MovieExecutor {
                 }).addOnFailureListener(task -> Log.d("Error", task.getMessage()));
     }
 
-    // TODO: I'm not sure that we need to implement this with firebase,
-    //  because this function will be called in front of ROOM.
     public void getMovieByName(String name, GetMovieItemListListener<Movie> listener) {
         this.db.collection(MOVIE_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_NAME, name)

@@ -64,14 +64,6 @@ public class MovieCommentExecutor {
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 
-    // TODO: Test implementation
-    public void removeMovieComment(String movieCommentId, ExecuteMovieItemListener listener) {
-        db.collection(MOVIE_COMMENT_COLLECTION_NAME)
-                .document(movieCommentId)
-                .delete()
-                .addOnCompleteListener(task -> listener.onComplete());
-    }
-
     public void updateMovieComment(String movieCommentId, MovieComment movieComment,
                                    ExecuteMovieItemListener listener) {
         db.collection(MOVIE_COMMENT_COLLECTION_NAME)
