@@ -52,21 +52,21 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
 
                         <ImageView
                             android:id="@+id/item_list_row_rating_tv_star"
                             android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginTop="1.5dp"
+                            android:layout_height="match_parent"
                             android:src="@drawable/ic_baseline_star_rate_24"
                             app:layout_constraintHorizontal_bias="1.0" />
 
                         <TextView
                             android:id="@+id/movie_profile_fragment_movie_rating_input_et"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginStart="2dp"
+                            android:gravity="center"
                             android:text="Rating"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/white_secondary" />
@@ -74,21 +74,29 @@
                         <ImageView
                             android:id="@+id/item_list_row_dot"
                             android:layout_width="6dp"
-                            android:layout_height="10dp"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="5dp"
-                            android:layout_marginTop="5dp"
                             android:layout_marginRight="5dp"
                             android:src="@drawable/ic_baseline_circle_24"
                             app:layout_constraintHorizontal_bias="1.0" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/movie_profile_fragment_movie_category_input_et"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:text="Genre"
-                            android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/white_secondary" />
+                            app:chipBackgroundColor="@color/white_secondary"
+                            app:chipIconSize="18dp"
+                            app:chipStartPadding="7dp"
+                            app:textStartPadding="3dp"
+                            app:chipIcon="@drawable/ic_baseline_tv_24"
+                            />
                     </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:dividerColor="@color/white_secondary"/>
 
                     <TextView
                         android:id="@+id/movie_profile_fragment_movie_description_input_et"
