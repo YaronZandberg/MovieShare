@@ -11,4 +11,5 @@
     <color name="grey">#5D5D5D</color>
     <color name="background">#F7F7F7</color>
     <color name="exitBtn">#db0000</color>
+    <color name="star">#F3C623</color>
 </resources>
