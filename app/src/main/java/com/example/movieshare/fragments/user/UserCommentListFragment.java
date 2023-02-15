@@ -21,6 +21,8 @@ import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.viewmodels.user.UserCommentListFragmentViewModel;
 
+import java.util.Objects;
+
 public class UserCommentListFragment extends MovieBaseFragment {
     private FragmentUserCommentListBinding viewBindings;
     private String userId;
@@ -36,16 +38,17 @@ public class UserCommentListFragment extends MovieBaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initializeUserComments();
         this.viewBindings = FragmentUserCommentListBinding.inflate(inflater, container, false);
         this.viewBindings.userCommentListFragmentList.setHasFixedSize(true);
         this.viewBindings.userCommentListFragmentList.setLayoutManager(new LinearLayoutManager(getContext()));
         this.movieCommentAdapter = new MovieCommentAdapter(getLayoutInflater(),
                 this.viewModel.getUserCommentList().getValue());
         this.viewBindings.userCommentListFragmentList.setAdapter(this.movieCommentAdapter);
-        this.viewBindings.swipeRefresh.setOnRefreshListener(this::reloadUserCommentList);
+        this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeUserComments);
         this.configureMenuOptions(this.viewBindings.getRoot());
-        this.viewModel.getUserCommentList().observe(getViewLifecycleOwner(), movieCommentList ->
-                this.movieCommentAdapter.setMovieItemList(this.viewModel.getUserCommentList().getValue()));
+        this.viewModel.getUserCommentList().observe(getViewLifecycleOwner(),
+                movieCommentList -> reloadUserCommentList());
         NotificationManager.instance()
                 .getEventUserCommentListLoadingState()
                 .observe(getViewLifecycleOwner(),
@@ -61,8 +64,16 @@ public class UserCommentListFragment extends MovieBaseFragment {
         this.viewModel = new ViewModelProvider(this).get(UserCommentListFragmentViewModel.class);
     }
 
-    private void reloadUserCommentList() {
+    private void initializeUserComments() {
         Repository.getRepositoryInstance().refreshAllMovieComments();
+    }
+
+    private void reloadUserCommentList() {
+        if (Objects.nonNull(this.viewModel.getUserCommentList().getValue())) {
+            Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                    .getAllMovieCommentsByUserId(this.userId, movieItemList ->
+                            this.movieCommentAdapter.setMovieItemList(movieItemList));
+        }
     }
 
     private void activateItemListListener() {
