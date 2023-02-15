@@ -82,12 +82,12 @@ public class MovieProfileFragment extends MovieBaseFragment {
             this.viewBindings.movieProfileFragmentMovieCategoryInputEt.setText(this.viewModel.getMovieCategoryName());
             this.viewBindings.movieProfileFragmentMovieDescriptionInputEt.setText(this.viewModel.getMovie().getDescription());
             this.viewBindings.movieProfileFragmentMovieRatingInputEt.setText(this.viewModel.getMovie().getMovieRating());
-            loadUserProfileImage();
+            loadMovieProfileImage();
             setUserCommentPropertiesState();
         }
     }
 
-    private void loadUserProfileImage() {
+    private void loadMovieProfileImage() {
         if (Objects.nonNull(this.viewModel.getMovie().getImageUrl())) {
             Picasso.get().load(this.viewModel.getMovie().getImageUrl(true))
                     .placeholder(R.drawable.movie_default_image)

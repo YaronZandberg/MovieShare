@@ -9,6 +9,8 @@ import com.example.movieshare.listeners.general.OnItemClickListener;
 import com.example.movieshare.repository.models.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 public class MovieViewHolder extends MovieItemViewHolder<Movie> {
     public MovieViewHolder(@NonNull View itemView, OnItemClickListener listener){
         super(itemView, listener);
@@ -20,9 +22,13 @@ public class MovieViewHolder extends MovieItemViewHolder<Movie> {
 
     @Override
     public void bindMovieItem(Movie movie) {
-        Picasso.get().load(movie.getImageUrl(true))
-                .placeholder(R.drawable.movie_default_image)
-                .into(this.movieItemImg);
+        if (Objects.nonNull(movie.getImageUrl(true))) {
+            Picasso.get().load(movie.getImageUrl(true))
+                    .placeholder(R.drawable.movie_default_image)
+                    .into(this.movieItemImg);
+        } else {
+            this.movieItemImg.setImageResource(R.drawable.movie_default_image);
+        }
         this.movieItemNameTv.setText(movie.getMovieName());
         this.movieItemRatingTv.setText(movie.getMovieRating());
     }
