@@ -72,7 +72,6 @@ public class MovieCommentExecutor {
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 
-    // TODO: Test implementation
     public void updateMovieComment(String movieCommentId, MovieComment movieComment,
                                    ExecuteMovieItemListener listener) {
         db.collection(MOVIE_COMMENT_COLLECTION_NAME)
