@@ -42,13 +42,13 @@ public class MovieCategory {
         this.description = description;
     }
 
-    // TODO: handle exceptions from casting or null
     public static MovieCategory fromJson(Map<String, Object> json) {
         String categoryId = String.valueOf(json.get(MOVIE_CATEGORY_ID));
         String categoryName = String.valueOf(json.get(MOVIE_CATEGORY_NAME));
         String categoryRating = String.valueOf(json.get(MOVIE_CATEGORY_RATING));
         String description = String.valueOf(json.get(MOVIE_CATEGORY_DESCRIPTION));
-        MovieCategory movieCategory = new MovieCategory(categoryId, categoryName, categoryRating, description);
+        MovieCategory movieCategory =
+                new MovieCategory(categoryId, categoryName, categoryRating, description);
         Timestamp lastUpdate = (Timestamp) json.get(MOVIE_CATEGORY_LAST_UPDATE);
         movieCategory.setCategoryLastUpdate(lastUpdate.getSeconds());
         return movieCategory;

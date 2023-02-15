@@ -82,7 +82,6 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
         });
     }
 
-    // TODO: Put the userId of the user instead of dummy 1
     private MovieComment buildNewMovieComment() {
         String userId = Repository.getRepositoryInstance().getAuthModel().getCurrentUserUid();
         String movieId = this.viewModel.getMovie().getMovieId();

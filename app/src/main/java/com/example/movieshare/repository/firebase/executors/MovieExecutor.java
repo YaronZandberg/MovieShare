@@ -25,7 +25,7 @@ public class MovieExecutor {
         return movieExecutorInstance;
     }
 
-    public void getAllMovies(GetMovieItemListListener<Movie> listener) {
+    /*public void getAllMovies(GetMovieItemListListener<Movie> listener) {
         this.db.collection(MOVIE_COLLECTION_NAME)
                 .get()
                 .addOnSuccessListener(task -> {
@@ -37,7 +37,7 @@ public class MovieExecutor {
                     }
                     listener.onComplete(movies);
                 });
-    }
+    }*/
 
     public void getAllMoviesSinceLastUpdate(Long localLastUpdate,
                                             GetMovieItemListListener<Movie> listener) {
@@ -60,7 +60,7 @@ public class MovieExecutor {
 
     // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
-    public void getAllMoviesByCategoryId(String categoryId,
+    /*public void getAllMoviesByCategoryId(String categoryId,
                                          GetMovieItemListListener<Movie> listener) {
         this.db.collection(MOVIE_COLLECTION_NAME)
                 .whereEqualTo(MOVIE_CATEGORY_ID, categoryId)
@@ -74,12 +74,12 @@ public class MovieExecutor {
                     }
                     listener.onComplete(movies);
                 });
-    }
+    }*/
 
     // TODO: There wasn't an original ROOM implementation
-    public void getMovieById(Integer id, GetMovieItemListener<Movie> listener) {
+    /*public void getMovieById(Integer id, GetMovieItemListener<Movie> listener) {
 
-    }
+    }*/
 
     // TODO: I'm not sure that we need to implement this with firebase,
     //  because this function will be called in front of ROOM.
@@ -102,12 +102,12 @@ public class MovieExecutor {
     }
 
     // TODO: There wasn't an original ROOM implementation
-    public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
+    /*public void removeMovie(Integer index, ExecuteMovieItemListener listener) {
 
-    }
+    }*/
 
     // TODO: There wasn't an original ROOM implementation
-    public void updateMovie(Integer index, Movie movie, ExecuteMovieItemListener listener) {
+    /*public void updateMovie(Integer index, Movie movie, ExecuteMovieItemListener listener) {
 
-    }
+    }*/
 }

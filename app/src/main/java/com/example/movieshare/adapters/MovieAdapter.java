@@ -21,7 +21,7 @@ public class MovieAdapter extends MovieItemAdapter<Movie> {
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = this.layoutInflater.inflate(R.layout.item_list_row, parent, false);
+        View view = this.layoutInflater.inflate(R.layout.item_list_row_movie, parent, false);
         return new MovieViewHolder(view, this.listener);
     }
 

@@ -3,14 +3,12 @@ package com.example.movieshare.repository.models;
 import static com.example.movieshare.constants.MovieConstants.*;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.movieshare.context.MyApplication;
@@ -60,7 +58,6 @@ public class Movie {
         this.imageUrl = imageUrl;
     }
 
-    // TODO: handle exceptions from casting or null
     public static Movie fromJson(Map<String, Object> json) {
         String movieId = String.valueOf(json.get(MOVIE_ID));
         String movieCategoryId = String.valueOf(json.get(MOVIE_CATEGORY_ID));
@@ -68,7 +65,8 @@ public class Movie {
         String movieRating = String.valueOf(json.get(MOVIE_RATING));
         String description = String.valueOf(json.get(MOVIE_DESCRIPTION));
         String imageUrl = String.valueOf(json.get(MOVIE_IMAGE_URL));
-        Movie movie = new Movie(movieId, movieCategoryId, movieName, movieRating, description, imageUrl);
+        Movie movie =
+                new Movie(movieId, movieCategoryId, movieName, movieRating, description, imageUrl);
         Timestamp lastUpdate = (Timestamp) json.get(MOVIE_LAST_UPDATE);
         movie.setMovieLastUpdate(lastUpdate.getSeconds());
         return movie;
@@ -151,8 +149,11 @@ public class Movie {
     }
 
     public String getImageUrl(Boolean fullPath) {
-        if(fullPath) { return MOVIE_IMAGE_BASE_URL + this.imageUrl; }
-        else { return this.imageUrl; }
+        if (fullPath) {
+            return MOVIE_IMAGE_BASE_URL + this.imageUrl;
+        } else {
+            return this.imageUrl;
+        }
     }
 
     public void setImageUrl(String imageUrl) {

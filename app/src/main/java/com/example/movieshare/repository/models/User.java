@@ -44,7 +44,6 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
-    // TODO: handle exceptions from casting or null
     public static User fromJson(Map<String, Object> json) {
         String userId = String.valueOf(json.get(USER_ID));
         String firstName = String.valueOf(json.get(USER_FIRST_NAME));

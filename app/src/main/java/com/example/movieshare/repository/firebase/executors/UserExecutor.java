@@ -7,19 +7,15 @@ import android.graphics.Bitmap;
 import com.example.movieshare.listeners.authentication.*;
 import com.example.movieshare.listeners.movies.GetMovieItemListener;
 import com.example.movieshare.repository.models.User;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserExecutor {
     private static final UserExecutor userExecutorInstance = new UserExecutor();
@@ -36,7 +32,7 @@ public class UserExecutor {
         return userExecutorInstance;
     }
 
-    public void getAllUsers(GetAllUsersListener listener) {
+    /*public void getAllUsers(GetAllUsersListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -49,9 +45,9 @@ public class UserExecutor {
                     }
                     listener.onComplete(users);
                 });
-    }
+    }*/
 
-    public void getAllUsersSinceLastUpdate(Long localLastUpdate,
+    /*public void getAllUsersSinceLastUpdate(Long localLastUpdate,
                                            GetAllUsersListener listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .whereGreaterThanOrEqualTo(USER_LAST_UPDATE,
@@ -67,8 +63,9 @@ public class UserExecutor {
                     }
                     listener.onComplete(users);
                 });
-    }
+    }*/
 
+    // TODO: Exchange the usage of this method in the same method at UserHandler
     public void getUserById(String id, GetMovieItemListener<User> listener) {
         this.db.collection(USER_COLLECTION_NAME)
                 .whereEqualTo(FieldPath.documentId(), id)

@@ -51,7 +51,7 @@ public class MovieCategoryHandler {
         }
     }
 
-    public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
+    /*public void removeMovieCategory(Integer index, ExecuteMovieItemListener listener) {
         this.executor.execute(() -> {
             MovieCategory deletedMovieCategory =
                     localDB.movieCategoryDao().getAllMovieCategories().getValue().get(index);
@@ -69,5 +69,5 @@ public class MovieCategoryHandler {
             localDB.movieCategoryDao().insertAll(movieCategory);
             mainThreadHandler.post(listener::onComplete);
         });
-    }
+    }*/
 }

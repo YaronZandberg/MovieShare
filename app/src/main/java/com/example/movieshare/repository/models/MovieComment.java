@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FieldValue;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: Add another foreign key of userId
 @Entity(foreignKeys = {
         @ForeignKey(entity = Movie.class,
                 parentColumns = "movieId",
@@ -36,6 +35,7 @@ public class MovieComment {
     @ColumnInfo(index = true)
     @NonNull
     private String movieId;
+
     private String movieName;
     private String movieRatingOfComment;
     private String description;
@@ -61,7 +61,6 @@ public class MovieComment {
         this.description = description;
     }
 
-    // TODO: handle exceptions from casting or null
     public static MovieComment fromJson(Map<String, Object> json) {
         String movieCommentId = String.valueOf(json.get(MOVIE_COMMENT_ID));
         String userId = String.valueOf(json.get(MOVIE_COMMENT_USER_ID));

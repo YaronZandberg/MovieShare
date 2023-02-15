@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.example.movieshare.fragments.authentication.SignInFragment"
-        android:label="fragment_sign_in"
+        android:label="Sign In"
         tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.movieshare.fragments.authentication.SignUpFragment"
-        android:label="fragment_sign_up"
+        android:label="Sign Up"
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_nav_graph"
