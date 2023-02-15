@@ -2,14 +2,11 @@ package com.example.movieshare.repository.models;
 
 import static com.example.movieshare.constants.UserConstants.*;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.movieshare.context.MyApplication;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
@@ -68,16 +65,6 @@ public class User {
         userJson.put(USER_IMAGE_URL, this.getImageUrl());
         userJson.put(USER_LAST_UPDATE, FieldValue.serverTimestamp());
         return userJson;
-    }
-
-    public static Long getLocalLastUpdate() {
-        return MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
-                .getLong(USER_LOCAL_LAST_UPDATE, 0);
-    }
-
-    public static void setLocalLastUpdate(Long localLastUpdate) {
-        MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
-                .edit().putLong(USER_LOCAL_LAST_UPDATE, localLastUpdate).commit();
     }
 
     @NonNull

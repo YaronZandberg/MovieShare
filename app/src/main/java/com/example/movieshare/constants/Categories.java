@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import java.util.Objects;
 
 public class Categories {
-    private JsonObject Categories = new JsonObject();
-    private JsonObject CategoriesImages = new JsonObject();
+    private final JsonObject Categories = new JsonObject();
+    private final JsonObject CategoriesImages = new JsonObject();
 
     public Categories() {
         createLocalCategory("28", "Action", R.drawable.ic_baseline_local_movies_24);
@@ -58,9 +58,5 @@ public class Categories {
     public Integer getImageByName(String name) {
         String Id = getIdByName(name);
         return CategoriesImages.get(Id).getAsInt();
-    }
-
-    public JsonObject getCategoriesImages() {
-        return CategoriesImages;
     }
 }

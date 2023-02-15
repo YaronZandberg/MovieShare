@@ -26,12 +26,12 @@ import com.example.movieshare.enums.LoadingState;
 import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
-import com.example.movieshare.repository.dao.MovieApiCaller;
 import com.example.movieshare.repository.firebase.executors.MovieExecutor;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieApi;
 import com.example.movieshare.repository.models.MovieApiList;
 
+import com.example.movieshare.repository.room.dao.MovieApiCaller;
 import com.example.movieshare.viewmodels.movie.MovieListFragmentViewModel;
 
 import java.util.Objects;
@@ -138,7 +138,7 @@ public class MovieListFragment extends MovieBaseFragment {
 
         for (MovieApi item : response.body().getResults()) {
             executor.getMovieByName(item.getOriginal_title(), movies -> {
-                if(movies.isEmpty() || movies.stream().filter(movie -> movie.getMovieCategoryId().contentEquals(this.viewModel.getMovieCategory().getCategoryId())).count() == 0) {
+                if(movies.isEmpty() || movies.stream().noneMatch(movie -> movie.getMovieCategoryId().contentEquals(this.viewModel.getMovieCategory().getCategoryId()))) {
                     executor.addMovie(new Movie(this.viewModel.getMovieCategory().getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()), () -> {});
                 }
             });

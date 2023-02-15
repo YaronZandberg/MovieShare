@@ -106,13 +106,10 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
     }
 
     private Boolean isFormValid() {
-        if(!UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt, 5) ||
-                !UserUtils.setErrorIfEmpty(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt) ||
-                !InputValidator.isFirstNameValid(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt.getText()) ||
-                !InputValidator.isLastNameValid(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt.getText())) {
-            return false;
-        }
-        return true;
+        return (UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt, 5) &&
+                UserUtils.setErrorIfEmpty(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt) &&
+                InputValidator.isFirstNameValid(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt.getText()) &&
+                InputValidator.isLastNameValid(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt.getText()));
     }
 
     private void saveComment(View view) {

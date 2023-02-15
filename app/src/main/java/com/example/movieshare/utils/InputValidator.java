@@ -21,10 +21,7 @@ public class InputValidator {
     public static boolean isNumber(@Nullable Editable text) {
         try {
             Integer.parseInt(text.toString());
-            if(isFieldEmpty(text) || Integer.parseInt(text.toString()) > 0) {
-                return true;
-            }
-            return false;
+            return (isFieldEmpty(text) || Integer.parseInt(text.toString()) > 0);
         } catch (NumberFormatException e){
             return false;
         }
