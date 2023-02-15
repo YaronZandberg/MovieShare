@@ -41,7 +41,7 @@ public abstract class MovieBaseFragment extends Fragment {
                 } else {
                     if (Objects.nonNull(view)) {
                         if (menuItem.getItemId() == R.id.logoutMenuItem) {
-                            Repository.getRepositoryInstance().getAuthModel().logout(() -> startIntroActivity());
+                            Repository.getRepositoryInstance().getAuthModel().logout(() -> startGuestActivity());
                         } else {
                             NavDirections action = MovieHomeFragmentDirections.actionGlobalUserProfileFragment();
                             Navigation.findNavController(view).navigate(action);
@@ -54,7 +54,7 @@ public abstract class MovieBaseFragment extends Fragment {
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
-    protected void startIntroActivity() {
+    protected void startGuestActivity() {
         if (Objects.nonNull(getActivity())) {
             Intent introActivityIntent = new Intent(getActivity(), GuestsActivity.class);
             startActivity(introActivityIntent);
