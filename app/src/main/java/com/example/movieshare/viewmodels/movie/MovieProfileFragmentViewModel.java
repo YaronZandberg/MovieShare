@@ -13,6 +13,7 @@ public class MovieProfileFragmentViewModel extends ViewModel {
     private Movie movie;
     private MovieCategory movieCategory;
     private String movieCategoryName;
+    private Integer movieCategoryImage;
 
     public List<Movie> getMovieList() {
         return this.movieList;
@@ -44,5 +45,13 @@ public class MovieProfileFragmentViewModel extends ViewModel {
 
     public void setMovieCategoryName(String movieCategoryName) {
         this.movieCategoryName = movieCategoryName;
+    }
+
+    public void setMovieCategoryImage(Integer movieCategoryImage) {
+        this.movieCategoryImage = movieCategoryImage;
+    }
+
+    public Integer getMovieCategoryImage() {
+        return movieCategoryImage;
     }
 }
