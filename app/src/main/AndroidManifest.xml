@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".context.MyApplication"
         android:allowBackup="true"
@@ -14,11 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieShare"
         tools:targetApi="31">
+
         <service
             android:name=".repository.models.MovieApi"
             android:enabled="true"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
         <activity
             android:name=".IntroActivity"
@@ -26,6 +27,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,4 +49,5 @@
                 android:value="" />
         </activity>
     </application>
+
 </manifest>

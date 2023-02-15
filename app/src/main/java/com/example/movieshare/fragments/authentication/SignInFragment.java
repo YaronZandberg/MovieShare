@@ -1,9 +1,11 @@
 package com.example.movieshare.fragments.authentication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.movieshare.MainActivity;
 import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentSignInBinding;
 import com.example.movieshare.fragments.base.MovieBaseFragment;
@@ -69,8 +72,9 @@ public class SignInFragment extends MovieBaseFragment {
                         this.viewBindings.signInFragmentEmailInputEt.getText().toString(),
                         this.viewBindings.signInFragmentPasswordInputEt.getText().toString(),
                         () -> {
-                            NavDirections action = SignInFragmentDirections.actionSignInFragmentToNavGraph();
-                            this.viewModel.getNavController().navigate(action);
+                            Intent intent = new Intent(this.getActivity(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         },
                         errorMessage -> {
                             Snackbar.make(view, errorMessage, Snackbar.LENGTH_SHORT).show();

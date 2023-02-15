@@ -89,14 +89,13 @@
                             app:chipIconSize="18dp"
                             app:chipStartPadding="7dp"
                             app:textStartPadding="3dp"
-                            app:chipIcon="@drawable/ic_baseline_tv_24"
-                            />
+                            app:chipIcon="@drawable/ic_baseline_tv_24" />
                     </LinearLayout>
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:dividerColor="@color/white_secondary"/>
+                        app:dividerColor="@color/white_secondary" />
 
                     <TextView
                         android:id="@+id/movie_profile_fragment_movie_description_input_et"

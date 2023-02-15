@@ -5,28 +5,41 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.MovieUtils;
 
 public class IntroActivity extends AppCompatActivity {
 
+    private static int TIME_OUT = 3000;
+
+    View first,second,third,fourth,fifth,sixth;
+    TextView a, slogan;
+    Animation topAnimantion ,bottomAnimation ,middleAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_intro);
+        setDataMemebers();
+        createAnimtaion();
+        bindAnimtaion();
 
-        Repository.getRepositoryInstance().getExecutor().execute(() -> {
-            MovieUtils.simulateSleeping();
-
-            if (Repository.getRepositoryInstance().getAuthModel().isSignedIn()) {
-                Repository.getRepositoryInstance().getMainThreadHandler().post((this::startUsersActivity));
-            } else {
-                Repository.getRepositoryInstance().getMainThreadHandler().post((this::startGuestsActivity));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isLogin();
             }
-        });
+        }, TIME_OUT);
     }
 
     private void startGuestsActivity() {
@@ -39,6 +52,7 @@ public class IntroActivity extends AppCompatActivity {
 
     private void startActivityFromIntent(Class<? extends AppCompatActivity> activityClass) {
         Intent intent = new Intent(this, activityClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
@@ -55,5 +69,43 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setDataMemebers() {
+        first = findViewById(R.id.first_line);
+        second = findViewById(R.id.second_line);
+        third = findViewById(R.id.third_line);
+        fourth = findViewById(R.id.fourth_line);
+        fifth = findViewById(R.id.fifth_line);
+        sixth = findViewById(R.id.sixth_line);
+        a = findViewById(R.id.a);
+        slogan = findViewById(R.id.tagLine);
+    }
+
+    private void createAnimtaion() {
+        topAnimantion = AnimationUtils.loadAnimation(this, R.anim.top_animation);
+        bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
+        middleAnimation = AnimationUtils.loadAnimation(this, R.anim.middle_animation);
+    }
+
+    private void bindAnimtaion() {
+        first.setAnimation(topAnimantion);
+        second.setAnimation(topAnimantion);
+        third.setAnimation(topAnimantion);
+        fourth.setAnimation(topAnimantion);
+        fifth.setAnimation(topAnimantion);
+        sixth.setAnimation(topAnimantion);
+        a.setAnimation(middleAnimation);
+        slogan.setAnimation(bottomAnimation);
+    }
+
+    private void isLogin() {
+        Repository.getRepositoryInstance().getExecutor().execute(() -> {
+            if (Repository.getRepositoryInstance().getAuthModel().isSignedIn()) {
+                Repository.getRepositoryInstance().getMainThreadHandler().post((this::startUsersActivity));
+            } else {
+                Repository.getRepositoryInstance().getMainThreadHandler().post((this::startGuestsActivity));
+            }
+        });
     }
 }
