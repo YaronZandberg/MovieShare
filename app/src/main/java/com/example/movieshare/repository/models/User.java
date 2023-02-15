@@ -45,22 +45,18 @@ public class User {
     }
 
     public static User fromJson(Map<String, Object> json) {
-        try {
-            String userId = String.valueOf(json.get(USER_ID));
-            String firstName = String.valueOf(json.get(USER_FIRST_NAME));
-            String lastName = String.valueOf(json.get(USER_LAST_NAME));
-            String email = String.valueOf(json.get(USER_EMAIL));
-            String imageUrl = null;
-            if (Objects.nonNull(json.get(USER_IMAGE_URL))) {
-                imageUrl = String.valueOf(json.get(USER_IMAGE_URL));
-            }
-            User user = new User(userId, firstName, lastName, email, imageUrl);
-            Timestamp lastUpdate = (Timestamp) json.get(USER_LAST_UPDATE);
-            user.setUserLastUpdate(lastUpdate.getSeconds());
-            return user;
-        } catch (Exception e) {
-            return null;
+        String userId = String.valueOf(json.get(USER_ID));
+        String firstName = String.valueOf(json.get(USER_FIRST_NAME));
+        String lastName = String.valueOf(json.get(USER_LAST_NAME));
+        String email = String.valueOf(json.get(USER_EMAIL));
+        String imageUrl = null;
+        if (Objects.nonNull(json.get(USER_IMAGE_URL))) {
+            imageUrl = String.valueOf(json.get(USER_IMAGE_URL));
         }
+        User user = new User(userId, firstName, lastName, email, imageUrl);
+        Timestamp lastUpdate = (Timestamp) json.get(USER_LAST_UPDATE);
+        user.setUserLastUpdate(lastUpdate.getSeconds());
+        return user;
     }
 
     public Map<String, Object> toJson() {

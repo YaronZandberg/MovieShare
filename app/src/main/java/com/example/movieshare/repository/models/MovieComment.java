@@ -62,20 +62,16 @@ public class MovieComment {
     }
 
     public static MovieComment fromJson(Map<String, Object> json) {
-        try {
-            String movieCommentId = String.valueOf(json.get(MOVIE_COMMENT_ID));
-            String userId = String.valueOf(json.get(MOVIE_COMMENT_USER_ID));
-            String movieId = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_ID));
-            String movieName = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_NAME));
-            String movieRatingOfComment = String.valueOf(json.get(MOVIE_COMMENT_RATING));
-            String description = String.valueOf(json.get(MOVIE_COMMENT_DESCRIPTION));
-            MovieComment movieComment = new MovieComment(movieCommentId, userId, movieId, movieName, movieRatingOfComment, description);
-            Timestamp lastUpdate = (Timestamp) json.get(MOVIE_COMMENT_LAST_UPDATE);
-            movieComment.setMovieCommentLastUpdate(lastUpdate.getSeconds());
-            return movieComment;
-        } catch (Exception e) {
-            return null;
-        }
+        String movieCommentId = String.valueOf(json.get(MOVIE_COMMENT_ID));
+        String userId = String.valueOf(json.get(MOVIE_COMMENT_USER_ID));
+        String movieId = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_ID));
+        String movieName = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_NAME));
+        String movieRatingOfComment = String.valueOf(json.get(MOVIE_COMMENT_RATING));
+        String description = String.valueOf(json.get(MOVIE_COMMENT_DESCRIPTION));
+        MovieComment movieComment = new MovieComment(movieCommentId, userId, movieId, movieName, movieRatingOfComment, description);
+        Timestamp lastUpdate = (Timestamp) json.get(MOVIE_COMMENT_LAST_UPDATE);
+        movieComment.setMovieCommentLastUpdate(lastUpdate.getSeconds());
+        return movieComment;
     }
 
     public Map<String, Object> toJson() {
