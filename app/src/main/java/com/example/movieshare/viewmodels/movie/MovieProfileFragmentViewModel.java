@@ -52,6 +52,6 @@ public class MovieProfileFragmentViewModel extends ViewModel {
     }
 
     public Integer getMovieCategoryImage() {
-        return movieCategoryImage;
+        return this.movieCategoryImage;
     }
 }
