@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.movieshare.adapters.CommentAdapter;
+import com.example.movieshare.adapters.UserCommentAdapter;
 import com.example.movieshare.databinding.FragmentMovieCommentListBinding;
 import com.example.movieshare.enums.LoadingState;
 import com.example.movieshare.fragments.base.MovieBaseFragment;
@@ -23,7 +23,7 @@ import com.example.movieshare.viewmodels.movie.MovieCommentListFragmentViewModel
 public class MovieCommentListFragment extends MovieBaseFragment {
     private FragmentMovieCommentListBinding viewBindings;
     private String movieId;
-    private CommentAdapter movieCommentAdapter;
+    private UserCommentAdapter userCommentAdapter;
     private MovieCommentListFragmentViewModel viewModel;
 
     @Override
@@ -39,9 +39,9 @@ public class MovieCommentListFragment extends MovieBaseFragment {
         this.viewBindings = FragmentMovieCommentListBinding.inflate(inflater, container, false);
         this.viewBindings.movieCommentListFragmentList.setHasFixedSize(true);
         this.viewBindings.movieCommentListFragmentList.setLayoutManager(new LinearLayoutManager(getContext()));
-        this.movieCommentAdapter = new CommentAdapter(getLayoutInflater(),
+        this.userCommentAdapter = new UserCommentAdapter(getLayoutInflater(),
                 this.viewModel.getMovieCommentList().getValue());
-        this.viewBindings.movieCommentListFragmentList.setAdapter(this.movieCommentAdapter);
+        this.viewBindings.movieCommentListFragmentList.setAdapter(this.userCommentAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeAllMovieComments);
         this.configureMenuOptions(this.viewBindings.getRoot());
         activateItemListListener();
@@ -68,10 +68,10 @@ public class MovieCommentListFragment extends MovieBaseFragment {
     private void reloadMovieCommentList() {
         Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                 .getAllMovieCommentsByMovieId(this.movieId, movieCommentList ->
-                        this.movieCommentAdapter.setMovieItemList(movieCommentList));
+                        this.userCommentAdapter.setMovieItemList(movieCommentList));
     }
 
     private void activateItemListListener() {
-        this.movieCommentAdapter.setOnItemClickListener(position -> {});
+        this.userCommentAdapter.setOnItemClickListener(position -> {});
     }
 }

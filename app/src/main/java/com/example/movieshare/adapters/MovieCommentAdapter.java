@@ -8,21 +8,21 @@ import androidx.annotation.NonNull;
 
 import com.example.movieshare.R;
 import com.example.movieshare.repository.models.MovieComment;
-import com.example.movieshare.viewholders.CommentViewHolder;
+import com.example.movieshare.viewholders.MovieCommentViewHolder;
 import com.example.movieshare.viewholders.MovieItemViewHolder;
 
 import java.util.List;
 
-public class CommentAdapter extends MovieItemAdapter<MovieComment> {
-    public CommentAdapter(LayoutInflater layoutInflater, List<MovieComment> movieItemList){
+public class MovieCommentAdapter extends MovieItemAdapter<MovieComment> {
+    public MovieCommentAdapter(LayoutInflater layoutInflater, List<MovieComment> movieItemList){
         super(layoutInflater, movieItemList);
     }
 
     @NonNull
     @Override
-    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MovieCommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = this.layoutInflater.inflate(R.layout.item_list_row_movie_comment, parent, false);
-        return new CommentViewHolder(view, this.listener);
+        return new MovieCommentViewHolder(view, this.listener);
     }
 
     @Override
