@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieshare.R;
 import com.example.movieshare.listeners.general.OnItemClickListener;
-import com.google.android.material.imageview.ShapeableImageView;
-import com.google.android.material.shape.CornerFamily;
-import com.google.android.material.shape.ShapeAppearanceModel;
 
 public abstract class MovieItemViewHolder <T> extends RecyclerView.ViewHolder {
     protected final TextView movieItemNameTv;
