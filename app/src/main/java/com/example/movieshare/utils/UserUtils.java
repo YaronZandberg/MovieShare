@@ -1,8 +1,8 @@
 package com.example.movieshare.utils;
 
 import static com.example.movieshare.constants.AuthConstants.*;
-import static com.example.movieshare.constants.MovieCommentConstants.COMMENT_INVALID;
-import static com.example.movieshare.constants.MovieCommentConstants.RATING_INVALID;
+import static com.example.movieshare.constants.MovieCommentConstants.MOVIE_COMMENT_RATING_INVALID;
+import static com.example.movieshare.constants.MovieCommentConstants.MOVIE_COMMENT_COMMENT_INVALID;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -45,7 +45,7 @@ public class UserUtils {
 
     public static boolean setErrorIfBiggerThan(TextInputEditText rating, Integer maxRating) {
         if (!InputValidator.isNumber(rating.getText()) || Integer.parseInt(rating.getText().toString()) < 0 || Integer.parseInt(rating.getText().toString()) > maxRating) {
-            rating.setError(RATING_INVALID);
+            rating.setError(MOVIE_COMMENT_COMMENT_INVALID);
             return false;
         } else {
             rating.setError(null);
@@ -55,7 +55,7 @@ public class UserUtils {
 
     public static boolean setErrorIfEmpty(TextInputEditText rating) {
         if(InputValidator.isFieldEmpty(rating.getText())) {
-            rating.setError(COMMENT_INVALID);
+            rating.setError(MOVIE_COMMENT_RATING_INVALID);
             return false;
         } else {
             rating.setError(null);

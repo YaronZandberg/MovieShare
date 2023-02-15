@@ -19,7 +19,7 @@ import com.example.movieshare.utils.MovieUtils;
 
 public class IntroActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 5000;
+    private static int TIME_OUT = 3000;
 
     View first,second,third,fourth,fifth,sixth;
     TextView a, slogan;
@@ -30,36 +30,16 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_intro);
-
-        first = findViewById(R.id.first_line);
-        second = findViewById(R.id.second_line);
-        third = findViewById(R.id.third_line);
-        fourth = findViewById(R.id.fourth_line);
-        fifth = findViewById(R.id.fifth_line);
-        sixth = findViewById(R.id.sixth_line);
-        a = findViewById(R.id.a);
-        slogan = findViewById(R.id.tagLine);
-
-        topAnimantion = AnimationUtils.loadAnimation(this, R.anim.top_animation);
-        bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
-        middleAnimation = AnimationUtils.loadAnimation(this, R.anim.middle_animation);
-
-        first.setAnimation(topAnimantion);
-        second.setAnimation(topAnimantion);
-        third.setAnimation(topAnimantion);
-        fourth.setAnimation(topAnimantion);
-        fifth.setAnimation(topAnimantion);
-        sixth.setAnimation(topAnimantion);
-        a.setAnimation(middleAnimation);
-        slogan.setAnimation(bottomAnimation);
+        setDataMemebers();
+        createAnimtaion();
+        bindAnimtaion();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 isLogin();
-                finish();
             }
-        }, SPLASH_TIME_OUT);
+        }, TIME_OUT);
     }
 
     private void startGuestsActivity() {
@@ -89,6 +69,34 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setDataMemebers() {
+        first = findViewById(R.id.first_line);
+        second = findViewById(R.id.second_line);
+        third = findViewById(R.id.third_line);
+        fourth = findViewById(R.id.fourth_line);
+        fifth = findViewById(R.id.fifth_line);
+        sixth = findViewById(R.id.sixth_line);
+        a = findViewById(R.id.a);
+        slogan = findViewById(R.id.tagLine);
+    }
+
+    private void createAnimtaion() {
+        topAnimantion = AnimationUtils.loadAnimation(this, R.anim.top_animation);
+        bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
+        middleAnimation = AnimationUtils.loadAnimation(this, R.anim.middle_animation);
+    }
+
+    private void bindAnimtaion() {
+        first.setAnimation(topAnimantion);
+        second.setAnimation(topAnimantion);
+        third.setAnimation(topAnimantion);
+        fourth.setAnimation(topAnimantion);
+        fifth.setAnimation(topAnimantion);
+        sixth.setAnimation(topAnimantion);
+        a.setAnimation(middleAnimation);
+        slogan.setAnimation(bottomAnimation);
     }
 
     private void isLogin() {
