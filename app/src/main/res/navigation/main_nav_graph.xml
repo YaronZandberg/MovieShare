@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.movieshare.fragments.user.UserProfileFragment"
-        android:label="fragment_profile"
+        android:label="User Profile"
         tools:layout="@layout/fragment_user_profile">
         <action
             android:id="@+id/action_profileFragment_to_userCommentListFragment"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/userCommentListFragment"
         android:name="com.example.movieshare.fragments.user.UserCommentListFragment"
-        android:label="fragment_user_comment_list"
+        android:label="User Comment List"
         tools:layout="@layout/fragment_user_comment_list">
         <action
             android:id="@+id/action_userCommentListFragment_to_userCommentEditionFragment"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/userCommentEditionFragment"
         android:name="com.example.movieshare.fragments.user.UserCommentEditionFragment"
-        android:label="fragment_user_comment_edition"
+        android:label="Edit Comment"
         tools:layout="@layout/fragment_user_comment_edition">
         <argument
             android:name="movieCommentPosition"
@@ -44,7 +44,7 @@
     <fragment
         android:id="@+id/userCommentAdditionFragment"
         android:name="com.example.movieshare.fragments.user.UserCommentAdditionFragment"
-        android:label="fragment_user_comment_addition"
+        android:label="Add Comment"
         tools:layout="@layout/fragment_user_comment_addition">
         <argument
             android:name="movieName"
@@ -53,7 +53,7 @@
     <fragment
         android:id="@+id/movieHomeFragment"
         android:name="com.example.movieshare.fragments.movie.MovieHomeFragment"
-        android:label="fragment_movie_home"
+        android:label="Movie Categories"
         tools:layout="@layout/fragment_movie_home">
         <action
             android:id="@+id/action_movieHomeFragment_to_movieListFragment"
@@ -62,7 +62,7 @@
     <fragment
         android:id="@+id/movieListFragment"
         android:name="com.example.movieshare.fragments.movie.MovieListFragment"
-        android:label="fragment_movie_list"
+        android:label="Movie List"
         tools:layout="@layout/fragment_movie_list">
         <argument
             android:name="movieCategoryPosition"
@@ -74,7 +74,7 @@
     <fragment
         android:id="@+id/movieProfileFragment"
         android:name="com.example.movieshare.fragments.movie.MovieProfileFragment"
-        android:label="fragment_movie_profile"
+        android:label="Movie Profile"
         tools:layout="@layout/fragment_movie_profile">
         <argument
             android:name="moviePosition"
@@ -92,7 +92,7 @@
     <fragment
         android:id="@+id/movieCommentListFragment"
         android:name="com.example.movieshare.fragments.movie.MovieCommentListFragment"
-        android:label="fragment_movie_comment_list"
+        android:label="Movie Comments"
         tools:layout="@layout/fragment_movie_comment_list">
         <argument
             android:name="movieId"
@@ -104,7 +104,7 @@
     <fragment
         android:id="@+id/userProfileEditionFragment"
         android:name="com.example.movieshare.fragments.user.UserProfileEditionFragment"
-        android:label="fragment_user_profile_edition"
+        android:label="Edit Profile"
         tools:layout="@layout/fragment_user_profile_edition">
         <argument
             android:name="userId"
