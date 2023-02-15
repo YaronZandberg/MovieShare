@@ -6,7 +6,12 @@ import androidx.annotation.NonNull;
 
 import com.example.movieshare.R;
 import com.example.movieshare.listeners.general.OnItemClickListener;
+import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.models.MovieComment;
+import com.example.movieshare.repository.models.User;
+import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 public class MovieCommentViewHolder extends MovieItemViewHolder<MovieComment> {
     public MovieCommentViewHolder(@NonNull View itemView, OnItemClickListener listener){
@@ -22,5 +27,22 @@ public class MovieCommentViewHolder extends MovieItemViewHolder<MovieComment> {
         this.movieItemNameTv.setText(movieComment.getMovieName());
         this.movieItemRatingTv.setText(movieComment.getMovieRatingOfComment());
         this.movieItemDescriptionTv.setText(movieComment.getDescription());
+        getCurrentUser();
+    }
+
+    private void getCurrentUser() {
+        String userId = Repository.getRepositoryInstance().getAuthModel().getCurrentUserUid();
+        Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
+                .getUserById(userId, this::loadUserProfileImage);
+    }
+
+    private void loadUserProfileImage(User user) {
+        if (Objects.nonNull(user.getImageUrl())) {
+            Picasso.get().load(user.getImageUrl())
+                    .placeholder(R.drawable.avatar)
+                    .into(this.movieItemImg);
+        } else {
+            this.movieItemImg.setImageResource(R.drawable.avatar);
+        }
     }
 }
