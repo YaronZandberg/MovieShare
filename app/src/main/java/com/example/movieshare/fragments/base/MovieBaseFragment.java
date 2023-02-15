@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.movieshare.GuestsActivity;
 import com.example.movieshare.IntroActivity;
 import com.example.movieshare.R;
 import com.example.movieshare.fragments.movie.MovieHomeFragmentDirections;
@@ -55,7 +56,7 @@ public abstract class MovieBaseFragment extends Fragment {
 
     protected void startIntroActivity() {
         if (Objects.nonNull(getActivity())) {
-            Intent introActivityIntent = new Intent(getActivity(), IntroActivity.class);
+            Intent introActivityIntent = new Intent(getActivity(), GuestsActivity.class);
             startActivity(introActivityIntent);
             getActivity().finish();
         }

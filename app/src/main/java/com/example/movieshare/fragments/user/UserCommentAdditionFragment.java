@@ -100,20 +100,30 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
             UserUtils.setErrorIfFirstNameIsInvalid(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt);
             UserUtils.setErrorIfLastNameIsInvalid(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt);
             if (isFormValid()) {
-                MovieComment movieComment = buildNewMovieComment();
-                Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
-                        .addMovieComment(movieComment, () -> {
-                            new AddUserMovieCommentDialogFragment()
-                                    .show(getActivity().getSupportFragmentManager(), "TAG");
-                            Repository.getRepositoryInstance().refreshAllMovieComments();
-                            Navigation.findNavController(view).popBackStack();
-                        });            }
+                saveComment(view);
+            }
         });
     }
 
-    private boolean isFormValid() {
-        return (InputValidator.isFirstNameValid(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt.getText()) &&
-                InputValidator.isLastNameValid(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt.getText()));
+    private Boolean isFormValid() {
+        if(!UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt, 5) ||
+                !UserUtils.setErrorIfEmpty(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt) ||
+                !InputValidator.isFirstNameValid(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt.getText()) ||
+                !InputValidator.isLastNameValid(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt.getText())) {
+            return false;
+        }
+        return true;
+    }
+
+    private void saveComment(View view) {
+        MovieComment movieComment = buildNewMovieComment();
+        Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
+                .addMovieComment(movieComment, () -> {
+                    new AddUserMovieCommentDialogFragment()
+                            .show(getActivity().getSupportFragmentManager(), "TAG");
+                    Repository.getRepositoryInstance().refreshAllMovieComments();
+                    Navigation.findNavController(view).popBackStack();
+                });
     }
 
     private MovieComment buildNewMovieComment() {

@@ -4,6 +4,7 @@ import static com.example.movieshare.constants.AuthConstants.*;
 import static com.example.movieshare.constants.UserConstants.USER_IMAGE_PROFILE_EXTENSION;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.movieshare.MainActivity;
 import com.example.movieshare.R;
 import com.example.movieshare.databinding.FragmentSignUpBinding;
 import com.example.movieshare.fragments.base.MovieBaseFragment;
@@ -146,8 +148,9 @@ public class SignUpFragment extends MovieBaseFragment {
     }
 
     private void navigateToHomePageAfterRegister() {
-        NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToNavGraph();
-        this.viewModel.getNavController().navigate(action);
+        Intent intent = new Intent(this.getActivity(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private boolean isFormValid() {
@@ -177,7 +180,6 @@ public class SignUpFragment extends MovieBaseFragment {
             return false;
         });
     }
-
 
     private void setPasswordEditTextOnKeyListener() {
         this.viewBindings.signUpFragmentPasswordInputEt.setOnKeyListener((view, i, keyEvent) -> {
