@@ -31,7 +31,7 @@ public class MovieComment {
     private String movieCommentId;
 
     @NonNull
-    private Integer userId;
+    private String userId;
 
     @ColumnInfo(index = true)
     @NonNull
@@ -41,7 +41,7 @@ public class MovieComment {
     private String description;
     private Long movieCommentLastUpdate;
 
-    public MovieComment(@NonNull Integer userId, @NonNull String movieId,
+    public MovieComment(@NonNull String userId, @NonNull String movieId,
                         String movieName, String movieRatingOfComment, String description) {
         this.userId = userId;
         this.movieId = movieId;
@@ -51,7 +51,7 @@ public class MovieComment {
     }
 
     @Ignore
-    public MovieComment(@NonNull String movieCommentId, @NonNull Integer userId, @NonNull String movieId,
+    public MovieComment(@NonNull String movieCommentId, @NonNull String userId, @NonNull String movieId,
                         String movieName, String movieRatingOfComment, String description) {
         this.movieCommentId = movieCommentId;
         this.userId = userId;
@@ -64,7 +64,7 @@ public class MovieComment {
     // TODO: handle exceptions from casting or null
     public static MovieComment fromJson(Map<String, Object> json) {
         String movieCommentId = String.valueOf(json.get(MOVIE_COMMENT_ID));
-        Integer userId = Integer.parseInt(String.valueOf(json.get(MOVIE_COMMENT_USER_ID)));
+        String userId = String.valueOf(json.get(MOVIE_COMMENT_USER_ID));
         String movieId = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_ID));
         String movieName = String.valueOf(json.get(MOVIE_COMMENT_MOVIE_NAME));
         String movieRatingOfComment = String.valueOf(json.get(MOVIE_COMMENT_RATING));
@@ -107,11 +107,11 @@ public class MovieComment {
     }
 
     @NonNull
-    public Integer getUserId() {
+    public String getUserId() {
         return this.userId;
     }
 
-    public void setUserId(@NonNull Integer userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
 

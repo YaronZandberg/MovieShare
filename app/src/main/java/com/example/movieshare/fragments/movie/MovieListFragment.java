@@ -8,8 +8,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -60,7 +62,7 @@ public class MovieListFragment extends MovieBaseFragment {
         initializeMovieCategory();
         this.viewBindings = FragmentMovieListBinding.inflate(inflater, container, false);
         this.viewBindings.movieListFragmentMoviesList.setHasFixedSize(true);
-        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new LinearLayoutManager(getContext()));
+        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new GridLayoutManager(getContext(), 3));
         this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.viewModel.getMovieList().getValue());
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeMovieCategory);
@@ -84,6 +86,7 @@ public class MovieListFragment extends MovieBaseFragment {
     private void initializeMovieCategory() {
         Repository.getRepositoryInstance().refreshAllMovieCategories();
         this.viewModel.setMovieCategory(this.viewModel.getAllMovieCategories().getValue().get(this.movieCategoryPosition));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(this.viewModel.getMovieCategory().getCategoryName());
         Repository.getRepositoryInstance().refreshAllMovies();
     }
 

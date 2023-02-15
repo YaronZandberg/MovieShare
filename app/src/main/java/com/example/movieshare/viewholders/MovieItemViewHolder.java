@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieshare.R;
 import com.example.movieshare.listeners.general.OnItemClickListener;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.ShapeAppearanceModel;
 
 public abstract class MovieItemViewHolder <T> extends RecyclerView.ViewHolder {
     protected final TextView movieItemNameTv;
@@ -23,6 +26,7 @@ public abstract class MovieItemViewHolder <T> extends RecyclerView.ViewHolder {
         this.movieItemRatingTv = itemView.findViewById(R.id.item_list_row_rating_tv);
         this.movieItemDescriptionTv = itemView.findViewById(R.id.item_list_row_comment_tv);
         this.movieItemImg = itemView.findViewById(R.id.item_list_row_img);
+
         itemView.setOnClickListener(view -> {
             Integer position = getAdapterPosition();
             Log.d("TAG", "row clicked " + position);
