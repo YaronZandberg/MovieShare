@@ -37,6 +37,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initializeAllMovieComment();
         this.viewBindings = FragmentUserCommentEditionBinding.inflate(inflater, container, false);
         reloadUserMovieComments();
         this.configureMenuOptions(this.viewBindings.getRoot());
@@ -50,6 +51,10 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         this.viewModel = new ViewModelProvider(this).get(UserCommentEditionFragmentViewModel.class);
     }
 
+    private void initializeAllMovieComment() {
+        Repository.getRepositoryInstance().getAllMovieComments();
+    }
+
     private void reloadUserMovieComments() {
         Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
                 .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
@@ -61,20 +66,12 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     }
 
     private void findMovieCommentPositionInTotalList() {
-        /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
-                .getAllMovieComments(allMovieComments -> {
-                    this.viewModel.setAllMovieComments(allMovieComments);
-                    this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
-                            .getAllMovieComments().indexOf(this.viewModel.getMovieComment()));
-                    displayUserMovieCommentDetails();
-                });*/
-        Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
-                .getAllMovieComments(allMovieComments -> {
-                    this.viewModel.setAllMovieComments(allMovieComments);
-                    this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
-                            .getAllMovieComments().indexOf(this.viewModel.getMovieComment()));
-                    displayUserMovieCommentDetails();
-                });
+        if (Objects.nonNull(this.viewModel.getAllMovieComments().getValue())) {
+            Integer index = this.viewModel.getAllMovieComments().getValue()
+                    .indexOf(this.viewModel.getMovieComment());
+            this.viewModel.setMovieCommentPositionInTotalList(index);
+            displayUserMovieCommentDetails();
+        }
     }
 
     @Override
@@ -105,6 +102,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                         .removeMovieComment(this.viewModel.getMovieComment().getMovieCommentId(), () -> {
                             new DeleteUserMovieCommentDialogFragment()
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
+                            Repository.getRepositoryInstance().refreshAllMovieComments();
                             Navigation.findNavController(view).popBackStack();
                         }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
@@ -114,6 +112,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                             this.viewModel.getMovieComment(), () -> {
                                 new UpdateUserMovieCommentDialogFragment()
                                         .show(getActivity().getSupportFragmentManager(), "TAG");
+                                Repository.getRepositoryInstance().refreshAllMovieComments();
                                 Navigation.findNavController(view).popBackStack();
                             });
         });

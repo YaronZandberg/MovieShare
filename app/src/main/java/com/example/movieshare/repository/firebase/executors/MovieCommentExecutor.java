@@ -77,7 +77,7 @@ public class MovieCommentExecutor {
                                    ExecuteMovieItemListener listener) {
         db.collection(MOVIE_COMMENT_COLLECTION_NAME)
                 .document(movieCommentId)
-                .set(movieComment)
+                .set(movieComment.toJson())
                 .addOnCompleteListener(task -> listener.onComplete());
     }
 }
