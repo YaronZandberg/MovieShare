@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,9 +60,11 @@ public class MovieListFragment extends MovieBaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         initializeMovieCategory();
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         this.viewBindings = FragmentMovieListBinding.inflate(inflater, container, false);
         this.viewBindings.movieListFragmentMoviesList.setHasFixedSize(true);
-        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new GridLayoutManager(getContext(), Math.round(dpWidth / 137)));
         this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.viewModel.getMovieList().getValue());
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeMovieCategory);
