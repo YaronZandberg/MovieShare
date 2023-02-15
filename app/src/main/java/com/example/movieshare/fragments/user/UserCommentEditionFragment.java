@@ -13,11 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
-import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.DeleteUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFragment;
 import com.example.movieshare.repository.Repository;
-import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.utils.UserUtils;
 import com.example.movieshare.viewmodels.user.UserCommentEditionFragmentViewModel;
 
