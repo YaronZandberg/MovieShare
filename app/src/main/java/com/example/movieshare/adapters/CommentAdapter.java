@@ -21,7 +21,7 @@ public class CommentAdapter extends MovieItemAdapter<MovieComment> {
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = this.layoutInflater.inflate(R.layout.item_list_row, parent, false);
+        View view = this.layoutInflater.inflate(R.layout.item_list_row_movie_comment, parent, false);
         return new CommentViewHolder(view, this.listener);
     }
 
