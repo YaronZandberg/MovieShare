@@ -53,24 +53,26 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     }
 
     private void initializeAllMovieComment() {
-        Repository.getRepositoryInstance().getAllMovieComments();
+        Repository.getRepositoryInstance().refreshAllMovieComments();
     }
 
     private void reloadUserMovieComments() {
-        Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
-                .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
-                    this.viewModel.setAllUserMovieComments(movieCommentList);
-                    this.viewModel.setMovieComment(this.viewModel.getAllUserMovieComments()
-                            .get(this.userMovieCommentPosition));
-                    findMovieCommentPositionInTotalList();
-                });
+        if (Objects.nonNull(this.viewModel.getAllMovieComments().getValue())) {
+            Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                    .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
+                        this.viewModel.setUserMovieComments(movieCommentList);
+                        this.viewModel.setMovieComment(this.viewModel.getUserMovieComments()
+                                .get(this.userMovieCommentPosition));
+                        findMovieCommentPositionInTotalList();
+                    });
+        }
     }
 
     private void findMovieCommentPositionInTotalList() {
         if (Objects.nonNull(this.viewModel.getAllMovieComments().getValue())) {
-            Integer index = this.viewModel.getAllMovieComments().getValue()
+            Integer movieCommentIndex = this.viewModel.getAllMovieComments().getValue()
                     .indexOf(this.viewModel.getMovieComment());
-            this.viewModel.setMovieCommentPositionInTotalList(index);
+            this.viewModel.setMovieCommentPositionInTotalList(movieCommentIndex);
             displayUserMovieCommentDetails();
         }
     }

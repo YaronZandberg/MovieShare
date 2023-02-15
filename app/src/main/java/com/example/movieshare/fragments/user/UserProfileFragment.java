@@ -51,7 +51,9 @@ public class UserProfileFragment extends MovieBaseFragment {
         this.userId = Repository.getRepositoryInstance().getAuthModel().getCurrentUserUid();
         Repository.getRepositoryInstance().getFirebaseModel().getUserExecutor()
                 .getUserById(this.userId, user -> {
-                    this.viewModel.setUser(user);
+                    if (Objects.nonNull(user)) {
+                        this.viewModel.setUser(user);
+                    }
                     displayUserDetails();
                 });
     }

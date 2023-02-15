@@ -10,12 +10,12 @@ import com.example.movieshare.repository.models.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 public class UserExecutor {
     private static final UserExecutor userExecutorInstance = new UserExecutor();
@@ -36,12 +36,11 @@ public class UserExecutor {
         this.db.collection(USER_COLLECTION_NAME)
                 .whereEqualTo(FieldPath.documentId(), id)
                 .get()
-                .addOnCompleteListener(task -> {
+                .addOnSuccessListener(task -> {
                     User user = null;
-                    if (task.isSuccessful()) {
-                        QuerySnapshot queryDocumentSnapshots = task.getResult();
-                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-                        user = User.fromJson(documentSnapshot.getData());
+                    List<DocumentSnapshot> jsonDocument = task.getDocuments();
+                    if(!jsonDocument.isEmpty()) {
+                        user = User.fromJson(jsonDocument.get(0).getData());
                     }
                     listener.onComplete(user);
                 });

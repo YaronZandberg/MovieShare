@@ -11,7 +11,7 @@ import java.util.List;
 public class UserCommentEditionFragmentViewModel extends ViewModel {
     private final LiveData<List<MovieComment>> allMovieComments =
             Repository.getRepositoryInstance().getAllMovieComments();
-    private List<MovieComment> allUserMovieComments;
+    private List<MovieComment> userMovieComments;
     private MovieComment movieComment;
     private Integer movieCommentPositionInTotalList;
 
@@ -19,12 +19,12 @@ public class UserCommentEditionFragmentViewModel extends ViewModel {
         return this.allMovieComments;
     }
 
-    public List<MovieComment> getAllUserMovieComments() {
-        return this.allUserMovieComments;
+    public List<MovieComment> getUserMovieComments() {
+        return this.userMovieComments;
     }
 
-    public void setAllUserMovieComments(List<MovieComment> allUserMovieComments) {
-        this.allUserMovieComments = allUserMovieComments;
+    public void setUserMovieComments(List<MovieComment> userMovieComments) {
+        this.userMovieComments = userMovieComments;
     }
 
     public MovieComment getMovieComment() {
