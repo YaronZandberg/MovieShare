@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +26,12 @@ import com.example.movieshare.enums.LoadingState;
 import com.example.movieshare.fragments.base.MovieBaseFragment;
 import com.example.movieshare.notifications.NotificationManager;
 import com.example.movieshare.repository.Repository;
-import com.example.movieshare.repository.dao.MovieApiCaller;
 import com.example.movieshare.repository.firebase.executors.MovieExecutor;
 import com.example.movieshare.repository.models.Movie;
 import com.example.movieshare.repository.models.MovieApi;
 import com.example.movieshare.repository.models.MovieApiList;
 
+import com.example.movieshare.repository.room.dao.MovieApiCaller;
 import com.example.movieshare.viewmodels.movie.MovieListFragmentViewModel;
 
 import java.util.Objects;
@@ -59,9 +60,11 @@ public class MovieListFragment extends MovieBaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         initializeMovieCategory();
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         this.viewBindings = FragmentMovieListBinding.inflate(inflater, container, false);
         this.viewBindings.movieListFragmentMoviesList.setHasFixedSize(true);
-        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        this.viewBindings.movieListFragmentMoviesList.setLayoutManager(new GridLayoutManager(getContext(), Math.round(dpWidth / 137)));
         this.movieAdapter = new MovieAdapter(getLayoutInflater(), this.viewModel.getMovieList().getValue());
         this.viewBindings.movieListFragmentMoviesList.setAdapter(this.movieAdapter);
         this.viewBindings.swipeRefresh.setOnRefreshListener(this::initializeMovieCategory);
@@ -135,7 +138,7 @@ public class MovieListFragment extends MovieBaseFragment {
 
         for (MovieApi item : response.body().getResults()) {
             executor.getMovieByName(item.getOriginal_title(), movies -> {
-                if(movies.isEmpty() || movies.stream().filter(movie -> movie.getMovieCategoryId().contentEquals(this.viewModel.getMovieCategory().getCategoryId())).count() == 0) {
+                if(movies.isEmpty() || movies.stream().noneMatch(movie -> movie.getMovieCategoryId().contentEquals(this.viewModel.getMovieCategory().getCategoryId()))) {
                     executor.addMovie(new Movie(this.viewModel.getMovieCategory().getCategoryId(), item.getOriginal_title(), item.getVote_average().toString(), item.getOverview(), item.getPoster_path()), () -> {});
                 }
             });

@@ -8,6 +8,10 @@ import com.example.movieshare.R;
 import com.example.movieshare.listeners.general.OnItemClickListener;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.repository.models.MovieComment;
+import com.example.movieshare.repository.models.User;
+import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 public class UserCommentViewHolder extends MovieItemViewHolder<MovieComment> {
     public UserCommentViewHolder(@NonNull View itemView, OnItemClickListener listener){
@@ -27,6 +31,17 @@ public class UserCommentViewHolder extends MovieItemViewHolder<MovieComment> {
                     this.movieItemNameTv.setText(userName);
                     this.movieItemRatingTv.setText(movieComment.getMovieRatingOfComment());
                     this.movieItemDescriptionTv.setText(movieComment.getDescription());
+                    loadUserProfileImage(user);
                 });
+    }
+
+    private void loadUserProfileImage(User user) {
+        if (Objects.nonNull(user.getImageUrl())) {
+            Picasso.get().load(user.getImageUrl())
+                    .placeholder(R.drawable.avatar)
+                    .into(this.movieItemImg);
+        } else {
+            this.movieItemImg.setImageResource(R.drawable.avatar);
+        }
     }
 }

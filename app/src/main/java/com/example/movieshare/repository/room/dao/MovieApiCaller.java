@@ -1,4 +1,4 @@
-package com.example.movieshare.repository.dao;
+package com.example.movieshare.repository.room.dao;
 
 import androidx.room.Dao;
 

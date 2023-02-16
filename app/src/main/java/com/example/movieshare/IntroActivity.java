@@ -15,11 +15,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.example.movieshare.repository.Repository;
-import com.example.movieshare.utils.MovieUtils;
 
 public class IntroActivity extends AppCompatActivity {
 
-    private static int TIME_OUT = 3000;
+    private static final int TIME_OUT = 3000;
 
     View first,second,third,fourth,fifth,sixth;
     TextView a, slogan;
@@ -30,16 +29,11 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_intro);
-        setDataMemebers();
-        createAnimtaion();
-        bindAnimtaion();
+        setDataMembers();
+        createAnimation();
+        bindAnimation();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                isLogin();
-            }
-        }, TIME_OUT);
+        new Handler().postDelayed(this::isLogin, TIME_OUT);
     }
 
     private void startGuestsActivity() {
@@ -71,7 +65,7 @@ public class IntroActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setDataMemebers() {
+    private void setDataMembers() {
         first = findViewById(R.id.first_line);
         second = findViewById(R.id.second_line);
         third = findViewById(R.id.third_line);
@@ -82,13 +76,13 @@ public class IntroActivity extends AppCompatActivity {
         slogan = findViewById(R.id.tagLine);
     }
 
-    private void createAnimtaion() {
+    private void createAnimation() {
         topAnimantion = AnimationUtils.loadAnimation(this, R.anim.top_animation);
         bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
         middleAnimation = AnimationUtils.loadAnimation(this, R.anim.middle_animation);
     }
 
-    private void bindAnimtaion() {
+    private void bindAnimation() {
         first.setAnimation(topAnimantion);
         second.setAnimation(topAnimantion);
         third.setAnimation(topAnimantion);

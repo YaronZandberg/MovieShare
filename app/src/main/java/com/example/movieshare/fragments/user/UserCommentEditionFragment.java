@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.movieshare.databinding.FragmentUserCommentEditionBinding;
-import com.example.movieshare.fragments.dialogs.DeleteUserMovieCommentDialogFragment;
 import com.example.movieshare.fragments.dialogs.UpdateUserMovieCommentDialogFragment;
 import com.example.movieshare.repository.Repository;
 import com.example.movieshare.utils.UserUtils;
@@ -38,6 +37,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initializeAllMovieComment();
         this.viewBindings = FragmentUserCommentEditionBinding.inflate(inflater, container, false);
         reloadUserMovieComments();
         this.configureMenuOptions(this.viewBindings.getRoot());
@@ -51,31 +51,29 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
         this.viewModel = new ViewModelProvider(this).get(UserCommentEditionFragmentViewModel.class);
     }
 
+    private void initializeAllMovieComment() {
+        Repository.getRepositoryInstance().refreshAllMovieComments();
+    }
+
     private void reloadUserMovieComments() {
-        Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
-                .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
-                    this.viewModel.setAllUserMovieComments(movieCommentList);
-                    this.viewModel.setMovieComment(this.viewModel.getAllUserMovieComments()
-                            .get(this.userMovieCommentPosition));
-                    findMovieCommentPositionInTotalList();
-                });
+        if (Objects.nonNull(this.viewModel.getAllMovieComments().getValue())) {
+            Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
+                    .getAllMovieCommentsByUserId(this.userId, movieCommentList -> {
+                        this.viewModel.setUserMovieComments(movieCommentList);
+                        this.viewModel.setMovieComment(this.viewModel.getUserMovieComments()
+                                .get(this.userMovieCommentPosition));
+                        findMovieCommentPositionInTotalList();
+                    });
+        }
     }
 
     private void findMovieCommentPositionInTotalList() {
-        /*Repository.getRepositoryInstance().getLocalModel().getMovieCommentHandler()
-                .getAllMovieComments(allMovieComments -> {
-                    this.viewModel.setAllMovieComments(allMovieComments);
-                    this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
-                            .getAllMovieComments().indexOf(this.viewModel.getMovieComment()));
-                    displayUserMovieCommentDetails();
-                });*/
-        Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
-                .getAllMovieComments(allMovieComments -> {
-                    this.viewModel.setAllMovieComments(allMovieComments);
-                    this.viewModel.setMovieCommentPositionInTotalList(this.viewModel
-                            .getAllMovieComments().indexOf(this.viewModel.getMovieComment()));
-                    displayUserMovieCommentDetails();
-                });
+        if (Objects.nonNull(this.viewModel.getAllMovieComments().getValue())) {
+            Integer movieCommentIndex = this.viewModel.getAllMovieComments().getValue()
+                    .indexOf(this.viewModel.getMovieComment());
+            this.viewModel.setMovieCommentPositionInTotalList(movieCommentIndex);
+            displayUserMovieCommentDetails();
+        }
     }
 
     @Override
@@ -99,28 +97,16 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
     protected void activateButtonsListeners() {
         this.viewBindings.userCommentEditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
-        this.viewBindings.userCommentEditionFragmentDeleteBtn.setOnClickListener(view ->
-                // TODO: Add isDeleted DM to MovieComment and display only comments
-                //  that their isDeleted is false
-                Repository.getRepositoryInstance().getFirebaseModel().getMovieCommentExecutor()
-                        .removeMovieComment(this.viewModel.getMovieComment().getMovieCommentId(), () -> {
-                            new DeleteUserMovieCommentDialogFragment()
-                                    .show(getActivity().getSupportFragmentManager(), "TAG");
-                            Navigation.findNavController(view).popBackStack();
-                        }));
         this.viewBindings.userCommentEditionFragmentSaveBtn.setOnClickListener(view -> {
-                if(isFormValid()) {
-                    saveComment(view);
-                }
+            if (isFormValid()) {
+                saveComment(view);
+            }
         });
     }
 
     private Boolean isFormValid() {
-        if(!UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentEditionFragmentMovieRatingInputEt, 5) ||
-                !UserUtils.setErrorIfEmpty(this.viewBindings.userCommentEditionFragmentMovieCommentInputEt)) {
-            return false;
-        }
-        return true;
+        return (UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentEditionFragmentMovieRatingInputEt, 5) &&
+                UserUtils.setErrorIfEmpty(this.viewBindings.userCommentEditionFragmentMovieCommentInputEt));
     }
 
     private void saveComment(View view) {
@@ -130,6 +116,7 @@ public class UserCommentEditionFragment extends UserCommentFormFragment {
                         this.viewModel.getMovieComment(), () -> {
                             new UpdateUserMovieCommentDialogFragment()
                                     .show(getActivity().getSupportFragmentManager(), "TAG");
+                            Repository.getRepositoryInstance().refreshAllMovieComments();
                             Navigation.findNavController(view).popBackStack();
                         });
     }

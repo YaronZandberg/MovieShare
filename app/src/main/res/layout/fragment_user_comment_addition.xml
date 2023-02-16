@@ -6,92 +6,110 @@
     android:layout_height="match_parent"
     tools:context=".fragments.user.UserCommentAdditionFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/user_comment_addition_fragment_movie_name_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="8dp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/user_comment_addition_fragment_movie_name_input_et"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Movie name" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/user_comment_addition_fragment_movie_rating_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_comment_addition_fragment_movie_name_input_layout">
+            <TextView
+                android:id="@+id/user_comment_addition_fragment_headline"
+                android:layout_width="350dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="100dp"
+                android:gravity="center"
+                android:text="Add Comment"
+                android:textColor="@color/purple_500"
+                android:textSize="48sp"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/user_comment_addition_fragment_movie_rating_input_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:maxLength="1"
-            android:hint="Movie rating" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/user_comment_addition_fragment_movie_name_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="8dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/user_comment_addition_fragment_movie_comment_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_comment_addition_fragment_movie_rating_input_layout">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_comment_addition_fragment_movie_name_input_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Movie name" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/user_comment_addition_fragment_movie_comment_input_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Comment" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/user_comment_addition_fragment_movie_rating_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp">
 
-    <Button
-        android:id="@+id/user_comment_addition_fragment_save_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="4dp"
-        android:backgroundTint="@color/purple_500"
-        android:text="Save"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/user_comment_addition_fragment_cancel_btn"
-        app:layout_constraintTop_toBottomOf="@+id/user_comment_addition_fragment_movie_comment_input_layout" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_comment_addition_fragment_movie_rating_input_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLength="1"
+                    android:hint="Movie rating" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/user_comment_addition_fragment_cancel_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="2dp"
-        android:backgroundTint="@color/purple_500"
-        android:text="Cancel"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/user_comment_addition_fragment_save_btn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_comment_addition_fragment_movie_comment_input_layout" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/user_comment_addition_fragment_movie_comment_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_comment_addition_fragment_movie_comment_input_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Comment" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <FrameLayout
+                android:id="@+id/user_comment_addition_fragment_buttons_frame"
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
+
+                <Button
+                    android:id="@+id/user_comment_addition_fragment_cancel_btn"
+                    android:layout_width="195dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="2dp"
+                    android:backgroundTint="@color/purple_500"
+                    android:text="Cancel"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/user_comment_addition_fragment_save_btn"
+                    android:layout_width="193dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="211dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="4dp"
+                    android:backgroundTint="@color/purple_500"
+                    android:text="Save"
+                    android:textSize="20sp" />
+            </FrameLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

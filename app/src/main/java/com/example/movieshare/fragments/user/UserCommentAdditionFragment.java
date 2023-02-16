@@ -16,6 +16,7 @@ import com.example.movieshare.databinding.FragmentUserCommentAdditionBinding;
 import com.example.movieshare.fragments.dialogs.AddUserMovieCommentDialogFragment;
 import com.example.movieshare.repository.models.MovieComment;
 import com.example.movieshare.repository.Repository;
+import com.example.movieshare.utils.InputValidator;
 import com.example.movieshare.utils.UserUtils;
 import com.example.movieshare.viewmodels.user.UserCommentAdditionFragmentViewModel;
 
@@ -69,21 +70,46 @@ public class UserCommentAdditionFragment extends UserCommentFormFragment {
 
     @Override
     protected void activateButtonsListeners() {
+        setMovieRatingEditTextOnKeyListener();
+        setMovieCommentEditTextOnKeyListener();
+        setCancelButtonListener();
+        setSaveButtonListener();
+    }
+
+    private void setMovieRatingEditTextOnKeyListener() {
+        this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt.setOnKeyListener((view, i, keyEvent) -> {
+            UserUtils.setErrorIfFirstNameIsInvalid(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt);
+            return false;
+        });
+    }
+
+    private void setMovieCommentEditTextOnKeyListener() {
+        this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt.setOnKeyListener((view, i, keyEvent) -> {
+            UserUtils.setErrorIfLastNameIsInvalid(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt);
+            return false;
+        });
+    }
+
+    private void setCancelButtonListener() {
         this.viewBindings.userCommentAdditionFragmentCancelBtn.setOnClickListener(view ->
                 Navigation.findNavController(view).popBackStack());
+    }
+
+    private void setSaveButtonListener() {
         this.viewBindings.userCommentAdditionFragmentSaveBtn.setOnClickListener(view -> {
-            if(isFormValid()) {
+            UserUtils.setErrorIfFirstNameIsInvalid(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt);
+            UserUtils.setErrorIfLastNameIsInvalid(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt);
+            if (isFormValid()) {
                 saveComment(view);
             }
         });
     }
 
     private Boolean isFormValid() {
-        if(!UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt, 5) ||
-            !UserUtils.setErrorIfEmpty(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt)) {
-            return false;
-        }
-        return true;
+        return (UserUtils.setErrorIfBiggerThan(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt, 5) &&
+                UserUtils.setErrorIfEmpty(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt) &&
+                InputValidator.isFirstNameValid(this.viewBindings.userCommentAdditionFragmentMovieRatingInputEt.getText()) &&
+                InputValidator.isLastNameValid(this.viewBindings.userCommentAdditionFragmentMovieCommentInputEt.getText()));
     }
 
     private void saveComment(View view) {

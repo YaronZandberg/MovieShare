@@ -1,7 +1,6 @@
 package com.example.movieshare.fragments.movie;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,7 +37,7 @@ public class MovieProfileFragment extends MovieBaseFragment {
     private Integer moviePosition;
     private String movieCategoryId;
     private MovieProfileFragmentViewModel viewModel;
-    private Categories categories = new Categories();
+    private final Categories categories = new Categories();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

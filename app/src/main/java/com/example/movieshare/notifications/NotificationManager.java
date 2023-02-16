@@ -11,13 +11,11 @@ public class NotificationManager {
     private final MutableLiveData<LoadingState> eventMovieCategoryListLoadingState;
     private final MutableLiveData<LoadingState> eventMovieListLoadingState;
     private final MutableLiveData<LoadingState> eventMovieCommentListLoadingState;
-    private final MutableLiveData<LoadingState> eventUserListLoadingState;
 
     private NotificationManager() {
         this.eventMovieCategoryListLoadingState = new MutableLiveData<>(NOT_LOADING);
         this.eventMovieListLoadingState = new MutableLiveData<>(NOT_LOADING);
         this.eventMovieCommentListLoadingState = new MutableLiveData<>(NOT_LOADING);
-        this.eventUserListLoadingState = new MutableLiveData<>(NOT_LOADING);
     }
 
     public static NotificationManager instance() {
@@ -34,9 +32,5 @@ public class NotificationManager {
 
     public MutableLiveData<LoadingState> getEventMovieCommentListLoadingState() {
         return this.eventMovieCommentListLoadingState;
-    }
-
-    public MutableLiveData<LoadingState> getEventUserListLoadingState() {
-        return this.eventUserListLoadingState;
     }
 }

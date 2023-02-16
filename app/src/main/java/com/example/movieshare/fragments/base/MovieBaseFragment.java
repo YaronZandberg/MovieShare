@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.movieshare.GuestsActivity;
-import com.example.movieshare.IntroActivity;
 import com.example.movieshare.R;
 import com.example.movieshare.fragments.movie.MovieHomeFragmentDirections;
 import com.example.movieshare.repository.Repository;
